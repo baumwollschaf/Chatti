@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 // This software is Copyright (c) 2021 Embarcadero Technologies, Inc.
 // You may only use this software if you are an authorized licensee
@@ -7,20 +7,43 @@
 // the software license agreement that comes with the Embarcadero Products
 // and is subject to that software license agreement.
 
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 unit View;
 
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Objects, FMX.Layouts, FMX.Controls.Presentation, FMX.MultiView,
-  FMX.MultiView.Types, FMX.Ani, FMX.Effects, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
-  Data.Bind.Components, Model.Types, Model.Constants,
-  View.Main, View.Menu, Model.Utils, DateUtils,
-  FMX.AddressBook.Types, FMX.AddressBook, ViewModel,
+  System.SysUtils,
+  System.Types,
+  System.UITypes,
+  System.Classes,
+  System.Variants,
+  FMX.Types,
+  FMX.Controls,
+  FMX.Forms,
+  FMX.Graphics,
+  FMX.Dialogs,
+  FMX.StdCtrls,
+  FMX.Objects,
+  FMX.Layouts,
+  FMX.Controls.Presentation,
+  FMX.MultiView,
+  FMX.MultiView.Types,
+  FMX.Ani,
+  FMX.Effects,
+  Data.Bind.EngExt,
+  FMX.Bind.DBEngExt,
+  Data.Bind.Components,
+  Model.Types,
+  Model.Constants,
+  View.Main,
+  View.Menu,
+  Model.Utils,
+  DateUtils,
+  FMX.AddressBook.Types,
+  FMX.AddressBook,
+  ViewModel,
 {$IFDEF ANDROID}
   FMX.DialogService,
   Androidapi.NativeActivity,
@@ -93,7 +116,6 @@ var
 implementation
 
 {$R *.fmx}
-
 {$IFDEF MSWINDOWS}
 {$R \Res\Styles\Styles_Win.res}
 {$ENDIF}
@@ -103,11 +125,10 @@ implementation
 {$IFDEF IOS}
 {$R \Res\Styles\Styles_iOS.res}
 {$ENDIF}
-
 { TViewForm }
 {$IFDEF ANDROID}
-procedure TViewForm.CloseDialogEvent(Sender: TObject;
-  const AResult: TModalResult);
+
+procedure TViewForm.CloseDialogEvent(Sender: TObject; const AResult: TModalResult);
 begin
 
   case AResult of
@@ -116,7 +137,8 @@ begin
         GrantAndroidPermission(EnumPermissions.READ_EXTERNAL_STORAGE);
         GrantAndroidPermission(EnumPermissions.WRITE_EXTERNAL_STORAGE);
       end;
-    mrCancel: ShowMessage(sCancelStoragePermissisonsText);
+    mrCancel:
+      ShowMessage(sCancelStoragePermissisonsText);
   end;
 end;
 {$ENDIF}
@@ -125,13 +147,13 @@ end;
 procedure TViewForm.DoOnLandscapeOrientation;
 begin
   FIsOrientationChanged := True;
-  var CurrentAtivity: TFrame := GetCurrentAtivity;
+  var
+    CurrentAtivity: TFrame := GetCurrentAtivity;
   if not Assigned(CurrentAtivity) or (CurrentAtivity as IActivityInfo).ActivityName.Equals(sActivitySignInName) or
-     (CurrentAtivity as IActivityInfo).ActivityName.Equals(sActivitySignUp)
-  then
+    (CurrentAtivity as IActivityInfo).ActivityName.Equals(sActivitySignUp) then
     Exit;
   CurrentAtivity.Align := TAlignLayout.Right;
-  MultiView.DrawerOptions.Mode:=  TSlidingMode.PushingDetailView;
+  MultiView.DrawerOptions.Mode := TSlidingMode.PushingDetailView;
   MultiView.Mode := TMultiViewMode.Panel;
   MultiView.RecalcSize;
   CurrentAtivity.Align := TAlignLayout.Client;
@@ -141,12 +163,12 @@ end;
 // Fires if Portrait orientation detected.
 procedure TViewForm.DoOnPortraitOrientation;
 begin
-  var CurrentAtivity: TFrame := GetCurrentAtivity;
+  var
+    CurrentAtivity: TFrame := GetCurrentAtivity;
   if not Assigned(CurrentAtivity) or (CurrentAtivity as IActivityInfo).ActivityName.Equals(sActivitySignInName) or
-     (CurrentAtivity as IActivityInfo).ActivityName.Equals(sActivitySignUp)
-  then
+    (CurrentAtivity as IActivityInfo).ActivityName.Equals(sActivitySignUp) then
     Exit;
-  MultiView.DrawerOptions.Mode:=  TSlidingMode.OverlapDetailView;
+  MultiView.DrawerOptions.Mode := TSlidingMode.OverlapDetailView;
   MultiView.Mode := TMultiViewMode.Drawer;
   MultiView.RecalcSize;
   MultiView.HideMaster;
@@ -157,8 +179,10 @@ procedure TViewForm.FormCreate(Sender: TObject);
 begin
   FAddressBookLoader := TAddressBookLoader.Create;
 {$IFDEF ANDROID}
-  if not IsPermissionGranted(EnumPermissions.READ_EXTERNAL_STORAGE) and not IsPermissionGranted(EnumPermissions.WRITE_EXTERNAL_STORAGE) then
-    TDialogService.MessageDialog(sGrantStoragePermissionsMsgDlgText, TMsgDlgType.mtInformation, [TMsgDlgBtn.mbOk, TMsgDlgBtn.mbCancel], TMsgDlgBtn.mbOk, 0, CloseDialogEvent);
+  if not IsPermissionGranted(EnumPermissions.READ_EXTERNAL_STORAGE) and
+    not IsPermissionGranted(EnumPermissions.WRITE_EXTERNAL_STORAGE) then
+    TDialogService.MessageDialog(sGrantStoragePermissionsMsgDlgText, TMsgDlgType.mtInformation,
+      [TMsgDlgBtn.mbOk, TMsgDlgBtn.mbCancel], TMsgDlgBtn.mbOk, 0, CloseDialogEvent);
 {$ENDIF}
   ReadCommonUserSettings;
   if not FCommonUserSettings.IsValid then
@@ -167,26 +191,29 @@ begin
     FCommonUserSettings.Theme := TThemeMode.tmLight;
   end
   else
-  case FCommonUserSettings.Theme of
-    TThemeMode.tmNone: SetDefaultTheme;
-    TThemeMode.tmLight: SetViewDarkMode(False);
-    TThemeMode.tmDark: SetViewDarkMode(True);
-  end;
+    case FCommonUserSettings.Theme of
+      TThemeMode.tmNone:
+        SetDefaultTheme;
+      TThemeMode.tmLight:
+        SetViewDarkMode(False);
+      TThemeMode.tmDark:
+        SetViewDarkMode(True);
+    end;
   InitView;
   if Application.IsUnitTestRunning then
     FUserSettings := TUserSettings.Create;
-// if Assigned(FUserSettings) then
-//   FUserSettings.DeSerialize;
-//   Creation Portrait Orientation Monitor.
+  // if Assigned(FUserSettings) then
+  // FUserSettings.DeSerialize;
+  // Creation Portrait Orientation Monitor.
   FPortraitOrientationMonitor := TScreenOrientationMonitor.Init(DoOnPortraitOrientation, TScreenOrientation.Portrait);
   // Creation Landscape Orientation Monitor.
-  FLandscapeOrientationMonitor := TScreenOrientationMonitor.Init(DoOnLandscapeOrientation, TScreenOrientation.Landscape);
+  FLandscapeOrientationMonitor := TScreenOrientationMonitor.Init(DoOnLandscapeOrientation,
+    TScreenOrientation.Landscape);
   if FLandscapeOrientationMonitor.ScreenOrientation = TScreenOrientation.Landscape then
     DoOnLandscapeOrientation;
 end;
 
-procedure TViewForm.FormPaint(Sender: TObject; Canvas: TCanvas;
-  const ARect: TRectF);
+procedure TViewForm.FormPaint(Sender: TObject; Canvas: TCanvas; const ARect: TRectF);
 begin
 {$IFDEF MSWINDOWS}
   if not MultiView.IsShowed then
@@ -197,8 +224,8 @@ end;
 procedure TViewForm.FormSaveState(Sender: TObject);
 begin
   WriteCommonUserSetting;
-//  if Assigned(FUserSettings) then
-//    FUserSettings.Serialize;
+  // if Assigned(FUserSettings) then
+  // FUserSettings.Serialize;
 end;
 
 function TViewForm.GetBackgroundTask: TThread;
@@ -317,10 +344,10 @@ begin
   FUserName := AValue;
 end;
 
-
 procedure TViewForm.SetViewDarkMode(AValue: Boolean);
 begin
-  var StyleRes: TResourceStream;
+  var
+    StyleRes: TResourceStream;
   if AValue then
     StyleRes := TResourceStream.Create(HInstance, sDarkThemeResName, RT_RCDATA)
   else
@@ -344,12 +371,14 @@ end;
 
 procedure TViewForm.ReadCommonUserSettings;
 begin
-  var Reader: TBinaryReader;
+  var
+    Reader: TBinaryReader;
   SaveState.StoragePath := TPath.GetDocumentsPath;
   if SaveState.Stream.Size > 0 then
   begin
     Reader := TBinaryReader.Create(SaveState.Stream);
-    var DataBlockSignature: Integer := Reader.ReadInteger;
+    var
+      DataBlockSignature: Integer := Reader.ReadInteger;
     try
       if DataBlockSignature <> dCommonUserSettingsBlockSignature then
         Exit;
@@ -365,7 +394,8 @@ end;
 
 procedure TViewForm.WriteCommonUserSetting;
 begin
-  var Writer : TBinaryWriter;
+  var
+    Writer: TBinaryWriter;
   SaveState.StoragePath := TPath.GetDocumentsPath;
   SaveState.Stream.Clear;
   Writer := TBinaryWriter.Create(SaveState.Stream);
