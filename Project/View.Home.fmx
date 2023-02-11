@@ -46,13 +46,13 @@ inherited HomeFrame: THomeFrame
       ControlCollection = <
         item
           Column = 0
-          Control = GridPanelLayout1
-          Row = 0
+          Control = GridPanelLayout2
+          Row = 1
         end
         item
           Column = 0
-          Control = GridPanelLayout2
-          Row = 1
+          Control = GridPanelLayout1
+          Row = 0
         end>
       RowCollection = <
         item
@@ -65,85 +65,10 @@ inherited HomeFrame: THomeFrame
         item
           SizeStyle = Auto
         end>
-      object GridPanelLayout1: TGridPanelLayout
-        Align = Top
-        Size.Width = 422.000000000000000000
-        Size.Height = 50.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 0
-        ColumnCollection = <
-          item
-            Value = 24.524831391784180000
-          end
-          item
-            Value = 61.312078479460460000
-          end
-          item
-            Value = 14.163090128755360000
-          end>
-        ControlCollection = <
-          item
-            Column = 0
-            Control = Label1
-            Row = 0
-          end
-          item
-            Column = 1
-            Control = edQuestion
-            Row = 0
-          end
-          item
-            Column = 2
-            Control = btnAsk
-            Row = 0
-          end>
-        RowCollection = <
-          item
-            Value = 100.000000000000000000
-          end>
-        object Label1: TLabel
-          Align = Client
-          Margins.Left = 8.000000000000000000
-          Margins.Top = 8.000000000000000000
-          Margins.Right = 8.000000000000000000
-          Margins.Bottom = 8.000000000000000000
-          Size.Width = 87.494789123535160000
-          Size.Height = 34.000000000000000000
-          Size.PlatformDefault = False
-          Text = 'Question'
-          TabOrder = 0
-        end
-        object edQuestion: TEdit
-          Touch.InteractiveGestures = [LongTap, DoubleTap]
-          Align = Client
-          TabOrder = 1
-          Margins.Left = 8.000000000000000000
-          Margins.Top = 8.000000000000000000
-          Margins.Right = 8.000000000000000000
-          Margins.Bottom = 8.000000000000000000
-          Size.Width = 242.736968994140600000
-          Size.Height = 34.000000000000000000
-          Size.PlatformDefault = False
-        end
-        object btnAsk: TButton
-          Align = Client
-          Margins.Left = 8.000000000000000000
-          Margins.Top = 8.000000000000000000
-          Margins.Right = 8.000000000000000000
-          Margins.Bottom = 8.000000000000000000
-          Size.Width = 43.768249511718750000
-          Size.Height = 34.000000000000000000
-          Size.PlatformDefault = False
-          StyleLookup = 'donetoolbutton'
-          TabOrder = 2
-          Text = 'Ask'
-          OnClick = btnAskClick
-        end
-      end
       object GridPanelLayout2: TGridPanelLayout
         Align = Client
         Size.Width = 422.000000000000000000
-        Size.Height = 498.625915527343800000
+        Size.Height = 506.625915527343800000
         Size.PlatformDefault = False
         TabOrder = 1
         ColumnCollection = <
@@ -153,49 +78,312 @@ inherited HomeFrame: THomeFrame
         ControlCollection = <
           item
             Column = 0
-            Control = Label2
+            Control = GridPanelLayout3
             Row = 0
           end
           item
             Column = 0
-            Control = Memo1
+            Control = GridPanelLayout4
             Row = 1
           end>
         RowCollection = <
           item
-            SizeStyle = Auto
-            Value = 9.090909090909092000
+            Value = 15.407719329730320000
           end
+          item
+            Value = 84.592280670269690000
+          end>
+        object GridPanelLayout3: TGridPanelLayout
+          Align = Client
+          Size.Width = 422.000000000000000000
+          Size.Height = 78.059501647949220000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          ColumnCollection = <
+            item
+              Value = 100.000000000000000000
+            end>
+          ControlCollection = <
+            item
+              Column = 0
+              Control = Layout1
+              Row = 0
+            end
+            item
+              Column = 0
+              Control = edQuestion
+              Row = 1
+            end>
+          RowCollection = <
+            item
+              SizeStyle = Auto
+              Value = 14.405546520585470000
+            end
+            item
+              Value = 100.000000000000000000
+            end>
+          object Layout1: TLayout
+            Align = Client
+            Size.Width = 422.000000000000000000
+            Size.Height = 36.491115570068360000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            object Label1: TLabel
+              Align = Client
+              Margins.Left = 8.000000000000000000
+              Margins.Top = 8.000000000000000000
+              Margins.Right = 8.000000000000000000
+              Margins.Bottom = 8.000000000000000000
+              Size.Width = 214.000000000000000000
+              Size.Height = 20.491115570068360000
+              Size.PlatformDefault = False
+              Text = 'Question'
+              TabOrder = 0
+            end
+            object btnAsk: TSpeedButton
+              Align = Right
+              Margins.Left = 8.000000000000000000
+              Margins.Top = 8.000000000000000000
+              Margins.Right = 8.000000000000000000
+              Margins.Bottom = 8.000000000000000000
+              Position.X = 334.000000000000000000
+              Position.Y = 8.000000000000000000
+              Size.Width = 80.000000000000000000
+              Size.Height = 20.491115570068360000
+              Size.PlatformDefault = False
+              Text = 'Ask'
+              OnClick = btnAskClick
+            end
+            object btnQuestionMark: TSpeedButton
+              Align = Right
+              Margins.Left = 8.000000000000000000
+              Margins.Top = 8.000000000000000000
+              Margins.Right = 8.000000000000000000
+              Margins.Bottom = 8.000000000000000000
+              Position.X = 238.000000000000000000
+              Position.Y = 8.000000000000000000
+              Size.Width = 80.000000000000000000
+              Size.Height = 20.491115570068360000
+              Size.PlatformDefault = False
+              Text = '?'
+              OnClick = btnQuestionMarkClick
+            end
+          end
+          object edQuestion: TEdit
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            Align = Client
+            TabOrder = 1
+            ReturnKeyType = Search
+            Margins.Left = 8.000000000000000000
+            Margins.Top = 8.000000000000000000
+            Margins.Right = 8.000000000000000000
+            Margins.Bottom = 8.000000000000000000
+            Size.Width = 406.000000000000000000
+            Size.Height = 25.568386077880860000
+            Size.PlatformDefault = False
+            OnKeyUp = edQuestionKeyUp
+          end
+        end
+        object GridPanelLayout4: TGridPanelLayout
+          Align = Client
+          Size.Width = 422.000000000000000000
+          Size.Height = 428.566406250000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          ColumnCollection = <
+            item
+              Value = 100.000000000000000000
+            end>
+          ControlCollection = <
+            item
+              Column = 0
+              Control = Layout2
+              Row = 0
+            end
+            item
+              Column = 0
+              Control = edAnswer
+              Row = 1
+            end>
+          RowCollection = <
+            item
+              SizeStyle = Auto
+              Value = 14.405546520585470000
+            end
+            item
+              Value = 100.000000000000000000
+            end>
+          object Layout2: TLayout
+            Align = Client
+            Size.Width = 422.000000000000000000
+            Size.Height = 36.491115570068360000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            object Label2: TLabel
+              Align = Client
+              Margins.Left = 8.000000000000000000
+              Margins.Top = 8.000000000000000000
+              Margins.Right = 8.000000000000000000
+              Margins.Bottom = 8.000000000000000000
+              Size.Width = 406.000000000000000000
+              Size.Height = 20.491115570068360000
+              Size.PlatformDefault = False
+              Text = 'Answer'
+              TabOrder = 0
+              object chBxClear: TCheckBox
+                Align = Right
+                Position.X = 104.000000000000000000
+                Size.Width = 128.000000000000000000
+                Size.Height = 20.491115570068360000
+                Size.PlatformDefault = False
+                TabOrder = 5
+                Text = 'Clear answer'
+              end
+              object ChBxShowQuestion: TCheckBox
+                Align = Right
+                IsChecked = True
+                Position.X = 232.000000000000000000
+                Size.Width = 174.000000000000000000
+                Size.Height = 20.491115570068360000
+                Size.PlatformDefault = False
+                TabOrder = 4
+                Text = 'Question in Answer'
+              end
+            end
+          end
+          object edAnswer: TMemo
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            DataDetectorTypes = []
+            TextSettings.WordWrap = True
+            Align = Client
+            Margins.Left = 8.000000000000000000
+            Margins.Top = 8.000000000000000000
+            Margins.Right = 8.000000000000000000
+            Margins.Bottom = 8.000000000000000000
+            Size.Width = 406.000000000000000000
+            Size.Height = 376.075286865234400000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Viewport.Width = 402.000000000000000000
+            Viewport.Height = 372.100000000000000000
+          end
+        end
+      end
+      object GridPanelLayout1: TGridPanelLayout
+        Align = Top
+        Size.Width = 422.000000000000000000
+        Size.Height = 42.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        ColumnCollection = <
+          item
+            Value = 20.000012677229990000
+          end
+          item
+            Value = 19.999925014803090000
+          end
+          item
+            Value = 19.999996802267640000
+          end
+          item
+            Value = 20.000039428463240000
+          end
+          item
+            Value = 20.000026077236040000
+          end>
+        ControlCollection = <
+          item
+            Column = 0
+            Control = btnCut
+            Row = 0
+          end
+          item
+            Column = 1
+            Control = btnCopy
+            Row = 0
+          end
+          item
+            Column = 2
+            Control = btnPaste
+            Row = 0
+          end
+          item
+            Column = 3
+            Control = btnSelectAll
+            Row = 0
+          end
+          item
+            Column = 4
+            Control = btnClear
+            Row = 0
+          end>
+        RowCollection = <
           item
             Value = 100.000000000000000000
           end>
-        object Label2: TLabel
+        object btnCut: TSpeedButton
           Align = Client
           Margins.Left = 8.000000000000000000
           Margins.Top = 8.000000000000000000
           Margins.Right = 8.000000000000000000
           Margins.Bottom = 8.000000000000000000
-          Size.Width = 406.000000000000000000
-          Size.Height = 17.000000000000000000
+          Size.Width = 68.400367736816410000
+          Size.Height = 26.000000000000000000
           Size.PlatformDefault = False
-          Text = 'Answer'
-          TabOrder = 0
+          Text = 'Cut'
+          OnClick = btnCutClick
         end
-        object Memo1: TMemo
-          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-          DataDetectorTypes = []
-          TextSettings.WordWrap = True
+        object btnCopy: TSpeedButton
+          Tag = 1
           Align = Client
           Margins.Left = 8.000000000000000000
           Margins.Top = 8.000000000000000000
           Margins.Right = 8.000000000000000000
           Margins.Bottom = 8.000000000000000000
-          Size.Width = 406.000000000000000000
-          Size.Height = 449.625915527343800000
+          Size.Width = 68.399688720703130000
+          Size.Height = 26.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 1
-          Viewport.Width = 406.000000000000000000
-          Viewport.Height = 449.600000000000000000
+          Text = 'Copy'
+          OnClick = btnCutClick
+        end
+        object btnPaste: TSpeedButton
+          Tag = 2
+          Align = Client
+          Margins.Left = 8.000000000000000000
+          Margins.Top = 8.000000000000000000
+          Margins.Right = 8.000000000000000000
+          Margins.Bottom = 8.000000000000000000
+          Size.Width = 68.399810791015630000
+          Size.Height = 26.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Paste'
+          OnClick = btnCutClick
+        end
+        object btnSelectAll: TSpeedButton
+          Tag = 3
+          Align = Client
+          Margins.Left = 8.000000000000000000
+          Margins.Top = 8.000000000000000000
+          Margins.Right = 8.000000000000000000
+          Margins.Bottom = 8.000000000000000000
+          Size.Width = 68.400177001953130000
+          Size.Height = 26.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Select all'
+          OnClick = btnCutClick
+        end
+        object btnClear: TSpeedButton
+          Tag = 4
+          Align = Client
+          Margins.Left = 8.000000000000000000
+          Margins.Top = 8.000000000000000000
+          Margins.Right = 8.000000000000000000
+          Margins.Bottom = 8.000000000000000000
+          Size.Width = 68.400115966796880000
+          Size.Height = 26.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Clear'
+          OnClick = btnCutClick
         end
       end
     end

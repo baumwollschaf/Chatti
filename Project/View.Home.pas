@@ -20,6 +20,7 @@ uses
   System.Classes,
   System.Variants,
   FMX.Types,
+  FMX.Text,
   FMX.Graphics,
   FMX.Controls,
   FMX.Forms,
@@ -39,21 +40,36 @@ uses
   FMX.Effects,
   Model.Types,
   ViewModel,
-  FMX.Edit, FMX.Memo.Types;
+  FMX.Edit,
+  FMX.Memo.Types;
 
 type
   // Home/main frame.
   THomeFrame = class(TMainFrame)
     DataPanel: TGridPanelLayout;
-    GridPanelLayout1: TGridPanelLayout;
-    Label1: TLabel;
-    edQuestion: TEdit;
-    btnAsk: TButton;
     GridPanelLayout2: TGridPanelLayout;
+    GridPanelLayout1: TGridPanelLayout;
+    btnCut: TSpeedButton;
+    btnCopy: TSpeedButton;
+    btnPaste: TSpeedButton;
+    btnSelectAll: TSpeedButton;
+    GridPanelLayout3: TGridPanelLayout;
+    Layout1: TLayout;
+    Label1: TLabel;
+    btnAsk: TSpeedButton;
+    edQuestion: TEdit;
+    GridPanelLayout4: TGridPanelLayout;
+    Layout2: TLayout;
     Label2: TLabel;
-    Memo1: TMemo;
-    procedure ContactsDataRectClick(Sender: TObject);
+    edAnswer: TMemo;
+    btnClear: TSpeedButton;
+    chBxClear: TCheckBox;
+    ChBxShowQuestion: TCheckBox;
+    btnQuestionMark: TSpeedButton;
     procedure btnAskClick(Sender: TObject);
+    procedure btnCutClick(Sender: TObject);
+    procedure edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
+    procedure btnQuestionMarkClick(Sender: TObject);
   private
     FViewModel: TViewModel;
     function GetUserName: string;
@@ -77,13 +93,71 @@ begin
   FViewModel.Ask(edQuestion.Text,
     procedure(Answer: string)
     begin
-      Memo1.Lines.Add(Answer);
+      if chBxClear.IsChecked then
+      begin
+        edAnswer.Lines.Clear;
+      end;
+      if ChBxShowQuestion.IsChecked then
+      begin
+        edAnswer.Lines.Add('me: ' + edQuestion.Text);
+        edAnswer.Lines.Add('-----');
+        edQuestion.Text := '';
+        edQuestion.SetFocus;
+      end;
+      edAnswer.Lines.Add(Answer);
+      edAnswer.Lines.Add('');
     end);
 end;
 
-procedure THomeFrame.ContactsDataRectClick(Sender: TObject);
+procedure THomeFrame.btnCutClick(Sender: TObject);
 begin
-  GetMainForm.ShowActivity('ContactsList', true);
+  var
+    Btn: TSpeedButton := TSpeedButton(Sender);
+  if Btn = nil then
+    Exit;
+
+  var
+    Intf: ITextActions := nil;
+  if edQuestion.IsFocused then
+    Intf := edQuestion
+  else if edAnswer.IsFocused then
+    Intf := edAnswer;
+
+  if Intf = nil then
+    Exit;
+
+  case Btn.Tag of
+    0:
+      begin
+        Intf.CutToClipboard;
+      end;
+    1:
+      begin
+        Intf.CopyToClipboard;
+      end;
+    2:
+      begin
+        Intf.PasteFromClipboard;
+      end;
+    3:
+      begin
+        Intf.SelectAll;
+      end;
+    4:
+      begin
+        Intf.SelectAll;
+        Intf.DeleteSelection;
+      end;
+  end;
+
+end;
+
+procedure THomeFrame.btnQuestionMarkClick(Sender: TObject);
+begin
+  inherited;
+  if edQuestion.Text.Trim = '' then
+    Exit;
+  edQuestion.Text := edQuestion.Text + '?';
 end;
 
 constructor THomeFrame.Create(Owner: TComponent);
@@ -97,7 +171,7 @@ begin
   var
     ViewInfo: IViewInfo := GetMainForm as IViewInfo;
     // If Data enbaled.
-  if { ViewInfo.IsActivityPresent(sActivityData) and } IsClassPresent(sModelDataClassName) then
+  if IsClassPresent(sModelDataClassName) then
   begin
     if not Assigned(ViewForm.ViewModel) then
     begin
@@ -109,6 +183,15 @@ begin
   end;
   // Applying SVG icon.
   HamburgerImg.Data.Data := MATERIAL_UI_MENU;
+end;
+
+procedure THomeFrame.edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
+begin
+  if Key = vkReturn then
+  begin
+    Key := 0;
+    btnAskClick(nil);
+  end;
 end;
 
 // Getting current logged UserName

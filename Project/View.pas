@@ -177,12 +177,12 @@ end;
 
 procedure TViewForm.FormCreate(Sender: TObject);
 begin
-  //FAddressBookLoader := TAddressBookLoader.Create;
+  // FAddressBookLoader := TAddressBookLoader.Create;
 {$IFDEF ANDROID}
-//  if not IsPermissionGranted(EnumPermissions.READ_EXTERNAL_STORAGE) and
-//    not IsPermissionGranted(EnumPermissions.WRITE_EXTERNAL_STORAGE) then
-//    TDialogService.MessageDialog(sGrantStoragePermissionsMsgDlgText, TMsgDlgType.mtInformation,
-//      [TMsgDlgBtn.mbOk, TMsgDlgBtn.mbCancel], TMsgDlgBtn.mbOk, 0, CloseDialogEvent);
+  // if not IsPermissionGranted(EnumPermissions.READ_EXTERNAL_STORAGE) and
+  // not IsPermissionGranted(EnumPermissions.WRITE_EXTERNAL_STORAGE) then
+  // TDialogService.MessageDialog(sGrantStoragePermissionsMsgDlgText, TMsgDlgType.mtInformation,
+  // [TMsgDlgBtn.mbOk, TMsgDlgBtn.mbCancel], TMsgDlgBtn.mbOk, 0, CloseDialogEvent);
 {$ENDIF}
   ReadCommonUserSettings;
   if not FCommonUserSettings.IsValid then
@@ -383,9 +383,10 @@ begin
       if DataBlockSignature <> dCommonUserSettingsBlockSignature then
         Exit;
       FCommonUserSettings.Theme := TThemeMode(Reader.ReadInteger);
-      FCommonUserSettings.TimeZone := Reader.ReadString;
-      FCommonUserSettings.StringValue := Reader.ReadString;
-      FCommonUserSettings.BoolValue := Reader.ReadBoolean;
+      FCommonUserSettings.ApiKey := Reader.ReadString;
+      FCommonUserSettings.ModelName := Reader.ReadString;
+      if FCommonUserSettings.ModelName = '' then
+        FCommonUserSettings.ModelName := 'text-davinci-003';
     finally
       Reader.Free;
     end;
@@ -402,9 +403,8 @@ begin
   try
     Writer.Write(dCommonUserSettingsBlockSignature);
     Writer.Write(Integer(FCommonUserSettings.Theme));
-    Writer.Write(FCommonUserSettings.TimeZone);
-    Writer.Write(FCommonUserSettings.StringValue);
-    Writer.Write(FCommonUserSettings.BoolValue);
+    Writer.Write(FCommonUserSettings.ApiKey);
+    Writer.Write(FCommonUserSettings.ModelName);
   finally
     Writer.Free;
   end;

@@ -91,12 +91,12 @@ end;
 procedure TModelData.DataModuleCreate(Sender: TObject);
 begin
 {$IFDEF DEBUG}
-//  if TFile.Exists('ApiKey.txt') then
-//  begin
-//    ChatGpt.ApiKey := TFile.ReadAllText('ApiKey.txt');
-//  end;
-  ChatGpt.LoadModels;
+  // if TFile.Exists('ApiKey.txt') then
+  // begin
+  // ChatGpt.ApiKey := TFile.ReadAllText('ApiKey.txt');
+  // end;
 {$ENDIF}
+  ChatGpt.LoadModels;
 end;
 
 destructor TModelData.Destroy;

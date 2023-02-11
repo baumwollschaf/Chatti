@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 // This software is Copyright (c) 2021 Embarcadero Technologies, Inc.
 // You may only use this software if you are an authorized licensee
@@ -7,50 +7,65 @@
 // the software license agreement that comes with the Embarcadero Products
 // and is subject to that software license agreement.
 
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 unit View.Settings;
 
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Edit, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
-  FMX.ListBox, View.Main, View.Settings.Item, FMX.Layouts, FMX.Effects, FMX.Ani,
-  FMX.Objects, FMX.Controls.Presentation, Model.Constants, Model.Types, Model.Utils;
+  System.SysUtils,
+  System.Types,
+  System.UITypes,
+  System.Classes,
+  System.Variants,
+  FMX.Types,
+  FMX.Edit,
+  FMX.Graphics,
+  FMX.Controls,
+  FMX.Forms,
+  FMX.Dialogs,
+  FMX.StdCtrls,
+  FMX.ListBox,
+  View.Main,
+  View.Settings.Item,
+  FMX.Layouts,
+  FMX.Effects,
+  FMX.Ani,
+  FMX.Objects,
+  FMX.Controls.Presentation,
+  Model.Constants,
+  ViewModel,
+  Model.Types,
+  Model.Utils;
 
 type
   // Application settings frame.
   TSettingsFrame = class(TMainFrame)
     VertScrollBox: TVertScrollBox;
     ThemeSettingsFrame: TSettingsItemFrame;
-    TZSettingsFrame: TSettingsItemFrame;
-    StringValueSettingsFrame: TSettingsItemFrame;
-    BoolValueSettingsFrame: TSettingsItemFrame;
-    procedure SettingsItemFrame1ComboBoxChange(Sender: TObject);
-    procedure SettingsItemFrame1ComboBoxPopup(Sender: TObject);
+    ApiKeyValueSettingsFrame: TSettingsItemFrame;
+    ModelItemFrame: TSettingsItemFrame;
     procedure ThemeSettingsFrameValueComboBoxChange(Sender: TObject);
     procedure StringValueSettingsFrameValueEditChange(Sender: TObject);
-    procedure BoolValueSettingsFrameValueSwitchSwitch(Sender: TObject);
+    procedure ModelItemFrameValueComboBoxChange(Sender: TObject);
   private
     FPrevSeltext: string;
     FPrevSelIdx: Integer;
-    //FUserSettings: TUserSettings;
+    // FUserSettings: TUserSettings;
+    FViewModel: TViewModel;
     FCommonUserSettings: ICommonUserSettings;
+    procedure LoadModels;
   public
     constructor Create(AOwner: TComponent); override;
   end;
 
 implementation
 
-{$R *.fmx}
+uses
+  View;
 
-procedure TSettingsFrame.BoolValueSettingsFrameValueSwitchSwitch(
-  Sender: TObject);
-begin
-  inherited;
-  FCommonUserSettings.GetCommonUserSettings.BoolValue := TSwitch(Sender).IsChecked;
-end;
+{$R *.fmx}
 
 constructor TSettingsFrame.Create(AOwner: TComponent);
 begin
@@ -58,77 +73,72 @@ begin
   FCommonUserSettings := GetMainForm as ICommonUserSettings;
 
   case FCommonUserSettings.GetCommonUserSettings.Theme of
-    tmNone: ThemeSettingsFrame.ValueComboBox.ItemIndex := 0;
-    tmLight: ThemeSettingsFrame.ValueComboBox.ItemIndex := 1;
-    tmDark: ThemeSettingsFrame.ValueComboBox.ItemIndex := 2;
+    tmNone:
+      ThemeSettingsFrame.ValueComboBox.ItemIndex := 0;
+    tmLight:
+      ThemeSettingsFrame.ValueComboBox.ItemIndex := 1;
+    tmDark:
+      ThemeSettingsFrame.ValueComboBox.ItemIndex := 2;
   end;
 
-  TZSettingsFrame.ValueComboBox.Selected.Text := FCommonUserSettings.GetCommonUserSettings.TimeZone;
-  StringValueSettingsFrame.ValueEdit.Text := FCommonUserSettings.GetCommonUserSettings.StringValue;
-  BoolValueSettingsFrame.ValueSwitch.IsChecked := FCommonUserSettings.GetCommonUserSettings.BoolValue;
-//
-//  var UserInfo: IUserInfo := GetMainForm as IUserInfo;
-//  if Assigned(UserInfo) then
-//    FUserSettings := (GetMainForm as IUserInfo).GetUserSettings;
-//  if not Assigned(FUserSettings) then
-//    Exit;
-//  case FUserSettings.Theme of
-//    tmNone: ThemeSettingsFrame.ValueComboBox.ItemIndex := 0;
-//    tmLight: ThemeSettingsFrame.ValueComboBox.ItemIndex := 1;
-//    tmDark: ThemeSettingsFrame.ValueComboBox.ItemIndex := 2;
-//  end;
-////
-//  TZSettingsFrame.ValueComboBox.Selected.Text := FUserSettings.TimeZone;
-//  StringValueSettingsFrame.ValueEdit.Text := FUserSettings.StringValue;
-//  BoolValueSettingsFrame.ValueSwitch.IsChecked := FUserSettings.BoolValue;
-//  ThemeSettingsFrame.ValueComboBox.ItemIndex := -1;
-//  ThemeSettingsFrame.ValueComboBox.OnChange := ThemeSettingsFrameValueComboBoxChange;
+  var
+    ViewInfo: IViewInfo := GetMainForm as IViewInfo;
+  if IsClassPresent(sModelDataClassName) then
+  begin
+    if not Assigned(ViewForm.ViewModel) then
+    begin
+      FViewModel := TViewModel.Create;
+      ViewForm.ViewModel := FViewModel;
+    end
+    else
+      FViewModel := ViewForm.ViewModel;
+  end;
+
+  ApiKeyValueSettingsFrame.ValueEdit.Text := FCommonUserSettings.GetCommonUserSettings.ApiKey;
+  LoadModels;
+  ModelItemFrame.ValueComboBox.ItemIndex := ModelItemFrame.ValueComboBox.Items.IndexOf
+    (FCommonUserSettings.GetCommonUserSettings.ModelName);
 end;
 
-procedure TSettingsFrame.SettingsItemFrame1ComboBoxChange(Sender: TObject);
+procedure TSettingsFrame.LoadModels;
 begin
-  inherited;
-  FPrevSeltext := TComboBox(Sender).Selected.Text;
-  FPrevSelIdx := TComboBox(Sender).Selected.Index;
-  if TComboBox(Sender).Selected.Text.IsEmpty then
-    Exit;
-  TComboBox(Sender).Selected.Text := Concat(FPrevSeltext.Split([TAB_CHAR])[0], ' (UTC', FPrevSeltext.Split(['UTC'])[1], ')');
-  FCommonUserSettings.GetCommonUserSettings.TimeZone :=  TComboBox(Sender).Selected.Text;
+  FViewModel.GetModels(ModelItemFrame.ValueComboBox.Items);
 end;
 
-procedure TSettingsFrame.SettingsItemFrame1ComboBoxPopup(Sender: TObject);
+procedure TSettingsFrame.ModelItemFrameValueComboBoxChange(Sender: TObject);
 begin
   inherited;
-  if not FPrevSeltext.IsEmpty then
-    TComboBox(Sender).Items[FPrevSelIdx] := FPrevSeltext;
+  FCommonUserSettings.GetCommonUserSettings.ModelName := TComboBox(Sender).Selected.Text;
 end;
 
-procedure TSettingsFrame.StringValueSettingsFrameValueEditChange(
-  Sender: TObject);
+procedure TSettingsFrame.StringValueSettingsFrameValueEditChange(Sender: TObject);
 begin
   inherited;
-  FCommonUserSettings.GetCommonUserSettings.StringValue := TEdit(Sender).Text;
+  FCommonUserSettings.GetCommonUserSettings.ApiKey := TEdit(Sender).Text;
 end;
 
 procedure TSettingsFrame.ThemeSettingsFrameValueComboBoxChange(Sender: TObject);
 begin
   inherited;
-  var ViewUtils: IViewUtils := (GetMainForm as IViewUtils);
-  if Assigned(ViewUtils) then
-    if FCommonUserSettings.GetCommonUserSettings.Theme <> TThemeMode(TComboBox(Sender).Selected.Index) then
-      case TComboBox(Sender).Selected.Index of
-        0: ViewUtils.SetDefaultTheme;
-        1: ViewUtils.SetViewDarkMode(False);
-        2: ViewUtils.SetViewDarkMode(True);
-      end;
-  FCommonUserSettings.GetCommonUserSettings.Theme := TThemeMode(TComboBox(Sender).Selected.Index);
+  var
+    ViewUtils: IViewUtils := (GetMainForm as IViewUtils);
+    if Assigned(ViewUtils) then if FCommonUserSettings.GetCommonUserSettings.Theme <>
+      TThemeMode(TComboBox(Sender).Selected.Index) then case TComboBox(Sender).Selected.Index of 0
+      : ViewUtils.SetDefaultTheme;
+    1: ViewUtils.SetViewDarkMode(False);
+    2: ViewUtils.SetViewDarkMode(True);
+end;
+FCommonUserSettings.GetCommonUserSettings.Theme := TThemeMode(TComboBox(Sender).Selected.Index);
 end;
 
 initialization
-  // Register frame
-  RegisterClass(TSettingsFrame);
+
+// Register frame
+RegisterClass(TSettingsFrame);
+
 finalization
-  // Unregister frame
-  UnRegisterClass(TSettingsFrame);
+
+// Unregister frame
+UnRegisterClass(TSettingsFrame);
 
 end.

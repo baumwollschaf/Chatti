@@ -101,7 +101,7 @@ const
   sDBStoragePathMaskiOS = '%s%s%s';
 
   // String routines.
-  sNotDefined = '[not defined]';
+  sNotDefined = '';
   sSpaceChar = ' ';
 
   // System messages.

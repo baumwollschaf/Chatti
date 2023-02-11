@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 // This software is Copyright (c) 2021 Embarcadero Technologies, Inc.
 // You may only use this software if you are an authorized licensee
@@ -7,24 +7,48 @@
 // the software license agreement that comes with the Embarcadero Products
 // and is subject to that software license agreement.
 
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 unit Model.Types;
 
 interface
 
 uses
-  System.Classes, System.SysUtils, System.StrUtils, System.UITypes,
-  System.Generics.Collections, System.Messaging,
-  FMX.Types, FMX.Forms, FMX.Objects, FMX.Dialogs, FMX.Graphics, FMX.Platform,
-  FMX.AddressBook.Types, FMX.AddressBook, FMX.MultiView,
+  System.Classes,
+  System.SysUtils,
+  System.StrUtils,
+  System.UITypes,
+  System.Generics.Collections,
+  System.Messaging,
+  FMX.Types,
+  FMX.Forms,
+  FMX.Objects,
+  FMX.Dialogs,
+  FMX.Graphics,
+  FMX.Platform,
+  FMX.AddressBook.Types,
+  FMX.AddressBook,
+  FMX.MultiView,
 {$IFDEF ANDROID}
-  Androidapi.Helpers, Androidapi.JNI.JavaTypes,
+  Androidapi.Helpers,
+  Androidapi.JNI.JavaTypes,
 {$ENDIF}
-  Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
-  FireDAC.Stan.Error, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
-  FireDAC.Comp.Client, FireDAC.Comp.DataSet, FireDAC.Phys, FireDAC.Phys.Intf,
-  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.UI.Intf, FireDAC.FMXUI.Wait;
+  Data.DB,
+  FireDAC.Stan.Intf,
+  FireDAC.Stan.Option,
+  FireDAC.Stan.Param,
+  FireDAC.Stan.Error,
+  FireDAC.Stan.Def,
+  FireDAC.Stan.Pool,
+  FireDAC.Stan.Async,
+  FireDAC.Comp.Client,
+  FireDAC.Comp.DataSet,
+  FireDAC.Phys,
+  FireDAC.Phys.Intf,
+  FireDAC.DatS,
+  FireDAC.DApt.Intf,
+  FireDAC.UI.Intf,
+  FireDAC.FMXUI.Wait;
 
 type
   TUserSettings = class;
@@ -61,7 +85,7 @@ type
   IUserInfo = interface
     ['{45FEB1A2-45A9-4E77-A9B8-F47B554BA258}']
     function GetUserName: string;
-    procedure SetUserName(AValue: String);
+    procedure SetUserName(AValue: string);
     function GetUserSettings: TUserSettings;
     procedure SetUserImage(AUserImage: TBitmap);
     function GetUserImage: TBitmap;
@@ -96,12 +120,13 @@ type
   end;
 
   // Implements accsess to Model.Data.
-  TAnswerRefCallback = reference to procedure(AAnswer: String);
+  TAnswerRefCallback = reference to procedure(AAnswer: string);
+
   IModelData = interface
     ['{9A242DDE-145A-4745-A1B1-370E6BC7AEC8}']
-    procedure Ask(AQuestion: String; AAnswer: TAnswerRefCallback);
+    procedure Ask(AQuestion: string; AAnswer: TAnswerRefCallback);
     procedure GetModels(AModels: TStrings);
-    procedure SetApiKey(AKey: String);
+    procedure SetApiKey(AKey: string);
     // Max Tokens
     // ...
     // etc
@@ -127,10 +152,10 @@ type
 
   // Store common user settings if we won't use SignUp logic.
   TCommonUserSettings = record
-    class var Theme: TThemeMode;
-    class var TimeZone: string;
-    class var StringValue: string;
-    class var BoolValue: Boolean;
+  class var
+    Theme: TThemeMode;
+    class var ApiKey: string;
+    class var ModelName: string;
     function IsValid: Boolean;
   end;
 
@@ -144,6 +169,7 @@ type
   type
     // Set of User Gender.
     TUserGender = (ugNone, ugMale, ugFemale);
+
     // Stores user settings and system settings for this user.
     TUserData = record
       Email: string;
@@ -160,25 +186,21 @@ type
     FUserDataList: TList<TUserData>;
     FCurrentUser: TUserData;
     function IndexOfByEmail(AEmail: string): Integer;
-    function GetTimeZone: string;
     function GetTheme: TThemeMode;
-    function GetStringValue: string;
-    function GetBoolValue: Boolean;
-    procedure SetTimeZone(ATimeZone: string);
+    function GetApiKey: string;
+    function GetModelName: string;
     procedure SetTheme(ATheme: TThemeMode);
-    procedure SetStringValue(AStringValue: string);
-    procedure SetBoolValue(ABoolValue: Boolean);
+    procedure SetApiKey(AApiKey: string);
+    procedure SetModelName(AModelName: string);
   public
     constructor Create;
     procedure DeSerialize;
     procedure Serialize;
-    function SignUp(AEmail, AFirstName, ALastName, APassword: string;
-      AUserPicture: TBitmap): Integer;
+    function SignUp(AEmail, AFirstName, ALastName, APassword: string; AUserPicture: TBitmap): Integer;
     function SignIn(AEmail, APassword: string): Boolean;
-    property TimeZone: string read GetTimeZone write SetTimeZone;
     property Theme: TThemeMode read GetTheme write SetTheme;
-    property StringValue: string read GetStringValue write SetStringValue;
-    property BoolValue: Boolean read GetBoolValue write SetBoolValue;
+    property ApiKey: string read GetApiKey write SetApiKey;
+    property ModelName: string read GetModelName write SetModelName;
     property UserDataList: TList<TUserData> read FUserDataList;
     property CurrentUser: TUserData read FCurrentUser;
   end;
@@ -186,7 +208,8 @@ type
 implementation
 
 uses
-  Model.Constants, Model.Utils;
+  Model.Constants,
+  Model.Utils;
 
 { TScreenOrientationMonitor }
 
@@ -206,8 +229,7 @@ begin
 end;
 
 // Event handler fires when screen orientation was changed.
-procedure TScreenOrientationMonitor.DoOrientationChanged(const Sender: TObject;
-  const M: TMessage);
+procedure TScreenOrientationMonitor.DoOrientationChanged(const Sender: TObject; const M: TMessage);
 begin
   // Execute payload if screen orientation equal screen orientation which was settings up by Init
   if GetScreenOrientation = FScreenOrientation then
@@ -218,8 +240,9 @@ end;
 function TScreenOrientationMonitor.GetScreenOrientation: TScreenOrientation;
 begin
   Result := TScreenOrientation.Portrait;
-//  TMessageManager.DefaultManager.SubscribeToMessage(TOrientationChangedMessage, DoOrientationChanged);
-  var screenService: IFMXScreenService;
+  // TMessageManager.DefaultManager.SubscribeToMessage(TOrientationChangedMessage, DoOrientationChanged);
+  var
+    screenService: IFMXScreenService;
   if TPlatformServices.Current.SupportsPlatformService(IFMXScreenService, screenService) then
     Result := screenService.GetScreenOrientation;
 end;
@@ -237,7 +260,8 @@ begin
 end;
 
 // Event handler that runs when requesting permission.
-procedure TAddressBookLoader.DoAddressBookPermissionRequest(ASender: TObject; const AMessage: string; const AAccessGranted: Boolean);
+procedure TAddressBookLoader.DoAddressBookPermissionRequest(ASender: TObject; const AMessage: string;
+  const AAccessGranted: Boolean);
 begin
   inherited;
   if Assigned(FAddressBookContacts) then
@@ -267,17 +291,20 @@ begin
 end;
 
 {$IFDEF ANDROID}
+
 // Get permission to read contacts.
 function TAddressBookLoader.GrantAddressBookPermissions: Boolean;
 begin
-  var isGranted: Boolean := GetPermissionsSvc.IsEveryPermissionGranted([JStringToString(EnumPermissions.READ_CONTACTS), JStringToString(EnumPermissions.WRITE_CONTACTS)]);
+  var
+    isGranted: Boolean := GetPermissionsSvc.IsEveryPermissionGranted([JStringToString(EnumPermissions.READ_CONTACTS),
+      JStringToString(EnumPermissions.WRITE_CONTACTS)]);
   if not isGranted then
-    Result := GrantAndroidPermission(EnumPermissions.READ_CONTACTS) and GrantAndroidPermission(EnumPermissions.WRITE_CONTACTS)
+    Result := GrantAndroidPermission(EnumPermissions.READ_CONTACTS) and
+      GrantAndroidPermission(EnumPermissions.WRITE_CONTACTS)
   else
     Result := isGranted;
 end;
 {$ENDIF}
-
 { TUserSettings }
 
 // Constructor TUserSettings.
@@ -291,15 +318,19 @@ procedure TUserSettings.DeSerialize;
 begin
   if not ConfigExists then
     Exit;
-  var Count: Integer;
-  var ASerializedData: TMemoryStream := TMemoryStream.Create;
+  var
+    Count: Integer;
+  var
+    ASerializedData: TMemoryStream := TMemoryStream.Create;
   try
     ASerializedData.LoadFromFile(GetConfigPath);
     ASerializedData.Read(Count, SizeOf(NativeInt));
     for var i: Integer := 0 to Count - 1 do
     begin
-      var sz: integer;
-      var UserData: TUserData;
+      var
+        sz: Integer;
+      var
+        UserData: TUserData;
 
       ASerializedData.Read(sz, SizeOf(NativeInt));
       SetLength(UserData.Email, sz div SizeOf(Char));
@@ -320,7 +351,8 @@ begin
       ASerializedData.Read(UserData.Gender, SizeOf(NativeInt));
 
       ASerializedData.Read(sz, SizeOf(NativeInt));
-      var BmpStream := TMemoryStream.Create;
+      var
+      BmpStream := TMemoryStream.Create;
       try
         BmpStream.CopyFrom(ASerializedData, sz);
         UserData.UserPicture := TBitmap.Create;
@@ -332,14 +364,12 @@ begin
       ASerializedData.Read(UserData.CommonUserSettings.Theme, SizeOf(NativeInt));
 
       ASerializedData.Read(sz, SizeOf(NativeInt));
-      SetLength(UserData.CommonUserSettings.TimeZone, sz div SizeOf(Char));
-      ASerializedData.Read(TBytes(UserData.CommonUserSettings.TimeZone), sz);
+      SetLength(UserData.CommonUserSettings.ApiKey, sz div SizeOf(Char));
+      ASerializedData.Read(TBytes(UserData.CommonUserSettings.ApiKey), sz);
 
       ASerializedData.Read(sz, SizeOf(NativeInt));
-      SetLength(UserData.CommonUserSettings.StringValue, sz div SizeOf(Char));
-      ASerializedData.Read(TBytes(UserData.CommonUserSettings.StringValue), sz);
-
-      ASerializedData.Read(UserData.CommonUserSettings.BoolValue, SizeOf(Boolean));
+      SetLength(UserData.CommonUserSettings.ModelName, sz div SizeOf(Char));
+      ASerializedData.Read(TBytes(UserData.CommonUserSettings.ModelName), sz);
 
       FUserDataList.Add(UserData);
     end;
@@ -353,62 +383,72 @@ procedure TUserSettings.Serialize;
 begin
   if (FUserDataList.Count = 0) or not FCurrentUser.IsValid then
     Exit;
-  var ASerializedData := TMemoryStream.Create;
+  var
+  ASerializedData := TMemoryStream.Create;
   try
     ASerializedData.Write(FUserDataList.Count, SizeOf(NativeInt));
 
-    for var i: integer := 0 to FUserDataList.Count - 1 do
+    for var i: Integer := 0 to FUserDataList.Count - 1 do
     begin
-      var sz: Integer;
+      var
+        sz: Integer;
 
-      var Email: string := FUserDataList[i].Email;
+      var
+        Email: string := FUserDataList[i].Email;
       sz := Email.Length * SizeOf(Char);
       ASerializedData.Write(sz, SizeOf(NativeInt));
       ASerializedData.Write(Email[1], sz);
 
-      var FirstName: string := FUserDataList[i].FirstName;
+      var
+        FirstName: string := FUserDataList[i].FirstName;
       sz := FirstName.Length * SizeOf(Char);
       ASerializedData.Write(sz, SizeOf(NativeInt));
       ASerializedData.Write(FirstName[1], sz);
 
-      var LastName: string := FUserDataList[i].LastName;
+      var
+        LastName: string := FUserDataList[i].LastName;
       sz := LastName.Length * SizeOf(Char);
       ASerializedData.Write(sz, SizeOf(NativeInt));
       ASerializedData.Write(LastName[1], sz);
 
-      var Password: string := FUserDataList[i].Password;
+      var
+        Password: string := FUserDataList[i].Password;
       sz := Password.Length * SizeOf(Char);
       ASerializedData.Write(sz, SizeOf(NativeInt));
       ASerializedData.Write(Password[1], sz);
 
-      var Gender: TUserGender:= FUserDataList[i].Gender;
+      var
+        Gender: TUserGender := FUserDataList[i].Gender;
       ASerializedData.Write(Gender, SizeOf(NativeInt));
 
-      var MS: TMemoryStream := TMemoryStream.Create;
+      var
+        MS: TMemoryStream := TMemoryStream.Create;
       try
         FUserDataList[i].UserPicture.SaveToStream(MS);
-        var BmpSz: Integer := MS.Size;
+        var
+          BmpSz: Integer := MS.Size;
         ASerializedData.Write(BmpSz, SizeOf(NativeInt));
         ASerializedData.Write(MS.Memory^, MS.Size);
       finally
         MS.Free;
       end;
 
-      var T: TThemeMode := FUserDataList[i].CommonUserSettings.Theme;
+      var
+        T: TThemeMode := FUserDataList[i].CommonUserSettings.Theme;
       ASerializedData.Write(T, SizeOf(NativeInt));
 
-      var TZ: string := FUserDataList[i].CommonUserSettings.TimeZone;
-      sz := TZ.Length * SizeOf(Char);
+      var
+        ApiKey: string := FUserDataList[i].CommonUserSettings.ApiKey;
+      sz := ApiKey.Length * SizeOf(Char);
       ASerializedData.Write(sz, SizeOf(NativeInt));
-      ASerializedData.Write(TZ[1], sz);
+      ASerializedData.Write(ApiKey[1], sz);
 
-      var StringValue: string := FUserDataList[i].CommonUserSettings.StringValue;
-      sz := StringValue.Length * SizeOf(Char);
+      var
+        StringValu: string := FUserDataList[i].CommonUserSettings.ModelName;
+      sz := StringValu.Length * SizeOf(Char);
       ASerializedData.Write(sz, SizeOf(NativeInt));
-      ASerializedData.Write(StringValue[1], sz);
+      ASerializedData.Write(StringValu[1], sz);
 
-      var BoolValue: Boolean := FUserDataList[i].CommonUserSettings.BoolValue;
-      ASerializedData.Write(Byte(Boolvalue), SizeOf(Boolean));
     end;
     ASerializedData.SaveToFile(GetConfigPath);
   finally
@@ -417,11 +457,11 @@ begin
 end;
 
 // SignUp routine for a new user.
-function TUserSettings.SignUp(AEmail, AFirstName, ALastName, APassword: string;
-  AUserPicture: TBitmap): Integer;
+function TUserSettings.SignUp(AEmail, AFirstName, ALastName, APassword: string; AUserPicture: TBitmap): Integer;
 begin
-  var Userdata: TUserData;
-  with Userdata do
+  var
+    UserData: TUserData;
+  with UserData do
   begin
     Email := AEmail;
     FirstName := AFirstName;
@@ -429,12 +469,11 @@ begin
     Password := APassword;
     Gender := ugNone;
     UserPicture := AUserPicture;
-    Theme :=  tmNone;
-    TimeZone := sNotDefined;
-    StringValue := sNotDefined;
-    BoolValue := False;
+    Theme := tmNone;
+    ApiKey := sNotDefined;
+    ModelName := 'text-davinci-003';
   end;
-  Result := FUserDataList.Add(Userdata);
+  Result := FUserDataList.Add(UserData);
 end;
 
 // SignIn routine for a specific user.
@@ -443,7 +482,7 @@ var
   LUserIdxByEmail: Integer;
 begin
   Result := False;
-  if not (AEmail.IsEmpty or APassword.IsEmpty) then
+  if not(AEmail.IsEmpty or APassword.IsEmpty) then
   begin
     LUserIdxByEmail := IndexOfByEmail(AEmail);
     if (LUserIdxByEmail <> -1) and FUserDataList[LUserIdxByEmail].Password.Equals(APassword) then
@@ -459,36 +498,34 @@ function TUserSettings.IndexOfByEmail(AEmail: string): Integer;
 begin
   Result := -1;
   if FUserDataList.Count > 0 then
-   for var i: Integer := 0 to FUserDataList.Count - 1 do
-     if FUserDataList[i].Email.Equals(AEmail) then
-     begin
-       Result := i;
-       Break;
-     end;
+    for var i: Integer := 0 to FUserDataList.Count - 1 do
+      if FUserDataList[i].Email.Equals(AEmail) then
+      begin
+        Result := i;
+        Break;
+      end;
 end;
 
-// Getting BoolValue value
-function TUserSettings.GetBoolValue: Boolean;
+function TUserSettings.GetModelName: string;
 begin
-  Result := FCurrentUser.CommonUserSettings.BoolValue;
+  Result := FCurrentUser.CommonUserSettings.ModelName;
 end;
 
-// Setting BoolValue value
-procedure TUserSettings.SetBoolValue(ABoolValue: Boolean);
+procedure TUserSettings.SetModelName(AModelName: string);
 begin
-  FCurrentUser.CommonUserSettings.BoolValue := ABoolValue;
+  FCurrentUser.CommonUserSettings.ModelName := AModelName;
 end;
 
-// Getting StringValue value
-function TUserSettings.GetStringValue: string;
+// Getting ApiKey value
+function TUserSettings.GetApiKey: string;
 begin
-  Result := FCurrentUser.CommonUserSettings.StringValue;
+  Result := FCurrentUser.CommonUserSettings.ApiKey;
 end;
 
-// Setting StringValue value
-procedure TUserSettings.SetStringValue(AStringValue: string);
+// Setting ApiKey value
+procedure TUserSettings.SetApiKey(AApiKey: string);
 begin
-  FCurrentUser.CommonUserSettings.StringValue := AStringValue;
+  FCurrentUser.CommonUserSettings.ApiKey := AApiKey;
 end;
 
 // Getting Theme value
@@ -503,33 +540,19 @@ begin
   FCurrentUser.CommonUserSettings.Theme := ATheme;
 end;
 
-// Getting TimeZone value
-function TUserSettings.GetTimeZone: string;
-begin
-  Result := FCurrentUser.CommonUserSettings.TimeZone;
-end;
-
-// Setting TimeZone value
-procedure TUserSettings.SetTimeZone(ATimeZone: string);
-begin
-  FCurrentUser.CommonUserSettings.TimeZone := ATimeZone;
-end;
-
 { TUserSettings.TUserData }
 
 // Ñhecking of the basic data of a specific user.
 function TUserSettings.TUserData.IsValid: Boolean;
 begin
-  Result := not (Email.IsEmpty or FirstName.IsEmpty or LastName.IsEmpty or
-    Password.IsEmpty) and Assigned(UserPicture);
+  Result := not(Email.IsEmpty or FirstName.IsEmpty or LastName.IsEmpty or Password.IsEmpty) and Assigned(UserPicture);
 end;
 
 { TCommonUserSettings }
 
 function TCommonUserSettings.IsValid: Boolean;
 begin
-  Result := not ((Theme = TThemeMode.tmNone) and TimeZone.isEmpty and StringValue.IsEmpty and not BoolValue);
+  Result := not((Theme = TThemeMode.tmNone) and ApiKey.IsEmpty and ModelName.IsEmpty);
 end;
-
 
 end.
