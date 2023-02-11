@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <Transactions/>
+  <Transactions>
+    <Transaction>2023.02.11 08:22:31.425,C:\DelphiProjekte\github\Chatti\ChattiGroup.groupproj=C:\Users\rd3\OneDrive\Dokumente\Embarcadero\Studio\Projekte\ProjectGroup1.groupproj</Transaction>
+  </Transactions>
   <Default.Personality>
     <Projects ActiveProject="C:\DelphiProjekte\github\Chatti\Project\Chatti.dproj"/>
   </Default.Personality>

@@ -3,9 +3,6 @@
         <ProjectGuid>{F15EE2C2-8BC3-4D3E-B64E-6D97D62F2F9D}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Project\Test\Chatti_tests.dproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="Project\Chatti.dproj">
             <Dependencies/>
         </Projects>
@@ -17,15 +14,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="Chatti_tests">
-        <MSBuild Projects="Project\Test\Chatti_tests.dproj"/>
-    </Target>
-    <Target Name="Chatti_tests:Clean">
-        <MSBuild Projects="Project\Test\Chatti_tests.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Chatti_tests:Make">
-        <MSBuild Projects="Project\Test\Chatti_tests.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Chatti">
         <MSBuild Projects="Project\Chatti.dproj"/>
     </Target>
@@ -36,13 +24,13 @@
         <MSBuild Projects="Project\Chatti.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Chatti_tests;Chatti"/>
+        <CallTarget Targets="Chatti"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Chatti_tests:Clean;Chatti:Clean"/>
+        <CallTarget Targets="Chatti:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Chatti_tests:Make;Chatti:Make"/>
+        <CallTarget Targets="Chatti:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
