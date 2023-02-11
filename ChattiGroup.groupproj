@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{F15EE2C2-8BC3-4D3E-B64E-6D97D62F2F9D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Project\Test\Chatti_tests.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Project\Chatti.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Chatti_tests">
+        <MSBuild Projects="Project\Test\Chatti_tests.dproj"/>
+    </Target>
+    <Target Name="Chatti_tests:Clean">
+        <MSBuild Projects="Project\Test\Chatti_tests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Chatti_tests:Make">
+        <MSBuild Projects="Project\Test\Chatti_tests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Chatti">
+        <MSBuild Projects="Project\Chatti.dproj"/>
+    </Target>
+    <Target Name="Chatti:Clean">
+        <MSBuild Projects="Project\Chatti.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Chatti:Make">
+        <MSBuild Projects="Project\Chatti.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Chatti_tests;Chatti"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Chatti_tests:Clean;Chatti:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Chatti_tests:Make;Chatti:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
