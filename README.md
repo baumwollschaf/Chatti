@@ -1,2 +1,2 @@
-# RdMobileChatGpt
-RdMobileChatGpt
+# Chatti
+Chatti
