@@ -177,12 +177,12 @@ end;
 
 procedure TViewForm.FormCreate(Sender: TObject);
 begin
-  FAddressBookLoader := TAddressBookLoader.Create;
+  //FAddressBookLoader := TAddressBookLoader.Create;
 {$IFDEF ANDROID}
-  if not IsPermissionGranted(EnumPermissions.READ_EXTERNAL_STORAGE) and
-    not IsPermissionGranted(EnumPermissions.WRITE_EXTERNAL_STORAGE) then
-    TDialogService.MessageDialog(sGrantStoragePermissionsMsgDlgText, TMsgDlgType.mtInformation,
-      [TMsgDlgBtn.mbOk, TMsgDlgBtn.mbCancel], TMsgDlgBtn.mbOk, 0, CloseDialogEvent);
+//  if not IsPermissionGranted(EnumPermissions.READ_EXTERNAL_STORAGE) and
+//    not IsPermissionGranted(EnumPermissions.WRITE_EXTERNAL_STORAGE) then
+//    TDialogService.MessageDialog(sGrantStoragePermissionsMsgDlgText, TMsgDlgType.mtInformation,
+//      [TMsgDlgBtn.mbOk, TMsgDlgBtn.mbCancel], TMsgDlgBtn.mbOk, 0, CloseDialogEvent);
 {$ENDIF}
   ReadCommonUserSettings;
   if not FCommonUserSettings.IsValid then

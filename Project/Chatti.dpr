@@ -12,7 +12,6 @@ uses
   Model in 'Model.pas',
   ViewModel in 'ViewModel.pas',
   View.Home in 'View.Home.pas' {HomeFrame: TFrame},
-  View.Home.DataRect in 'View.Home.DataRect.pas' {DataRectFrame: TFrame},
   View.Settings.Item in 'View.Settings.Item.pas' {SettingsItemFrame: TFrame},
   View.Settings in 'View.Settings.pas' {SettingsFrame: TFrame},
   Model.Data in 'Model.Data.pas' {ModelData: TDataModule},

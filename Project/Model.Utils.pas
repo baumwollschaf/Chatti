@@ -291,7 +291,7 @@ function GrantAndroidPermission(APermission: JString): Boolean;
 begin
   var LResult: Boolean;
   PermissionsService.RequestPermissions([JStringToString(APermission)],
-    procedure(const APermissions: TArray<string>; const AGrantResults: TArray<TPermissionStatus>)
+    procedure(const APermissions: TClassicStringDynArray; const AGrantResults: TClassicPermissionStatusDynArray)
     begin
       if (Length(AGrantResults) = 1) and (AGrantResults[0] = TPermissionStatus.Granted) then
       begin

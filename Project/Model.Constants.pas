@@ -55,9 +55,6 @@ const
   sGrantStoragePermissionsMsgDlgText = 'Grant read\write storage permissions?';
   sCancelStoragePermissisonsText = Concat('Storage permissions denied!', #10, 'User settings were not loaded\saved propertly!');
 
-  sDBSampleDataRectDisabledCaption = 'DB Access';
-  sDataSampleDataRectDisabledValue = '[disabled]';
-
   sContactsNotSupported = 'Contacts list is not supported by Windows Platform';
   sPermissionsDenied = 'Premissions denied';
   sLoadingContacts = 'Loading contacts...';
@@ -97,15 +94,6 @@ const
   USER_NAME_PARAM = 'USER_NAME';
   sFilterbyFirstName = 'FIRST_NAME=''';
   sSingleQuoteChar = string('''');
-
-  // ViewModel data layer SQL scripts.
-  // We use these SQL for demo purposes.
-  SQLCMD_GetCustNoByUserName = 'SELECT CUST_NO FROM CUSTOMER WHERE CONTACT_FIRST=' + SQL_CMD_PARAM_DELIMITER + USER_NAME_PARAM;
-  SQLCMD_GetCustNoByUserName_FIELDNAME = 'CUST_NO';
-  SQLCMD_GetTotalSumSales = 'SELECT SUM(TOTAL_VALUE) FROM SALES WHERE CUST_NO=' + SQL_CMD_PARAM_DELIMITER + CUST_NO_PARAM;
-  SQLCMD_GetTotalSumSales_FIELDNAME = 'SUM';
-  SQLCMD_GetAddressLine1 = 'SELECT ADDRESS_LINE1 FROM CUSTOMER WHERE CONTACT_FIRST=' + SQL_CMD_PARAM_DELIMITER + USER_NAME_PARAM;
-  SQLCMD_GetAddressLine1_FIELDNAME = 'ADDRESS_LINE1';
 
   // IBLite demo dabatase file name.
   sDBName = 'employee.gdb';

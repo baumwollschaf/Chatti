@@ -27,15 +27,23 @@ uses
   Model.Constants,
   Model.Types,
   Model.Utils,
+  rd.OpenAI.ChatGpt.Model,
   rd.OpenAI.ChatGpt.ViewModel;
 
 type
   // Data access layer.
   TModelData = class(TDataModule, IModelData)
     ChatGpt: TRDChatGpt;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure ChatGptModelsLoaded(Sender: TObject; AType: TModels);
+    procedure ChatGptAnswer(Sender: TObject; AMessage: string);
   protected
     FAnswer: TAnswerRefCallback;
-    procedure Ask(AQuestion: String; AAnswer: TAnswerRefCallback);
+    FModels: TStringList;
+    FInitialized: Boolean;
+    procedure Ask(AQuestion: string; AAnswer: TAnswerRefCallback);
+    procedure GetModels(AModels: TStrings);
+    procedure SetApiKey(AKey: string);
   public
     constructor Create(Owner: TComponent); override;
     destructor Destroy; override;
@@ -50,64 +58,63 @@ implementation
 {$R *.dfm}
 { TModelData }
 
-procedure TModelData.Ask(AQuestion: String; AAnswer: TAnswerRefCallback);
+procedure TModelData.Ask(AQuestion: string; AAnswer: TAnswerRefCallback);
 begin
+  if not FInitialized then
+    Exit;
   FAnswer := AAnswer;
+  ChatGpt.Ask(AQuestion);
+end;
+
+procedure TModelData.ChatGptAnswer(Sender: TObject; AMessage: string);
+begin
+  if Assigned(FAnswer) then
+    FAnswer(AMessage);
+end;
+
+procedure TModelData.ChatGptModelsLoaded(Sender: TObject; AType: TModels);
+begin
+  FModels.Clear;
+  for var i: integer := 0 to AType.Data.Count - 1 do
+  begin
+    FModels.Add(AType.Data[i].Id);
+  end;
+  FInitialized := True;
 end;
 
 constructor TModelData.Create;
-var
-  LDatabasePath: string;
 begin
   inherited Create(nil);
-{$IFDEF MSWINDOWS}
-  LDatabasePath := TDirectory.GetParent(TDirectory.GetParent(TDirectory.GetParent(TPath.GetLibraryPath)));
-  if Application.IsUnitTestRunning then
-    LDatabasePath := TDirectory.GetParent(LDatabasePath);
-  LDatabasePath := TPath.Combine(LDatabasePath, sDBStoragePathWindows);
+  FModels := TStringList.Create;
+end;
+
+procedure TModelData.DataModuleCreate(Sender: TObject);
+begin
+{$IFDEF DEBUG}
+//  if TFile.Exists('ApiKey.txt') then
+//  begin
+//    ChatGpt.ApiKey := TFile.ReadAllText('ApiKey.txt');
+//  end;
+  ChatGpt.LoadModels;
 {$ENDIF}
-{$IF Defined(ANDROID) or Defined(IOS)}
-  LDatabasePath := TPath.GetDocumentsPath;
-{$ENDIF}
-  LDatabasePath := TPath.Combine(LDatabasePath, sDBName);
-  // Init(LDatabasePath);
 end;
 
 destructor TModelData.Destroy;
 begin
+  FreeAndNil(FModels);
   DestroyComponents;
   inherited;
 end;
 
-// Init database connection
-// procedure TModelData.Init(DatabasePath: string);
-// begin
-// FDConnection.Params.Database := DatabasePath;
-// try
-// FDConnection.Connected := True;
-// except
-// on E: Exception do
-// ShowMessage(Concat(sIBLiteErrorPrefix, E.Message));
-// end;
-// end;
+procedure TModelData.GetModels(AModels: TStrings);
+begin
+  AModels.Assign(FModels);
+end;
 
-// implements IModelData
-// function TModelData.GetFDConnection: TFDConnection;
-// begin
-// Result := FDConnection;
-// end;
-//
-/// / implements IModelData
-// function TModelData.GetFDQueryGrid: TFDQuery;
-// begin
-// Result := FDQueryGrid;
-// end;
-//
-/// / implements IModelData
-// function TModelData.GetFDQueryListView: TFDQuery;
-// begin
-// Result := FDQueryListView;
-// end;
+procedure TModelData.SetApiKey(AKey: string);
+begin
+  ChatGpt.ApiKey := AKey;
+end;
 
 initialization
 

@@ -26,7 +26,6 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function ExecSQLCommand(ASQLCommand, AFieldName, AParamName: string; AValue: Variant): Variant;
   end;
 
 var
@@ -59,13 +58,6 @@ begin
   ModelData := nil;
   FModelData.Destroy;
   inherited;
-end;
-
-function TModel.ExecSQLCommand(ASQLCommand, AFieldName, AParamName: string; AValue: Variant): Variant;
-begin
-  Result := Null;
-  if not Assigned(FModelData) then
-    Exit;
 end;
 
 end.
