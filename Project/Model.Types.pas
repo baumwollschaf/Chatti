@@ -96,11 +96,13 @@ type
   end;
 
   // Implements accsess to Model.Data.
+  TAnswerRefCallback = reference to procedure(AAnswer: String);
   IModelData = interface
     ['{9A242DDE-145A-4745-A1B1-370E6BC7AEC8}']
-    function GetFDConnection: TFDConnection;
-    function GetFDQueryGrid: TFDQuery;
-    function GetFDQueryListView: TFDQuery;
+//    function GetFDConnection: TFDConnection;
+//    function GetFDQueryGrid: TFDQuery;
+//    function GetFDQueryListView: TFDQuery;
+    procedure Ask(AQuestion: String; AAnswer: TAnswerRefCallback);
   end;
 
   // Implements loading contacts on non-Windows platforms.

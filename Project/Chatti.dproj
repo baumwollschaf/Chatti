@@ -94,9 +94,10 @@
         <AUP_READ_EXTERNAL_STORAGE>true</AUP_READ_EXTERNAL_STORAGE>
         <AUP_WRITE_EXTERNAL_STORAGE>true</AUP_WRITE_EXTERNAL_STORAGE>
         <AUP_READ_PHONE_STATE>true</AUP_READ_PHONE_STATE>
-        <DCC_UnitSearchPath>..\RDOpenAI\RDOpenAI;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\..\RDOpenAI\RDOpenAI;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_Locale>1031</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <SanitizedProjectName>Chatti</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <VerInfo_Keys>package=com.embarcadero.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=</VerInfo_Keys>
@@ -275,6 +276,10 @@
         <DCCReference Include="View.Settings.pas">
             <Form>SettingsFrame</Form>
             <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Model.Data.pas">
+            <Form>ModelData</Form>
+            <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="View.pas">
             <Form>ViewForm</Form>
