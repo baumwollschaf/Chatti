@@ -100,6 +100,7 @@ type
     procedure SetDefaultTheme;
     procedure PortraitRealign;
     procedure LandscapeRealign;
+    procedure SetChattiSettings;
     { IViewInfo }
     function GetScreenOrientation: TScreenOrientation;
     function GetMultiView: TMultiView;
@@ -317,6 +318,14 @@ end;
 procedure TViewForm.SetBackgroundTask(ATask: TThread);
 begin
   FBackgroundTask := ATask;
+end;
+
+procedure TViewForm.SetChattiSettings;
+begin
+  if ViewModel = nil then
+    Exit;
+  ViewModel.SetApiKey(FCommonUserSettings.ApiKey);
+  ViewModel.SetModel(FCommonUserSettings.ModelName);
 end;
 
 procedure TViewForm.SetDefaultTheme;

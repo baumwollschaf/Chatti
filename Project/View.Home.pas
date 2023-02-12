@@ -183,6 +183,17 @@ begin
   end;
   // Applying SVG icon.
   HamburgerImg.Data.Data := MATERIAL_UI_MENU;
+
+  // Chatti
+  ViewForm.SetChattiSettings;
+  try
+    FViewModel.LoadModels;
+  except
+    on E: Exception do
+    begin
+      ShowMessage('Set API-Key correctly in Settings'#13#10 + E.Message);
+    end;
+  end;
 end;
 
 procedure THomeFrame.edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);

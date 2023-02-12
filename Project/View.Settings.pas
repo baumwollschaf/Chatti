@@ -94,6 +94,11 @@ begin
       FViewModel := ViewForm.ViewModel;
   end;
 
+  // dont set apikey and model
+  ApiKeyValueSettingsFrame.Visible := False;
+  ModelItemFrame.Visible := False;
+  Exit;
+
   ApiKeyValueSettingsFrame.ValueEdit.Text := FCommonUserSettings.GetCommonUserSettings.ApiKey;
   LoadModels;
   ModelItemFrame.ValueComboBox.ItemIndex := ModelItemFrame.ValueComboBox.Items.IndexOf

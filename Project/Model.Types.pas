@@ -117,6 +117,7 @@ type
     procedure SetDefaultTheme;
     procedure PortraitRealign;
     procedure LandscapeRealign;
+    procedure SetChattiSettings;
   end;
 
   // Implements accsess to Model.Data.
@@ -125,8 +126,10 @@ type
   IModelData = interface
     ['{9A242DDE-145A-4745-A1B1-370E6BC7AEC8}']
     procedure Ask(AQuestion: string; AAnswer: TAnswerRefCallback);
+    procedure LoadModels;
     procedure GetModels(AModels: TStrings);
     procedure SetApiKey(AKey: string);
+    procedure SetModel(AModel: String);
     // Max Tokens
     // ...
     // etc

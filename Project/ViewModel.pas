@@ -31,6 +31,8 @@ type
     procedure Ask(AQuestion: string; AAnswer: TAnswerRefCallback);
     procedure GetModels(AModels: TStrings);
     procedure SetApiKey(AKey: string);
+    procedure SetModel(AModel: string);
+    procedure LoadModels;
 
     destructor Destroy; override;
     constructor Create;
@@ -61,9 +63,19 @@ begin
   (ModelData as IModelData).GetModels(AModels);
 end;
 
+procedure TViewModel.LoadModels;
+begin
+  (ModelData as IModelData).LoadModels;
+end;
+
 procedure TViewModel.SetApiKey(AKey: string);
 begin
   (ModelData as IModelData).SetApiKey(AKey);
+end;
+
+procedure TViewModel.SetModel(AModel: string);
+begin
+  (ModelData as IModelData).SetModel(AModel);
 end;
 
 end.

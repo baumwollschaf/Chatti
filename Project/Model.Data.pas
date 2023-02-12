@@ -40,10 +40,11 @@ type
   protected
     FAnswer: TAnswerRefCallback;
     FModels: TStringList;
-    FInitialized: Boolean;
     procedure Ask(AQuestion: string; AAnswer: TAnswerRefCallback);
+    procedure LoadModels;
     procedure GetModels(AModels: TStrings);
     procedure SetApiKey(AKey: string);
+    procedure SetModel(AModel: string);
   public
     constructor Create(Owner: TComponent); override;
     destructor Destroy; override;
@@ -60,8 +61,6 @@ implementation
 
 procedure TModelData.Ask(AQuestion: string; AAnswer: TAnswerRefCallback);
 begin
-  if not FInitialized then
-    Exit;
   FAnswer := AAnswer;
   ChatGpt.Ask(AQuestion);
 end;
@@ -79,7 +78,6 @@ begin
   begin
     FModels.Add(AType.Data[i].Id);
   end;
-  FInitialized := True;
 end;
 
 constructor TModelData.Create;
@@ -96,7 +94,6 @@ begin
   // ChatGpt.ApiKey := TFile.ReadAllText('ApiKey.txt');
   // end;
 {$ENDIF}
-  ChatGpt.LoadModels;
 end;
 
 destructor TModelData.Destroy;
@@ -111,9 +108,21 @@ begin
   AModels.Assign(FModels);
 end;
 
+procedure TModelData.LoadModels;
+begin
+  ChatGpt.LoadModels;
+end;
+
 procedure TModelData.SetApiKey(AKey: string);
 begin
+  Exit;
   ChatGpt.ApiKey := AKey;
+end;
+
+procedure TModelData.SetModel(AModel: string);
+begin
+  Exit;
+  ChatGpt.Model := AModel;
 end;
 
 initialization
