@@ -129,7 +129,8 @@ type
     procedure LoadModels;
     procedure GetModels(AModels: TStrings);
     procedure SetApiKey(AKey: string);
-    procedure SetModel(AModel: String);
+    procedure SetModel(AModel: string);
+    procedure SetMaxTokens(AValue: Integer);
     // Max Tokens
     // ...
     // etc
@@ -159,6 +160,7 @@ type
     Theme: TThemeMode;
     class var ApiKey: string;
     class var ModelName: string;
+    class var MaxTokens: Integer;
     function IsValid: Boolean;
   end;
 
@@ -195,6 +197,8 @@ type
     procedure SetTheme(ATheme: TThemeMode);
     procedure SetApiKey(AApiKey: string);
     procedure SetModelName(AModelName: string);
+    function GetMaxTokens: Integer;
+    procedure SetMaxTokens(const Value: Integer);
   public
     constructor Create;
     procedure DeSerialize;
@@ -204,6 +208,7 @@ type
     property Theme: TThemeMode read GetTheme write SetTheme;
     property ApiKey: string read GetApiKey write SetApiKey;
     property ModelName: string read GetModelName write SetModelName;
+    property MaxTokens: Integer read GetMaxTokens write SetMaxTokens;
     property UserDataList: TList<TUserData> read FUserDataList;
     property CurrentUser: TUserData read FCurrentUser;
   end;
@@ -509,9 +514,19 @@ begin
       end;
 end;
 
+function TUserSettings.GetMaxTokens: Integer;
+begin
+  Result := FCurrentUser.CommonUserSettings.MaxTokens;
+end;
+
 function TUserSettings.GetModelName: string;
 begin
   Result := FCurrentUser.CommonUserSettings.ModelName;
+end;
+
+procedure TUserSettings.SetMaxTokens(const Value: Integer);
+begin
+  FCurrentUser.CommonUserSettings.MaxTokens := Value;
 end;
 
 procedure TUserSettings.SetModelName(AModelName: string);
@@ -555,7 +570,7 @@ end;
 
 function TCommonUserSettings.IsValid: Boolean;
 begin
-  Result := not((Theme = TThemeMode.tmNone) and ApiKey.IsEmpty and ModelName.IsEmpty);
+  Result := not((Theme = TThemeMode.tmNone) and ApiKey.IsEmpty and ModelName.IsEmpty and (MaxTokens < 1));
 end;
 
 end.

@@ -46,32 +46,39 @@ uses
 type
   // Home/main frame.
   THomeFrame = class(TMainFrame)
-    DataPanel: TGridPanelLayout;
-    GridPanelLayout2: TGridPanelLayout;
+    LayoutMain: TLayout;
+    edAnswer: TMemo;
     GridPanelLayout1: TGridPanelLayout;
     btnCut: TSpeedButton;
     btnCopy: TSpeedButton;
     btnPaste: TSpeedButton;
     btnSelectAll: TSpeedButton;
-    GridPanelLayout3: TGridPanelLayout;
+    btnClear: TSpeedButton;
     Layout1: TLayout;
     Label1: TLabel;
-    GridPanelLayout4: TGridPanelLayout;
-    Layout2: TLayout;
-    Label2: TLabel;
-    edAnswer: TMemo;
-    btnClear: TSpeedButton;
-    chBxClear: TCheckBox;
-    ChBxShowQuestion: TCheckBox;
     btnQuestionMark: TSpeedButton;
     Layout3: TLayout;
-    edQuestion: TEdit;
+    Layout2: TLayout;
+    Label2: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    chBxClear: TCheckBox;
+    ChBxShowQuestion: TCheckBox;
+    Layout4: TLayout;
     btnAsk: TSpeedButton;
+    edQuestion: TEdit;
+    Layout5: TLayout;
+    Label3: TLabel;
+    TrackBar1: TTrackBar;
+    SpeedButton3: TSpeedButton;
     procedure btnAskClick(Sender: TObject);
     procedure btnCutClick(Sender: TObject);
     procedure edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
     procedure btnQuestionMarkClick(Sender: TObject);
+    procedure TrackBar1Change(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
   private
+    FLoaded: Boolean;
     FViewModel: TViewModel;
     function GetUserName: string;
   public
@@ -158,7 +165,30 @@ begin
   inherited;
   if edQuestion.Text.Trim = '' then
     Exit;
-  edQuestion.Text := edQuestion.Text + '?';
+
+  var
+    Btn: TSpeedButton := TSpeedButton(Sender);
+  if Btn = nil then
+    Exit;
+
+  var
+    Char: Char;
+
+  case Btn.Tag of
+    0:
+      begin
+        Char := '?';
+      end;
+    1:
+      begin
+        Char := '!';
+      end;
+    2:
+      begin
+        Char := '.';
+      end;
+  end;
+  edQuestion.Text := edQuestion.Text.TrimRight + Char;
   edQuestion.SelStart := edQuestion.Text.Length;
 end;
 
@@ -187,6 +217,11 @@ begin
   HamburgerImg.Data.Data := MATERIAL_UI_MENU;
 
   // Chatti
+
+  TrackBar1.Value := UserInfo.GetUserSettings.MaxTokens;
+  TrackBar1Change(nil);
+  FLoaded := True;
+
   ViewForm.SetChattiSettings;
   try
     FViewModel.LoadModels;
@@ -214,6 +249,26 @@ begin
     UserInfo: IUserInfo := GetMainForm as IUserInfo;
   if Assigned(UserInfo) then
     Result := UserInfo.GetUserName;
+end;
+
+procedure THomeFrame.SpeedButton3Click(Sender: TObject);
+begin
+  inherited;
+  TrackBar1.Value := 2048;
+  TrackBar1Change(nil);
+end;
+
+procedure THomeFrame.TrackBar1Change(Sender: TObject);
+begin
+  var
+    Tokens: Integer := Trunc(TrackBar1.Value);
+  Label3.Text := Format('Shorter ... longer Answer (Tokens: %d)', [Tokens]);
+  if not FLoaded then
+    Exit;
+  var
+    UserInfo: IUserInfo := GetMainForm as IUserInfo;
+  UserInfo.GetUserSettings.MaxTokens := Tokens;
+  FViewModel.SetMaxTokens(Tokens);
 end;
 
 initialization

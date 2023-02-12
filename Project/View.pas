@@ -189,6 +189,7 @@ begin
   if not FCommonUserSettings.IsValid then
   begin
     SetViewDarkMode(False);
+    FCommonUserSettings.MaxTokens := 2048;
     FCommonUserSettings.Theme := TThemeMode.tmLight;
   end
   else
@@ -326,6 +327,7 @@ begin
     Exit;
   ViewModel.SetApiKey(FCommonUserSettings.ApiKey);
   ViewModel.SetModel(FCommonUserSettings.ModelName);
+  ViewModel.SetMaxTokens(FCommonUserSettings.MaxTokens);
 end;
 
 procedure TViewForm.SetDefaultTheme;
@@ -396,6 +398,9 @@ begin
       FCommonUserSettings.ModelName := Reader.ReadString;
       if FCommonUserSettings.ModelName = '' then
         FCommonUserSettings.ModelName := 'text-davinci-003';
+      FCommonUserSettings.MaxTokens := Reader.ReadInteger;
+      if FCommonUserSettings.MaxTokens < 1 then
+        FCommonUserSettings.MaxTokens := 2048;
     finally
       Reader.Free;
     end;
@@ -414,6 +419,7 @@ begin
     Writer.Write(Integer(FCommonUserSettings.Theme));
     Writer.Write(FCommonUserSettings.ApiKey);
     Writer.Write(FCommonUserSettings.ModelName);
+    Writer.Write(FCommonUserSettings.MaxTokens);
   finally
     Writer.Free;
   end;

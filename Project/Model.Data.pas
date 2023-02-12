@@ -47,6 +47,7 @@ type
     procedure GetModels(AModels: TStrings);
     procedure SetApiKey(AKey: string);
     procedure SetModel(AModel: string);
+    procedure SetMaxTokens(AValue: Integer);
   public
     constructor Create(Owner: TComponent); override;
     destructor Destroy; override;
@@ -114,6 +115,11 @@ procedure TModelData.SetApiKey(AKey: string);
 begin
   Exit;
   ChatGpt.ApiKey := AKey;
+end;
+
+procedure TModelData.SetMaxTokens(AValue: Integer);
+begin
+  ChatGpt.MaxTokens := AValue;
 end;
 
 procedure TModelData.SetModel(AModel: string);

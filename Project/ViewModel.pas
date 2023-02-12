@@ -32,6 +32,7 @@ type
     procedure GetModels(AModels: TStrings);
     procedure SetApiKey(AKey: string);
     procedure SetModel(AModel: string);
+    procedure SetMaxTokens(AValue: Integer);
     procedure LoadModels;
 
     destructor Destroy; override;
@@ -71,6 +72,11 @@ end;
 procedure TViewModel.SetApiKey(AKey: string);
 begin
   (ModelData as IModelData).SetApiKey(AKey);
+end;
+
+procedure TViewModel.SetMaxTokens(AValue: Integer);
+begin
+  (ModelData as IModelData).SetMaxTokens(AValue);
 end;
 
 procedure TViewModel.SetModel(AModel: string);
