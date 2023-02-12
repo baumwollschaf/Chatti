@@ -56,8 +56,6 @@ type
     GridPanelLayout3: TGridPanelLayout;
     Layout1: TLayout;
     Label1: TLabel;
-    btnAsk: TSpeedButton;
-    edQuestion: TEdit;
     GridPanelLayout4: TGridPanelLayout;
     Layout2: TLayout;
     Label2: TLabel;
@@ -66,6 +64,9 @@ type
     chBxClear: TCheckBox;
     ChBxShowQuestion: TCheckBox;
     btnQuestionMark: TSpeedButton;
+    Layout3: TLayout;
+    edQuestion: TEdit;
+    btnAsk: TSpeedButton;
     procedure btnAskClick(Sender: TObject);
     procedure btnCutClick(Sender: TObject);
     procedure edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
@@ -158,6 +159,7 @@ begin
   if edQuestion.Text.Trim = '' then
     Exit;
   edQuestion.Text := edQuestion.Text + '?';
+  edQuestion.SelStart := edQuestion.Text.Length;
 end;
 
 constructor THomeFrame.Create(Owner: TComponent);

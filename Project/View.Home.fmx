@@ -111,7 +111,7 @@ inherited HomeFrame: THomeFrame
             end
             item
               Column = 0
-              Control = edQuestion
+              Control = Layout3
               Row = 1
             end>
           RowCollection = <
@@ -134,54 +134,63 @@ inherited HomeFrame: THomeFrame
               Margins.Top = 8.000000000000000000
               Margins.Right = 8.000000000000000000
               Margins.Bottom = 8.000000000000000000
-              Size.Width = 214.000000000000000000
+              Size.Width = 336.000000000000000000
               Size.Height = 20.491115570068360000
               Size.PlatformDefault = False
               Text = 'Question'
               TabOrder = 0
             end
-            object btnAsk: TSpeedButton
-              Align = Right
-              Margins.Left = 8.000000000000000000
-              Margins.Top = 8.000000000000000000
-              Margins.Right = 8.000000000000000000
-              Margins.Bottom = 8.000000000000000000
-              Position.X = 334.000000000000000000
-              Position.Y = 8.000000000000000000
-              Size.Width = 80.000000000000000000
-              Size.Height = 20.491115570068360000
-              Size.PlatformDefault = False
-              Text = 'Ask'
-              OnClick = btnAskClick
-            end
             object btnQuestionMark: TSpeedButton
               Align = Right
+              ImageIndex = 5
               Margins.Left = 8.000000000000000000
               Margins.Top = 8.000000000000000000
               Margins.Right = 8.000000000000000000
               Margins.Bottom = 8.000000000000000000
-              Position.X = 238.000000000000000000
+              Position.X = 360.000000000000000000
               Position.Y = 8.000000000000000000
-              Size.Width = 80.000000000000000000
+              Size.Width = 54.000000000000000000
               Size.Height = 20.491115570068360000
               Size.PlatformDefault = False
-              Text = '?'
+              Text = 'add "?"'
               OnClick = btnQuestionMarkClick
             end
           end
-          object edQuestion: TEdit
-            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          object Layout3: TLayout
             Align = Client
-            TabOrder = 1
-            ReturnKeyType = Search
-            Margins.Left = 8.000000000000000000
-            Margins.Top = 8.000000000000000000
-            Margins.Right = 8.000000000000000000
-            Margins.Bottom = 8.000000000000000000
-            Size.Width = 406.000000000000000000
-            Size.Height = 25.568386077880860000
+            Size.Width = 422.000000000000000000
+            Size.Height = 41.568386077880860000
             Size.PlatformDefault = False
-            OnKeyUp = edQuestionKeyUp
+            TabOrder = 1
+            object edQuestion: TEdit
+              Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+              Align = Client
+              TabOrder = 1
+              ReturnKeyType = Search
+              Margins.Left = 8.000000000000000000
+              Margins.Top = 8.000000000000000000
+              Margins.Right = 8.000000000000000000
+              Margins.Bottom = 8.000000000000000000
+              Size.Width = 336.000000000000000000
+              Size.Height = 25.568386077880860000
+              Size.PlatformDefault = False
+              OnKeyUp = edQuestionKeyUp
+            end
+            object btnAsk: TSpeedButton
+              Align = Right
+              ImageIndex = 6
+              Margins.Left = 8.000000000000000000
+              Margins.Top = 8.000000000000000000
+              Margins.Right = 8.000000000000000000
+              Margins.Bottom = 8.000000000000000000
+              Position.X = 360.000000000000000000
+              Position.Y = 8.000000000000000000
+              Size.Width = 54.000000000000000000
+              Size.Height = 25.568386077880860000
+              Size.PlatformDefault = False
+              Text = 'Go'
+              OnClick = btnAskClick
+            end
           end
         end
         object GridPanelLayout4: TGridPanelLayout
@@ -323,11 +332,12 @@ inherited HomeFrame: THomeFrame
           end>
         object btnCut: TSpeedButton
           Align = Client
+          ImageIndex = 0
           Margins.Left = 8.000000000000000000
           Margins.Top = 8.000000000000000000
           Margins.Right = 8.000000000000000000
           Margins.Bottom = 8.000000000000000000
-          Size.Width = 68.400367736816410000
+          Size.Width = 68.400054931640630000
           Size.Height = 26.000000000000000000
           Size.PlatformDefault = False
           Text = 'Cut'
@@ -336,6 +346,7 @@ inherited HomeFrame: THomeFrame
         object btnCopy: TSpeedButton
           Tag = 1
           Align = Client
+          ImageIndex = 1
           Margins.Left = 8.000000000000000000
           Margins.Top = 8.000000000000000000
           Margins.Right = 8.000000000000000000
@@ -349,11 +360,12 @@ inherited HomeFrame: THomeFrame
         object btnPaste: TSpeedButton
           Tag = 2
           Align = Client
+          ImageIndex = 2
           Margins.Left = 8.000000000000000000
           Margins.Top = 8.000000000000000000
           Margins.Right = 8.000000000000000000
           Margins.Bottom = 8.000000000000000000
-          Size.Width = 68.399810791015630000
+          Size.Width = 68.399993896484380000
           Size.Height = 26.000000000000000000
           Size.PlatformDefault = False
           Text = 'Paste'
@@ -362,6 +374,7 @@ inherited HomeFrame: THomeFrame
         object btnSelectAll: TSpeedButton
           Tag = 3
           Align = Client
+          ImageIndex = 3
           Margins.Left = 8.000000000000000000
           Margins.Top = 8.000000000000000000
           Margins.Right = 8.000000000000000000
@@ -375,6 +388,7 @@ inherited HomeFrame: THomeFrame
         object btnClear: TSpeedButton
           Tag = 4
           Align = Client
+          ImageIndex = 4
           Margins.Left = 8.000000000000000000
           Margins.Top = 8.000000000000000000
           Margins.Right = 8.000000000000000000

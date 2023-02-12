@@ -27,6 +27,9 @@ uses
   Model.Constants,
   Model.Types,
   Model.Utils,
+{$IFDEF baumwollschaf}
+  Extern.ApiKey,
+{$ENDIF}
   rd.OpenAI.ChatGpt.Model,
   rd.OpenAI.ChatGpt.ViewModel;
 
@@ -34,7 +37,6 @@ type
   // Data access layer.
   TModelData = class(TDataModule, IModelData)
     ChatGpt: TRDChatGpt;
-    procedure DataModuleCreate(Sender: TObject);
     procedure ChatGptModelsLoaded(Sender: TObject; AType: TModels);
     procedure ChatGptAnswer(Sender: TObject; AMessage: string);
   protected
@@ -84,15 +86,10 @@ constructor TModelData.Create;
 begin
   inherited Create(nil);
   FModels := TStringList.Create;
-end;
 
-procedure TModelData.DataModuleCreate(Sender: TObject);
-begin
-{$IFDEF DEBUG}
-  // if TFile.Exists('ApiKey.txt') then
-  // begin
-  // ChatGpt.ApiKey := TFile.ReadAllText('ApiKey.txt');
-  // end;
+{$IFDEF baumwollschaf}
+  // this is just a constant with my personal API-Key... not checked in ;-)
+  ChatGpt.ApiKey := TExternalStuff.ApiKey;
 {$ENDIF}
 end;
 

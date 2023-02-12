@@ -1,5 +1,4 @@
 object ModelData: TModelData
-  OnCreate = DataModuleCreate
   Height = 327
   Width = 486
   object ChatGpt: TRDChatGpt
