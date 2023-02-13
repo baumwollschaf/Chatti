@@ -64,7 +64,7 @@ object AppMainFormChatti: TAppMainFormChatti
           Value = 16.714398999730950000
         end
         item
-          Value = 16.695266894049370000
+          Value = 16.695266894049380000
         end
         item
           Value = 16.676171804416490000
@@ -362,8 +362,8 @@ object AppMainFormChatti: TAppMainFormChatti
       Size.Height = 308.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
-      Viewport.Width = 368.000000000000000000
-      Viewport.Height = 308.000000000000000000
+      Viewport.Width = 364.000000000000000000
+      Viewport.Height = 304.000000000000000000
     end
   end
   object RDChatGpt1: TRDChatGpt
