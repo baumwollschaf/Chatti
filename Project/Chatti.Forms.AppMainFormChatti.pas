@@ -182,6 +182,8 @@ begin
       begin
         Char := '.';
       end;
+    else
+      Exit;
   end;
   edQuestion.Text := edQuestion.Text.TrimRight + Char;
   edQuestion.SelStart := edQuestion.Text.Length;
