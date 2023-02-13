@@ -38,7 +38,6 @@ type
     comboTheme: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure comboThemeChange(Sender: TObject);
   private
     FSettings: TSetting;
   protected
@@ -57,13 +56,6 @@ implementation
 
 {$R *.fmx}
 { TSettingsForm }
-
-procedure TSettingsForm.comboThemeChange(Sender: TObject);
-begin
-  inherited;
-  // AppMainFormChatti.SetThemeMode(TThemeMode(comboTheme.ItemIndex));
-  // StyleBook := AppMainFormChatti.StyleBook;
-end;
 
 procedure TSettingsForm.FormCreate(Sender: TObject);
 begin

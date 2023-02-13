@@ -25,6 +25,7 @@ type
     procedure btnBackClick(Sender: TObject);
     procedure btnNextClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
   private
     FBackCallBack: TProc<TObject>;
     FNextCallBack: TProc<TObject>;
@@ -75,6 +76,15 @@ end;
 procedure TTemplateForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := TCloseAction.caFree;
+end;
+
+procedure TTemplateForm.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
+begin
+  if Key = vkHardwareBack then
+  begin
+    Key := 0;
+    btnBackClick(nil);
+  end;
 end;
 
 end.

@@ -9,6 +9,7 @@ object TemplateForm: TTemplateForm
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnClose = FormClose
+  OnKeyDown = FormKeyDown
   DesignerMasterStyle = 0
   object Header: TToolBar
     Size.Width = 640.000000000000000000

@@ -192,21 +192,17 @@ begin
   var
     CurTheme: TThemeMode := FSettings.ThemeMode;
   SettingsForm := TSettingsForm.Create(Application,
+    // cancel-click
+    nil,
+    // ok-click
     procedure(Setting: TObject)
     begin
-      // cancel-click
       if CurTheme <> TSetting(Setting).Theme then
       begin
-        // back to old theme
-        // SetThemeMode(CurTheme);
+        FSettings.ThemeMode := TSetting(Setting).Theme;
+        FSettings.Save;
+        SetThemeMode(FSettings.ThemeMode);
       end;
-    end,
-    procedure(Setting: TObject)
-    begin
-      // ok-click
-      FSettings.ThemeMode := TSetting(Setting).Theme;
-      FSettings.Save;
-      SetThemeMode(FSettings.ThemeMode);
     end);
   SettingsForm.Settings.Theme := CurTheme;
   SettingsForm.Show;

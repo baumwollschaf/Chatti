@@ -46,7 +46,6 @@ inherited SettingsForm: TSettingsForm
       Size.Height = 34.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
-      OnChange = comboThemeChange
     end
   end
 end
