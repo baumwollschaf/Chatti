@@ -9,6 +9,7 @@ inherited SettingsForm: TSettingsForm
     end
     inherited btnNext: TSpeedButton
       StyleLookup = 'donetoolbutton'
+      Text = 'OK'
     end
   end
   object Layout1: TLayout

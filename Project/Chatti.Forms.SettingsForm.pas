@@ -60,6 +60,10 @@ implementation
 procedure TSettingsForm.FormCreate(Sender: TObject);
 begin
   inherited;
+  {$IFNDEF MSWINDOWS}
+  btnNext.Text := '';
+  {$ENDIF}
+
   FSettings := TSetting.Create;
   FSettings.FForm := Self;
 end;
