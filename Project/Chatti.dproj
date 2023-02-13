@@ -313,43 +313,17 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
+        <DCCReference Include="Chatti.Forms.AppMainFormChatti.pas">
+            <Form>AppMainFormChatti</Form>
+        </DCCReference>
+        <DCCReference Include="Chatti.Forms.TemplateForm.pas">
+            <Form>TemplateForm</Form>
+        </DCCReference>
+        <DCCReference Include="Chatti.Forms.SettingsForm.pas">
+            <Form>SettingsForm</Form>
+        </DCCReference>
         <DCCReference Include="Extern.ApiKey.pas"/>
-        <DCCReference Include="View.Main.pas">
-            <Form>MainFrame</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Model.Constants.pas"/>
-        <DCCReference Include="Model.Types.pas"/>
-        <DCCReference Include="Model.Utils.pas"/>
-        <DCCReference Include="View.Menu.pas">
-            <Form>MenuFrame</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="View.Menu.Item.pas">
-            <Form>MenuItemFrame</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Model.pas"/>
-        <DCCReference Include="ViewModel.pas"/>
-        <DCCReference Include="View.Home.pas">
-            <Form>HomeFrame</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="View.Settings.Item.pas">
-            <Form>SettingsItemFrame</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="View.Settings.pas">
-            <Form>SettingsFrame</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Model.Data.pas">
-            <Form>ModelData</Form>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="View.pas">
-            <Form>ViewForm</Form>
-        </DCCReference>
+        <DCCReference Include="Chatti.Types.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

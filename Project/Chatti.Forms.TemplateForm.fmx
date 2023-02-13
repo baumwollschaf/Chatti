@@ -1,0 +1,45 @@
+object TemplateForm: TTemplateForm
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 640
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnClose = FormClose
+  DesignerMasterStyle = 0
+  object Header: TToolBar
+    Size.Width = 640.000000000000000000
+    Size.Height = 48.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object HeaderLabel: TLabel
+      Align = Contents
+      Size.Width = 640.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'toollabel'
+      TextSettings.HorzAlign = Center
+      Text = 'Title'
+    end
+    object btnNext: TSpeedButton
+      Align = Right
+      Position.X = 583.000000000000000000
+      Size.Width = 57.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'nexttoolbutton'
+      OnClick = btnNextClick
+    end
+    object btnBack: TSpeedButton
+      Align = Left
+      Size.Width = 57.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'priortoolbutton'
+      OnClick = btnBackClick
+    end
+  end
+end

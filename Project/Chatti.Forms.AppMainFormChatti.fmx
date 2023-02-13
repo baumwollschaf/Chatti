@@ -1,0 +1,386 @@
+object AppMainFormChatti: TAppMainFormChatti
+  Left = 0
+  Top = 0
+  Caption = 'Chatti'
+  ClientHeight = 567
+  ClientWidth = 384
+  Position = ScreenCenter
+  FormFactor.Width = 1440
+  FormFactor.Height = 900
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnClose = FormClose
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object Header: TToolBar
+    Size.Width = 384.000000000000000000
+    Size.Height = 48.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object HeaderLabel: TLabel
+      Align = Contents
+      Size.Width = 384.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'toollabel'
+      TextSettings.HorzAlign = Center
+      Text = 'Chatti'
+    end
+    object btnSettings: TSpeedButton
+      Align = Right
+      Position.X = 327.000000000000000000
+      Size.Width = 57.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'detailstoolbutton'
+      Text = 'btnSettings'
+      OnClick = btnSettingsClick
+    end
+  end
+  object ViewStyleBook: TStyleBook
+    UseStyleManager = True
+    Styles = <
+      item
+      end>
+    Left = 168
+    Top = 128
+  end
+  object VertScrollBox1: TVertScrollBox
+    Align = Client
+    Size.Width = 384.000000000000000000
+    Size.Height = 519.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Viewport.Width = 384.000000000000000000
+    Viewport.Height = 519.000000000000000000
+    object GridPanelLayout1: TGridPanelLayout
+      Align = Top
+      Size.Width = 384.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      ColumnCollection = <
+        item
+          Value = 16.714398999730950000
+        end
+        item
+          Value = 16.695266894049370000
+        end
+        item
+          Value = 16.676171804416490000
+        end
+        item
+          Value = 16.657100702651850000
+        end
+        item
+          Value = 16.638048015693990000
+        end
+        item
+          Value = 16.619013583457350000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = btnCut
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = btnCopy
+          Row = 0
+        end
+        item
+          Column = 2
+          Control = btnPaste
+          Row = 0
+        end
+        item
+          Column = 3
+          Control = btnSelectAll
+          Row = 0
+        end
+        item
+          Column = 4
+          Control = btnClear
+          Row = 0
+        end
+        item
+          Column = 5
+          Control = SpeedButton3
+          Row = 0
+        end>
+      RowCollection = <
+        item
+          Value = 100.000000000000000000
+        end>
+      object btnCut: TSpeedButton
+        Align = Client
+        ImageIndex = 0
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        RotationAngle = 270.000000000000000000
+        Size.Width = 48.183288574218750000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = #9986
+        OnClick = btnCutClick
+      end
+      object btnCopy: TSpeedButton
+        Tag = 1
+        Align = Client
+        ImageIndex = 1
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 48.109832763671880000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = #55357#56523
+        OnClick = btnCutClick
+      end
+      object btnPaste: TSpeedButton
+        Tag = 2
+        Align = Client
+        ImageIndex = 2
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 48.036499023437500000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = #55357#56529
+        OnClick = btnCutClick
+      end
+      object btnSelectAll: TSpeedButton
+        Tag = 3
+        Align = Client
+        ImageIndex = 3
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 47.963256835937500000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = #10720
+        OnClick = btnCutClick
+      end
+      object btnClear: TSpeedButton
+        Tag = 4
+        Align = Client
+        ImageIndex = 4
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 47.890106201171880000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = #10060
+        OnClick = btnCutClick
+      end
+      object SpeedButton3: TSpeedButton
+        Action = ShowShareSheetAction1
+        Align = Client
+        Enabled = True
+        ImageIndex = -1
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 47.817016601562500000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'actiontoolbutton'
+        Text = 'Share'
+      end
+    end
+    object Layout1: TLayout
+      Align = Top
+      Position.Y = 50.000000000000000000
+      Size.Width = 384.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      object Label1: TLabel
+        Align = Client
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 201.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Question'
+        TabOrder = 0
+      end
+      object btnQuestionMark: TSpeedButton
+        Align = Right
+        ImageIndex = 5
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.X = 217.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 63.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'add "?"'
+        OnClick = btnQuestionMarkClick
+      end
+      object SpeedButton1: TSpeedButton
+        Tag = 1
+        Align = Right
+        ImageIndex = 5
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.X = 288.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 41.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = '"!"'
+        OnClick = btnQuestionMarkClick
+      end
+      object SpeedButton2: TSpeedButton
+        Tag = 2
+        Align = Right
+        ImageIndex = 5
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.X = 337.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 39.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = '"."'
+        OnClick = btnQuestionMarkClick
+      end
+    end
+    object Layout4: TLayout
+      Align = Top
+      Position.Y = 100.000000000000000000
+      Size.Width = 384.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object btnAsk: TSpeedButton
+        Align = Right
+        ImageIndex = 6
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.X = 306.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 70.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'donetoolbutton'
+        Text = 'Go'
+        OnClick = btnAskClick
+      end
+      object edQuestion: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 1
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 282.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        OnKeyUp = edQuestionKeyUp
+      end
+    end
+    object Layout2: TLayout
+      Align = Top
+      Position.Y = 150.000000000000000000
+      Size.Width = 384.000000000000000000
+      Size.Height = 45.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Label2: TLabel
+        Align = Client
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 50.000000000000000000
+        Size.Height = 29.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Answer'
+        TabOrder = 0
+      end
+      object chBxClear: TCheckBox
+        Align = Right
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.X = 66.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 128.000000000000000000
+        Size.Height = 29.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 5
+        Text = 'Clear answer'
+        OnChange = chBxClearChange
+      end
+      object ChBxShowQuestion: TCheckBox
+        Align = Right
+        IsChecked = True
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.X = 202.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 174.000000000000000000
+        Size.Height = 29.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+        Text = 'Question in Answer'
+        OnChange = ChBxShowQuestionChange
+      end
+    end
+    object edAnswer: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      TextSettings.WordWrap = True
+      Align = Client
+      Margins.Left = 8.000000000000000000
+      Margins.Top = 8.000000000000000000
+      Margins.Right = 8.000000000000000000
+      Margins.Bottom = 8.000000000000000000
+      Size.Width = 368.000000000000000000
+      Size.Height = 308.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Viewport.Width = 364.000000000000000000
+      Viewport.Height = 304.000000000000000000
+    end
+  end
+  object RDChatGpt1: TRDChatGpt
+    Temperature = 0.100000000000000000
+    URL = 'https://api.openai.com/v1'
+    OnAnswer = RDChatGpt1Answer
+    Asynchronous = True
+    Left = 176
+    Top = 272
+  end
+  object ActionList1: TActionList
+    Left = 272
+    Top = 304
+    object ShowShareSheetAction1: TShowShareSheetAction
+      Category = 'Medienbibliothek'
+      OnUpdate = ShowShareSheetAction1Update
+      OnBeforeExecute = ShowShareSheetAction1BeforeExecute
+    end
+  end
+end

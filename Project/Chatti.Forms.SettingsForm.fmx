@@ -1,0 +1,52 @@
+inherited SettingsForm: TSettingsForm
+  Caption = 'TemplateForm1'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  inherited Header: TToolBar
+    inherited HeaderLabel: TLabel
+      Text = 'Settings'
+    end
+    inherited btnNext: TSpeedButton
+      StyleLookup = 'donetoolbutton'
+    end
+  end
+  object Layout1: TLayout
+    Align = Top
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 56.000000000000000000
+    Size.Width = 624.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Label1: TLabel
+      Align = Left
+      Margins.Top = 8.000000000000000000
+      Margins.Bottom = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 201.000000000000000000
+      Size.Height = 34.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Theme'
+      TabOrder = 1
+    end
+    object comboTheme: TComboBox
+      Align = Client
+      Items.Strings = (
+        'None'
+        'Light'
+        'Dark')
+      ItemIndex = 1
+      Margins.Top = 8.000000000000000000
+      Margins.Bottom = 8.000000000000000000
+      Size.Width = 423.000000000000000000
+      Size.Height = 34.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnChange = comboThemeChange
+    end
+  end
+end

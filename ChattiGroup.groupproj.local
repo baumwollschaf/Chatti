@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <Transactions>
-    <Transaction>2023.02.11 08:22:31.425,C:\DelphiProjekte\github\Chatti\ChattiGroup.groupproj=C:\Users\rd3\OneDrive\Dokumente\Embarcadero\Studio\Projekte\ProjectGroup1.groupproj</Transaction>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.425,C:\Users\rd3\OneDrive\Dokumente\Embarcadero\Studio\Projekte\ProjectGroup1.groupproj=C:\DelphiProjekte\github\Chatti\ChattiGroup.groupproj</Transaction>
   </Transactions>
-  <Default.Personality>
-    <Projects ActiveProject="C:\DelphiProjekte\github\Chatti\Project\Chatti.dproj"/>
-  </Default.Personality>
+	<Default.Personality>
+		<Projects ActiveProject="C:\DelphiProjects\github\Chatti\Project\Chatti.dproj"/>
+	</Default.Personality>
 </BorlandProject>
