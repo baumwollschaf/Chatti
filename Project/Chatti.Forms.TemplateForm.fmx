@@ -4,7 +4,7 @@ object TemplateForm: TTemplateForm
   Caption = 'Form1'
   ClientHeight = 480
   ClientWidth = 640
-  Position = ScreenCenter
+  Position = MainFormCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
