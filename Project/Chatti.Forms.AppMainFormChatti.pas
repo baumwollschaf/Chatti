@@ -238,7 +238,7 @@ procedure TAppMainFormChatti.FormCreate(Sender: TObject);
 begin
   FSettings := TSettings.Create(RDChatGpt1);
   FSettings.Load;
-  RDChatGpt1.ApiKey := TExternalStuff.ApiKey;
+  RDChatGpt1.ApiKey := S(TExternalStuff.ApiKey);
   RDChatGpt1.LoadModels;
   SetThemeMode(FSettings.ThemeMode);
   chBxClear.IsChecked := FSettings.ClearAnswer;
