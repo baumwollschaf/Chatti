@@ -120,7 +120,6 @@ object AppMainFormChatti: TAppMainFormChatti
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
         Margins.Bottom = 8.000000000000000000
-        RotationAngle = 270.000000000000000000
         Size.Width = 48.183288574218750000
         Size.Height = 34.000000000000000000
         Size.PlatformDefault = False
