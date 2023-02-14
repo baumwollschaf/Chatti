@@ -48,9 +48,6 @@ type
     btnClear: TSpeedButton;
     Layout1: TLayout;
     Label1: TLabel;
-    btnQuestionMark: TSpeedButton;
-    SpeedButton1: TSpeedButton;
-    SpeedButton2: TSpeedButton;
     Layout4: TLayout;
     btnAsk: TSpeedButton;
     edQuestion: TEdit;
@@ -67,7 +64,6 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnCutClick(Sender: TObject);
-    procedure btnQuestionMarkClick(Sender: TObject);
     procedure btnAskClick(Sender: TObject);
     procedure RDChatGpt1Answer(Sender: TObject; AMessage: string);
     procedure edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
@@ -109,7 +105,6 @@ begin
   if edQuestion.Text.Trim = '' then
     Exit;
   FCurQuestion := edQuestion.Text;
-  RDChatGpt1.Cancel;
   RDChatGpt1.Ask(FCurQuestion);
 end;
 
@@ -154,39 +149,6 @@ begin
       end;
   end;
 
-end;
-
-procedure TAppMainFormChatti.btnQuestionMarkClick(Sender: TObject);
-begin
-  if edQuestion.Text.Trim = '' then
-    Exit;
-
-  var
-    Btn: TSpeedButton := TSpeedButton(Sender);
-  if Btn = nil then
-    Exit;
-
-  var
-    Char: Char;
-
-  case Btn.Tag of
-    0:
-      begin
-        Char := '?';
-      end;
-    1:
-      begin
-        Char := '!';
-      end;
-    2:
-      begin
-        Char := '.';
-      end;
-    else
-      Exit;
-  end;
-  edQuestion.Text := edQuestion.Text.TrimRight + Char;
-  edQuestion.SelStart := edQuestion.Text.Length;
 end;
 
 procedure TAppMainFormChatti.btnSettingsClick(Sender: TObject);

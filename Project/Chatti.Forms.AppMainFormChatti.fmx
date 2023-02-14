@@ -42,8 +42,8 @@ object AppMainFormChatti: TAppMainFormChatti
     Styles = <
       item
       end>
-    Left = 168
-    Top = 128
+    Left = 256
+    Top = 104
   end
   object VertScrollBox1: TVertScrollBox
     Align = Client
@@ -202,7 +202,7 @@ object AppMainFormChatti: TAppMainFormChatti
       Align = Top
       Position.Y = 50.000000000000000000
       Size.Width = 384.000000000000000000
-      Size.Height = 50.000000000000000000
+      Size.Height = 31.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 4
       object Label1: TLabel
@@ -210,61 +210,16 @@ object AppMainFormChatti: TAppMainFormChatti
         Margins.Left = 8.000000000000000000
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
-        Margins.Bottom = 8.000000000000000000
-        Size.Width = 201.000000000000000000
-        Size.Height = 34.000000000000000000
+        Size.Width = 368.000000000000000000
+        Size.Height = 23.000000000000000000
         Size.PlatformDefault = False
         Text = 'Question'
         TabOrder = 0
       end
-      object btnQuestionMark: TSpeedButton
-        Align = Right
-        ImageIndex = 5
-        Margins.Top = 8.000000000000000000
-        Margins.Right = 8.000000000000000000
-        Margins.Bottom = 8.000000000000000000
-        Position.X = 217.000000000000000000
-        Position.Y = 8.000000000000000000
-        Size.Width = 63.000000000000000000
-        Size.Height = 34.000000000000000000
-        Size.PlatformDefault = False
-        Text = 'add "?"'
-        OnClick = btnQuestionMarkClick
-      end
-      object SpeedButton1: TSpeedButton
-        Tag = 1
-        Align = Right
-        ImageIndex = 5
-        Margins.Top = 8.000000000000000000
-        Margins.Right = 8.000000000000000000
-        Margins.Bottom = 8.000000000000000000
-        Position.X = 288.000000000000000000
-        Position.Y = 8.000000000000000000
-        Size.Width = 41.000000000000000000
-        Size.Height = 34.000000000000000000
-        Size.PlatformDefault = False
-        Text = '"!"'
-        OnClick = btnQuestionMarkClick
-      end
-      object SpeedButton2: TSpeedButton
-        Tag = 2
-        Align = Right
-        ImageIndex = 5
-        Margins.Top = 8.000000000000000000
-        Margins.Right = 8.000000000000000000
-        Margins.Bottom = 8.000000000000000000
-        Position.X = 337.000000000000000000
-        Position.Y = 8.000000000000000000
-        Size.Width = 39.000000000000000000
-        Size.Height = 34.000000000000000000
-        Size.PlatformDefault = False
-        Text = '"."'
-        OnClick = btnQuestionMarkClick
-      end
     end
     object Layout4: TLayout
       Align = Top
-      Position.Y = 100.000000000000000000
+      Position.Y = 81.000000000000000000
       Size.Width = 384.000000000000000000
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
@@ -301,7 +256,7 @@ object AppMainFormChatti: TAppMainFormChatti
     end
     object Layout2: TLayout
       Align = Top
-      Position.Y = 150.000000000000000000
+      Position.Y = 131.000000000000000000
       Size.Width = 384.000000000000000000
       Size.Height = 45.000000000000000000
       Size.PlatformDefault = False
@@ -358,11 +313,11 @@ object AppMainFormChatti: TAppMainFormChatti
       Margins.Right = 8.000000000000000000
       Margins.Bottom = 8.000000000000000000
       Size.Width = 368.000000000000000000
-      Size.Height = 308.000000000000000000
+      Size.Height = 327.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
       Viewport.Width = 364.000000000000000000
-      Viewport.Height = 304.000000000000000000
+      Viewport.Height = 323.000000000000000000
     end
   end
   object RDChatGpt1: TRDChatGpt
