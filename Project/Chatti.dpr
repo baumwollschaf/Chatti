@@ -9,8 +9,7 @@ uses
   {$IFDEF baumwollschaf}
   Extern.ApiKey in 'Extern.ApiKey.pas',
   {$ENDIF }
-  Chatti.Types in 'Chatti.Types.pas',
-  Chatti.Crypto in 'Chatti.Crypto.pas';
+  Chatti.Types in 'Chatti.Types.pas';
 
 {$R *.res}
 
