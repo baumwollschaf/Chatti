@@ -22,6 +22,7 @@ type
     FRDChat: TRDChatGpt;
     FClearAnswer: Boolean;
     FQuestionInAnswer: Boolean;
+    FSendNotification: Boolean;
     procedure LoadSave(ASave: Boolean);
   public
     procedure Load;
@@ -31,6 +32,7 @@ type
     property ThemeMode: TThemeMode read FThemeMode write FThemeMode;
     property ClearAnswer: Boolean read FClearAnswer write FClearAnswer;
     property QuestionInAnswer: Boolean read FQuestionInAnswer write FQuestionInAnswer;
+    property SendNotification: Boolean read FSendNotification write FSendNotification;
   end;
 
 procedure SynchronizedRun(Proc: TProc);
@@ -79,6 +81,7 @@ begin
         WriteInteger('General', 'ThemeMode', Ord(FThemeMode));
         WriteBool('General', 'ClearAnswer', FClearAnswer);
         WriteBool('General', 'QuestionInAnswer', FQuestionInAnswer);
+        WriteBool('General', 'SendNotification', FSendNotification);
       end else begin
         FRDChat.URL := ReadString('RDChat', 'URL', 'https://api.openai.com/v1');
         FRDChat.Model := ReadString('RDChat', 'Model', 'text-davinci-003');
@@ -88,6 +91,7 @@ begin
         FThemeMode := TThemeMode(ReadInteger('General', 'ThemeMode', Ord(tmDark)));
         FClearAnswer := ReadBool('General', 'ClearAnswer', False);
         FQuestionInAnswer := ReadBool('General', 'QuestionInAnswer', True);
+        FSendNotification := ReadBool('General', 'SendNotification', True);
       end;
     finally
       Free;
