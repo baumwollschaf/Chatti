@@ -314,6 +314,8 @@ object AppMainFormChatti: TAppMainFormChatti
         StyleLookup = ''
         TabOrder = 0
         Text = 'Text'
+        ExplicitSize.cx = 41.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
         object edAnswer: TMemo
           Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
           DataDetectorTypes = []
@@ -386,6 +388,8 @@ object AppMainFormChatti: TAppMainFormChatti
         StyleLookup = ''
         TabOrder = 0
         Text = 'Analysis'
+        ExplicitSize.cx = 63.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
         object MemoModerations: TMemo
           Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
           DataDetectorTypes = []

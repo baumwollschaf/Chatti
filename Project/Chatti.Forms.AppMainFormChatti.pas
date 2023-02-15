@@ -181,12 +181,9 @@ begin
 
   var
     Intf: ITextActions := nil;
-  if edQuestion.IsFocused then
-    Intf := edQuestion
-  else if edAnswer.IsFocused then
-    Intf := edAnswer
-  else if MemoModerations.IsFocused then
-    Intf := MemoModerations;
+
+  if not Supports(Focused.GetObject, ITextActions, Intf) then
+    Exit;
 
   if Intf = nil then
     Exit;
