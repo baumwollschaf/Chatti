@@ -182,6 +182,12 @@ begin
   var
     Intf: ITextActions := nil;
 
+  if Focused = nil then
+    Exit;
+
+  if Focused.GetObject = nil then
+    Exit;
+
   if not Supports(Focused.GetObject, ITextActions, Intf) then
     Exit;
 
