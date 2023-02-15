@@ -1,5 +1,5 @@
 inherited SettingsForm: TSettingsForm
-  Caption = 'TemplateForm1'
+  Caption = 'Settings'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   DesignerMasterStyle = 0
@@ -12,41 +12,147 @@ inherited SettingsForm: TSettingsForm
       Text = 'OK'
     end
   end
-  object Layout1: TLayout
-    Align = Top
-    Margins.Left = 8.000000000000000000
-    Margins.Top = 8.000000000000000000
-    Margins.Right = 8.000000000000000000
-    Position.X = 8.000000000000000000
-    Position.Y = 56.000000000000000000
-    Size.Width = 624.000000000000000000
-    Size.Height = 50.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 1
-    object Label1: TLabel
-      Align = Left
+  inherited VertScrollBox1: TVertScrollBox
+    Viewport.Width = 640.000000000000000000
+    Viewport.Height = 432.000000000000000000
+    object Layout1: TLayout
+      Align = Top
+      Margins.Left = 8.000000000000000000
       Margins.Top = 8.000000000000000000
-      Margins.Bottom = 8.000000000000000000
+      Margins.Right = 8.000000000000000000
+      Position.X = 8.000000000000000000
       Position.Y = 8.000000000000000000
-      Size.Width = 201.000000000000000000
-      Size.Height = 34.000000000000000000
+      Size.Width = 624.000000000000000000
+      Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
-      Text = 'Theme'
-      TabOrder = 1
+      TabOrder = 3
+      object Label1: TLabel
+        Align = Left
+        Margins.Top = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 201.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Theme'
+        TabOrder = 1
+      end
+      object comboTheme: TComboBox
+        Align = Client
+        Items.Strings = (
+          'None'
+          'Light'
+          'Dark')
+        ItemIndex = 1
+        Margins.Top = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 423.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+      end
     end
-    object comboTheme: TComboBox
-      Align = Client
-      Items.Strings = (
-        'None'
-        'Light'
-        'Dark')
-      ItemIndex = 1
+    object Layout2: TLayout
+      Align = Top
+      Margins.Left = 8.000000000000000000
       Margins.Top = 8.000000000000000000
-      Margins.Bottom = 8.000000000000000000
-      Size.Width = 423.000000000000000000
-      Size.Height = 34.000000000000000000
+      Margins.Right = 8.000000000000000000
+      Position.X = 8.000000000000000000
+      Position.Y = 66.000000000000000000
+      Size.Width = 624.000000000000000000
+      Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 0
+      TabOrder = 2
+      object Label2: TLabel
+        Align = Left
+        Margins.Top = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 201.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Timeout [sec]'
+        TabOrder = 1
+      end
+      object edTimeOut: TNumberBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 0
+        Cursor = crIBeam
+        Min = 15.000000000000000000
+        Max = 120.000000000000000000
+        Value = 30.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 370.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object SpeedButton1: TSpeedButton
+        Align = Right
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.X = 575.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 49.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'def'
+        OnClick = SpeedButton1Click
+      end
+    end
+    object Layout3: TLayout
+      Align = Top
+      Margins.Left = 8.000000000000000000
+      Margins.Top = 8.000000000000000000
+      Margins.Right = 8.000000000000000000
+      Position.X = 8.000000000000000000
+      Position.Y = 124.000000000000000000
+      Size.Width = 624.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object Label3: TLabel
+        Align = Left
+        Margins.Top = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 201.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Temperature (0..2)'
+        TabOrder = 0
+      end
+      object edtemp: TNumberBox
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 1
+        Cursor = crIBeam
+        DecimalDigits = 1
+        Max = 2.000000000000000000
+        Value = 0.100000000000000000
+        ValueType = Float
+        KeyboardType = NumbersAndPunctuation
+        Margins.Top = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 370.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object SpeedButton2: TSpeedButton
+        Align = Right
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Position.X = 575.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 49.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'def'
+        OnClick = SpeedButton2Click
+      end
     end
   end
 end

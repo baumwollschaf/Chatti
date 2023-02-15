@@ -42,8 +42,8 @@ object AppMainFormChatti: TAppMainFormChatti
     Styles = <
       item
       end>
-    Left = 256
-    Top = 104
+    Left = 248
+    Top = 208
   end
   object VertScrollBox1: TVertScrollBox
     Align = Client
@@ -55,10 +55,12 @@ object AppMainFormChatti: TAppMainFormChatti
     Viewport.Height = 519.000000000000000000
     object GridPanelLayout1: TGridPanelLayout
       Align = Top
-      Size.Width = 384.000000000000000000
-      Size.Height = 50.000000000000000000
+      Scale.X = 1.299999952316284000
+      Scale.Y = 1.299999952316284000
+      Size.Width = 295.384613037109400000
+      Size.Height = 41.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 5
+      TabOrder = 3
       ColumnCollection = <
         item
           Value = 16.714398999730950000
@@ -120,8 +122,8 @@ object AppMainFormChatti: TAppMainFormChatti
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
         Margins.Bottom = 8.000000000000000000
-        Size.Width = 48.183288574218750000
-        Size.Height = 34.000000000000000000
+        Size.Width = 33.371761322021480000
+        Size.Height = 25.000000000000000000
         Size.PlatformDefault = False
         Text = #9986
         OnClick = btnCutClick
@@ -134,8 +136,8 @@ object AppMainFormChatti: TAppMainFormChatti
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
         Margins.Bottom = 8.000000000000000000
-        Size.Width = 48.109832763671880000
-        Size.Height = 34.000000000000000000
+        Size.Width = 33.315250396728520000
+        Size.Height = 25.000000000000000000
         Size.PlatformDefault = False
         Text = #55357#56523
         OnClick = btnCutClick
@@ -148,8 +150,8 @@ object AppMainFormChatti: TAppMainFormChatti
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
         Margins.Bottom = 8.000000000000000000
-        Size.Width = 48.036499023437500000
-        Size.Height = 34.000000000000000000
+        Size.Width = 33.258850097656250000
+        Size.Height = 25.000000000000000000
         Size.PlatformDefault = False
         Text = #55357#56529
         OnClick = btnCutClick
@@ -162,8 +164,8 @@ object AppMainFormChatti: TAppMainFormChatti
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
         Margins.Bottom = 8.000000000000000000
-        Size.Width = 47.963256835937500000
-        Size.Height = 34.000000000000000000
+        Size.Width = 33.202514648437500000
+        Size.Height = 25.000000000000000000
         Size.PlatformDefault = False
         Text = #10720
         OnClick = btnCutClick
@@ -176,8 +178,8 @@ object AppMainFormChatti: TAppMainFormChatti
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
         Margins.Bottom = 8.000000000000000000
-        Size.Width = 47.890106201171880000
-        Size.Height = 34.000000000000000000
+        Size.Width = 33.146240234375000000
+        Size.Height = 25.000000000000000000
         Size.PlatformDefault = False
         Text = #10060
         OnClick = btnCutClick
@@ -191,8 +193,8 @@ object AppMainFormChatti: TAppMainFormChatti
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
         Margins.Bottom = 8.000000000000000000
-        Size.Width = 47.817016601562500000
-        Size.Height = 34.000000000000000000
+        Size.Width = 33.089996337890630000
+        Size.Height = 25.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'actiontoolbutton'
         Text = 'Share'
@@ -200,130 +202,228 @@ object AppMainFormChatti: TAppMainFormChatti
     end
     object Layout1: TLayout
       Align = Top
-      Position.Y = 50.000000000000000000
+      Position.Y = 53.299999237060550000
       Size.Width = 384.000000000000000000
       Size.Height = 31.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 4
+      TabOrder = 2
       object Label1: TLabel
         Align = Client
         Margins.Left = 8.000000000000000000
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
-        Size.Width = 368.000000000000000000
+        Size.Width = 112.000000000000000000
         Size.Height = 23.000000000000000000
         Size.PlatformDefault = False
-        Text = 'Question'
+        Text = 'Input'
         TabOrder = 0
+        OnApplyStyleLookup = Label1ApplyStyleLookup
+      end
+      object ChBxClearQuestion: TCheckBox
+        Align = Right
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Position.X = 128.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 6
+        Text = 'Clear text'
+        OnChange = ChBxClearQuestionChange
+      end
+      object chBxAnalyse: TCheckBox
+        Align = Right
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Position.X = 256.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 5
+        Text = 'Analyse text'
+        OnChange = chBxAnalyseChange
       end
     end
     object Layout4: TLayout
       Align = Top
-      Position.Y = 81.000000000000000000
+      Position.Y = 84.300003051757810000
       Size.Width = 384.000000000000000000
-      Size.Height = 50.000000000000000000
+      Size.Height = 46.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 2
-      object btnAsk: TSpeedButton
-        Align = Right
-        ImageIndex = 6
-        Margins.Left = 8.000000000000000000
-        Margins.Top = 8.000000000000000000
-        Margins.Right = 8.000000000000000000
-        Margins.Bottom = 8.000000000000000000
-        Position.X = 306.000000000000000000
-        Position.Y = 8.000000000000000000
-        Size.Width = 70.000000000000000000
-        Size.Height = 34.000000000000000000
-        Size.PlatformDefault = False
-        StyleLookup = 'donetoolbutton'
-        Text = 'Go'
-        OnClick = btnAskClick
-      end
+      TabOrder = 0
       object edQuestion: TEdit
         Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
         Align = Client
         TabOrder = 1
         Margins.Left = 8.000000000000000000
         Margins.Top = 8.000000000000000000
-        Margins.Right = 8.000000000000000000
+        Margins.Right = 1.000000000000000000
         Margins.Bottom = 8.000000000000000000
-        Size.Width = 282.000000000000000000
-        Size.Height = 34.000000000000000000
+        Size.Width = 336.000000000000000000
+        Size.Height = 30.000000000000000000
         Size.PlatformDefault = False
         OnKeyUp = edQuestionKeyUp
       end
-    end
-    object Layout2: TLayout
-      Align = Top
-      Position.Y = 131.000000000000000000
-      Size.Width = 384.000000000000000000
-      Size.Height = 45.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 0
-      object Label2: TLabel
-        Align = Client
-        Margins.Left = 8.000000000000000000
-        Margins.Top = 8.000000000000000000
-        Margins.Right = 8.000000000000000000
-        Margins.Bottom = 8.000000000000000000
-        Size.Width = 50.000000000000000000
-        Size.Height = 29.000000000000000000
-        Size.PlatformDefault = False
-        Text = 'Answer'
-        TabOrder = 0
-      end
-      object chBxClear: TCheckBox
+      object PathSend: TPath
         Align = Right
-        Margins.Top = 8.000000000000000000
+        Data.Path = {
+          0900000000000000000000400000A04101000000000000413333B34101000000
+          0000C0410000204101000000000040410000C04101000000000040410000F041
+          01000000666682419A99CD41010000000000B0410000E041010000000000F041
+          0000004003000000000000400000A041}
+        Margins.Left = 1.000000000000000000
+        Margins.Top = 10.000000000000000000
         Margins.Right = 8.000000000000000000
-        Margins.Bottom = 8.000000000000000000
-        Position.X = 66.000000000000000000
-        Position.Y = 8.000000000000000000
-        Size.Width = 128.000000000000000000
-        Size.Height = 29.000000000000000000
+        Margins.Bottom = 10.000000000000000000
+        Position.X = 346.000000000000000000
+        Position.Y = 10.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
-        TabOrder = 5
-        Text = 'Clear answer'
-        OnChange = chBxClearChange
-      end
-      object ChBxShowQuestion: TCheckBox
-        Align = Right
-        IsChecked = True
-        Margins.Top = 8.000000000000000000
-        Margins.Right = 8.000000000000000000
-        Margins.Bottom = 8.000000000000000000
-        Position.X = 202.000000000000000000
-        Position.Y = 8.000000000000000000
-        Size.Width = 174.000000000000000000
-        Size.Height = 29.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 4
-        Text = 'Question in Answer'
-        OnChange = ChBxShowQuestionChange
+        Stroke.Kind = None
+        OnClick = btnAskClick
       end
     end
-    object edAnswer: TMemo
-      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-      DataDetectorTypes = []
-      TextSettings.WordWrap = True
+    object TabControl1: TTabControl
       Align = Client
       Margins.Left = 8.000000000000000000
       Margins.Top = 8.000000000000000000
       Margins.Right = 8.000000000000000000
       Margins.Bottom = 8.000000000000000000
       Size.Width = 368.000000000000000000
-      Size.Height = 327.000000000000000000
+      Size.Height = 372.700012207031300000
       Size.PlatformDefault = False
-      TabOrder = 1
-      Viewport.Width = 364.000000000000000000
-      Viewport.Height = 323.000000000000000000
+      TabIndex = 1
+      TabOrder = 4
+      TabPosition = Bottom
+      Sizes = (
+        368s
+        346.700012207031s
+        368s
+        346.700012207031s)
+      object TabItem1: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 41.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Text'
+        object edAnswer: TMemo
+          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          DataDetectorTypes = []
+          TextSettings.WordWrap = True
+          Align = Client
+          Size.Width = 368.000000000000000000
+          Size.Height = 301.700012207031300000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Viewport.Width = 364.000000000000000000
+          Viewport.Height = 297.700000000000000000
+        end
+        object Layout2: TLayout
+          Align = Top
+          Size.Width = 368.000000000000000000
+          Size.Height = 45.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object Label2: TLabel
+            Align = Client
+            Margins.Left = 8.000000000000000000
+            Margins.Top = 8.000000000000000000
+            Margins.Right = 8.000000000000000000
+            Margins.Bottom = 8.000000000000000000
+            Size.Width = 64.000000000000000000
+            Size.Height = 29.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Output'
+            TabOrder = 0
+          end
+          object chBxClear: TCheckBox
+            Align = Right
+            Margins.Top = 8.000000000000000000
+            Margins.Right = 8.000000000000000000
+            Margins.Bottom = 8.000000000000000000
+            Position.X = 80.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 128.000000000000000000
+            Size.Height = 29.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 5
+            Text = 'Clear text'
+            OnChange = chBxClearChange
+          end
+          object ChBxShowQuestion: TCheckBox
+            Align = Right
+            IsChecked = True
+            Margins.Top = 8.000000000000000000
+            Margins.Right = 8.000000000000000000
+            Margins.Bottom = 8.000000000000000000
+            Position.X = 216.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 144.000000000000000000
+            Size.Height = 29.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 4
+            Text = 'Input in output'
+            OnChange = ChBxShowQuestionChange
+          end
+        end
+      end
+      object TabItem2: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 63.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Analysis'
+        object MemoModerations: TMemo
+          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          DataDetectorTypes = []
+          Align = Client
+          Size.Width = 368.000000000000000000
+          Size.Height = 301.700012207031300000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Viewport.Width = 364.000000000000000000
+          Viewport.Height = 297.700000000000000000
+        end
+        object Layout3: TLayout
+          Align = Top
+          Size.Width = 368.000000000000000000
+          Size.Height = 45.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object Label3: TLabel
+            Align = Client
+            Margins.Left = 8.000000000000000000
+            Margins.Top = 8.000000000000000000
+            Margins.Right = 8.000000000000000000
+            Margins.Bottom = 8.000000000000000000
+            Size.Width = 352.000000000000000000
+            Size.Height = 29.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Analysis'
+            TabOrder = 0
+          end
+        end
+      end
     end
   end
   object RDChatGpt1: TRDChatGpt
     Temperature = 0.100000000000000000
     URL = 'https://api.openai.com/v1'
     OnAnswer = RDChatGpt1Answer
+    OnModerationsLoaded = RDChatGpt1ModerationsLoaded
     Asynchronous = True
     Left = 176
     Top = 272

@@ -14,7 +14,7 @@ uses
   FMX.Graphics,
   FMX.Dialogs,
   FMX.StdCtrls,
-  FMX.Controls.Presentation;
+  FMX.Controls.Presentation, FMX.Layouts;
 
 type
   TTemplateForm = class abstract(TForm)
@@ -22,6 +22,7 @@ type
     HeaderLabel: TLabel;
     btnNext: TSpeedButton;
     btnBack: TSpeedButton;
+    VertScrollBox1: TVertScrollBox;
     procedure btnBackClick(Sender: TObject);
     procedure btnNextClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

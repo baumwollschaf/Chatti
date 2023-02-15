@@ -43,4 +43,13 @@ object TemplateForm: TTemplateForm
       OnClick = btnBackClick
     end
   end
+  object VertScrollBox1: TVertScrollBox
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 432.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Viewport.Width = 640.000000000000000000
+    Viewport.Height = 432.000000000000000000
+  end
 end
