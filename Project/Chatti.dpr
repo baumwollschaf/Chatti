@@ -9,7 +9,8 @@ uses
   {$IFDEF baumwollschaf}
   Extern.ApiKey in 'Extern.ApiKey.pas',
   {$ENDIF }
-  Chatti.Types in 'Chatti.Types.pas';
+  Chatti.Types in 'Chatti.Types.pas',
+  Chatti.BubbleLabel in 'Chatti.BubbleLabel.pas';
 
 {$R *.res}
 

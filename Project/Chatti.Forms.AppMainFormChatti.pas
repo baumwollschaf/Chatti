@@ -32,6 +32,7 @@ uses
   FMX.StdActns,
   FMX.MediaLibrary.Actions,
   FMX.Objects,
+  Chatti.BubbleLabel,
   FMX.TabControl;
 
 type
