@@ -11,6 +11,16 @@
     </PropertyGroup>
     <ItemGroup Condition="'$(Platform)'=='OSX64'"/>
     <ItemGroup Condition="'$(Platform)'=='Win32'">
+        <DeployFile Include="..\bin\Chatti.exe" Condition="'$(Config)'=='Release'">
+            <RemoteDir>Chatti\</RemoteDir>
+            <RemoteName>Chatti.exe</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
         <DeployFile Include="Win32\Debug\Chatti.exe" Condition="'$(Config)'=='Debug'">
             <RemoteDir>Chatti\</RemoteDir>
             <RemoteName>Chatti.exe</RemoteName>

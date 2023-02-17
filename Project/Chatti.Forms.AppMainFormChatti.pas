@@ -33,7 +33,9 @@ uses
   FMX.MediaLibrary.Actions,
   FMX.Objects,
   Chatti.BubbleLabel,
-  FMX.TabControl;
+  FMX.TabControl,
+  FMX.AutoSizer,
+  FMX.Menus;
 
 type
   TAppMainFormChatti = class(TForm)
@@ -43,33 +45,21 @@ type
     RDChatGpt1: TRDChatGpt;
     ViewStyleBook: TStyleBook;
     VertScrollBox1: TVertScrollBox;
-    GridPanelLayout1: TGridPanelLayout;
-    btnCut: TSpeedButton;
-    btnCopy: TSpeedButton;
-    btnPaste: TSpeedButton;
-    btnSelectAll: TSpeedButton;
-    btnClear: TSpeedButton;
-    Layout1: TLayout;
-    Label1: TLabel;
     Layout4: TLayout;
     edQuestion: TEdit;
     ActionList1: TActionList;
     ShowShareSheetAction1: TShowShareSheetAction;
-    SpeedButton3: TSpeedButton;
-    ChBxClearQuestion: TCheckBox;
     PathSend: TPath;
     TabControl1: TTabControl;
     TabItem1: TTabItem;
-    edAnswer: TMemo;
     TabItem2: TTabItem;
-    chBxAnalyse: TCheckBox;
     MemoModerations: TMemo;
-    Layout2: TLayout;
-    Label2: TLabel;
-    chBxClear: TCheckBox;
-    ChBxShowQuestion: TCheckBox;
-    Layout3: TLayout;
-    Label3: TLabel;
+    AutoSizer: TFmxAutoSizer;
+    sbMessages: TVertScrollBox;
+    btnShare: TSpeedButton;
+    btnClear: TSpeedButton;
+    EditClipboard: TEdit;
+    MainLayout: TLayout;
     procedure btnSettingsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -80,17 +70,31 @@ type
     procedure edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
     procedure ShowShareSheetAction1BeforeExecute(Sender: TObject);
     procedure ShowShareSheetAction1Update(Sender: TObject);
-    procedure chBxClearChange(Sender: TObject);
-    procedure ChBxShowQuestionChange(Sender: TObject);
     procedure Label1ApplyStyleLookup(Sender: TObject);
-    procedure ChBxClearQuestionChange(Sender: TObject);
-    procedure chBxAnalyseChange(Sender: TObject);
     procedure RDChatGpt1ModerationsLoaded(Sender: TObject; AType: TModerations);
+    procedure miCopyClick(Sender: TObject);
+    procedure FormFocusChanged(Sender: TObject);
+    procedure FormVirtualKeyboardShown(Sender: TObject; KeyboardVisible: Boolean; const Bounds: TRect);
+    procedure FormVirtualKeyboardHidden(Sender: TObject; KeyboardVisible: Boolean; const Bounds: TRect);
   private
     FInput: String;
+    FWasMe: Boolean;
     FSettings: TSettings;
+    function GetLabelsText: String;
+    procedure AddLabel(AText: String; AMe: Boolean; AFollowing: Boolean);
     procedure AnalyzeInput(AText: String; AType: TModerations);
     function StringRework(AText: String): String;
+    procedure TextToClipBoard(ABubbleLabel: TBubbleLabel);
+  private
+    procedure ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
+  private
+    // Keyboard stuff
+    { Private declarations }
+    FKBBounds: TRectF;
+    FNeedOffset: Boolean;
+    procedure CalcContentBoundsProc(Sender: TObject; var ContentBounds: TRectF);
+    procedure RestorePosition;
+    procedure UpdateKBBounds;
   public
     procedure SetThemeMode(ATheme: TThemeMode);
   end;
@@ -102,6 +106,7 @@ implementation
 
 uses
   FMX.Text,
+  System.Math,
   System.IOUtils;
 
 {$R *.fmx}
@@ -125,10 +130,41 @@ begin
     Result := '👍';
 end;
 
+procedure TAppMainFormChatti.AddLabel(AText: String; AMe: Boolean; AFollowing: Boolean);
+begin
+  var
+    Labl: TBubbleLabel;
+  Labl := TBubbleLabel.Create(sbMessages);
+  Labl.Touch.InteractiveGestures := Labl.Touch.InteractiveGestures + [TInteractiveGesture.LongTap];
+  Labl.OnGesture := ControlGesture;
+  // Labl.OnClick := OnLabelClick;
+  Labl.Parent := sbMessages;
+  Labl.Me := AMe;
+  Labl.Text := AText;
+  Labl.Align := TAlignLayout.Top;
+  Labl.Position.Y := 999999999;
+  Labl.Following := AFollowing;
+  Labl.Resize;
+  AutoSizer.Control := Labl;
+  AutoSizer.AutoSize := False;
+  AutoSizer.AutoSize := True;
+  var
+    Offset: Integer := 10;
+  if Labl.Margins.Top = 0 then
+    Offset := 20;
+  Labl.Height := Labl.Height + Labl.Margins.Top + Labl.Margins.Bottom + Offset;
+  sbMessages.ScrollBy(0, -95);
+end;
+
 procedure TAppMainFormChatti.AnalyzeInput(AText: String; AType: TModerations);
 begin
   MemoModerations.Text := '';
+
+  MemoModerations.Lines.Add('Text to analyse: '#13#10 + FInput);
+  MemoModerations.Lines.Add('-----');
+
   var
+    CountChars: Integer;
   CountChars := AText.Length;
   MemoModerations.Lines.Add('Count characters: ' + CountChars.ToString);
 
@@ -169,8 +205,23 @@ procedure TAppMainFormChatti.btnAskClick(Sender: TObject);
 begin
   if edQuestion.Text.Trim = '' then
     Exit;
-  FInput := edQuestion.Text;
-  RDChatGpt1.Ask(FInput);
+
+  case TabControl1.TabIndex of
+    0:
+      begin
+        FInput := edQuestion.Text;
+        edQuestion.Text := '';
+        RDChatGpt1.Ask(FInput);
+        AddLabel(FInput, True, FWasMe and True);
+        FWasMe := True;
+      end;
+    1:
+      begin
+        FInput := edQuestion.Text;
+        edQuestion.Text := '';
+        RDChatGpt1.LoadModerations(FInput);
+      end;
+  end;
 end;
 
 procedure TAppMainFormChatti.btnCutClick(Sender: TObject);
@@ -180,44 +231,21 @@ begin
   if Btn = nil then
     Exit;
 
+  case TabControl1.TabIndex of
+    0:
+      begin
+        FWasMe := False;
+        TBubbleLabel.ClearLabels;
+        Exit;
+      end;
+  end;
+
   var
     Intf: ITextActions := nil;
 
-  if Focused = nil then
-    Exit;
-
-  if Focused.GetObject = nil then
-    Exit;
-
-  if not Supports(Focused.GetObject, ITextActions, Intf) then
-    Exit;
-
-  if Intf = nil then
-    Exit;
-
-  case Btn.Tag of
-    0:
-      begin
-        Intf.CutToClipboard;
-      end;
-    1:
-      begin
-        Intf.CopyToClipboard;
-      end;
-    2:
-      begin
-        Intf.PasteFromClipboard;
-      end;
-    3:
-      begin
-        Intf.SelectAll;
-      end;
-    4:
-      begin
-        Intf.SelectAll;
-        Intf.DeleteSelection;
-      end;
-  end;
+  Intf := MemoModerations;
+  Intf.SelectAll;
+  Intf.DeleteSelection;
 
 end;
 
@@ -244,28 +272,21 @@ begin
   SettingsForm.Show;
 end;
 
-procedure TAppMainFormChatti.chBxAnalyseChange(Sender: TObject);
+procedure TAppMainFormChatti.CalcContentBoundsProc(Sender: TObject; var ContentBounds: TRectF);
 begin
-  FSettings.Analyze := chBxAnalyse.IsChecked;
-  FSettings.Save;
+  if FNeedOffset and (FKBBounds.Top > 0) then
+  begin
+    ContentBounds.Bottom := Max(ContentBounds.Bottom, 2 * ClientHeight - FKBBounds.Top);
+  end;
 end;
 
-procedure TAppMainFormChatti.chBxClearChange(Sender: TObject);
+procedure TAppMainFormChatti.ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
 begin
-  FSettings.ClearAnswer := chBxClear.IsChecked;
-  FSettings.Save;
-end;
-
-procedure TAppMainFormChatti.ChBxClearQuestionChange(Sender: TObject);
-begin
-  FSettings.ClearQuestion := ChBxClearQuestion.IsChecked;
-  FSettings.Save;
-end;
-
-procedure TAppMainFormChatti.ChBxShowQuestionChange(Sender: TObject);
-begin
-  FSettings.QuestionInAnswer := ChBxShowQuestion.IsChecked;
-  FSettings.Save;
+  if EventInfo.GestureID = System.UITypes.igiLongTap then
+  begin
+    TextToClipBoard(TBubbleLabel(Sender));
+    Handled := True;
+  end;
 end;
 
 procedure TAppMainFormChatti.edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
@@ -284,61 +305,93 @@ end;
 
 procedure TAppMainFormChatti.FormCreate(Sender: TObject);
 begin
-{$IFNDEF MSWINDOWS}
-  btnCut.RotationAngle := -90;
-{$ENDIF}
+  VKAutoShowMode := TVKAutoShowMode.Always;
+  VertScrollBox1.OnCalcContentBounds := CalcContentBoundsProc;
+
   TabControl1.ActiveTab := TabItem1;
   FSettings := TSettings.Create(RDChatGpt1);
   FSettings.Load;
   RDChatGpt1.ApiKey := S(TExternalStuff.ApiKey);
   RDChatGpt1.LoadModels;
   SetThemeMode(FSettings.ThemeMode);
-  chBxClear.IsChecked := FSettings.ClearAnswer;
-  ChBxClearQuestion.IsChecked := FSettings.ClearQuestion;
-  ChBxShowQuestion.IsChecked := FSettings.QuestionInAnswer;
-  chBxAnalyse.IsChecked := FSettings.Analyze;
 end;
 
 procedure TAppMainFormChatti.FormDestroy(Sender: TObject);
 begin
+  TBubbleLabel.ClearLabels;
   FreeAndNil(FSettings);
+end;
+
+procedure TAppMainFormChatti.FormFocusChanged(Sender: TObject);
+begin
+  UpdateKBBounds;
+end;
+
+procedure TAppMainFormChatti.FormVirtualKeyboardHidden(Sender: TObject; KeyboardVisible: Boolean; const Bounds: TRect);
+begin
+  FKBBounds.Create(0, 0, 0, 0);
+  FNeedOffset := False;
+  RestorePosition;
+end;
+
+procedure TAppMainFormChatti.FormVirtualKeyboardShown(Sender: TObject; KeyboardVisible: Boolean; const Bounds: TRect);
+begin
+  FKBBounds := TRectF.Create(Bounds);
+  FKBBounds.TopLeft := ScreenToClient(FKBBounds.TopLeft);
+  FKBBounds.BottomRight := ScreenToClient(FKBBounds.BottomRight);
+  UpdateKBBounds;
+end;
+
+function TAppMainFormChatti.GetLabelsText: String;
+begin
+  Result := '';
+  var
+    Who: String;
+  for var Bub: TBubbleLabel in TBubbleLabel.List do
+  begin
+    if Result <> '' then
+    begin
+      Result := Result + #13#10;;
+    end;
+    if Bub.Me then
+    begin
+      Who := 'me: ';
+    end else begin
+      Who := '';
+    end;
+
+    Result := Result + Who + Bub.Text;
+  end;
 end;
 
 procedure TAppMainFormChatti.Label1ApplyStyleLookup(Sender: TObject);
 begin
-  PathSend.Fill.Color := Label1.GetStyledColor;
-  PathSend.Stroke.Color := Label1.GetStyledColor;
+  PathSend.Fill.Color := HeaderLabel.GetStyledColor;
+  PathSend.Stroke.Color := HeaderLabel.GetStyledColor;
+end;
+
+procedure TAppMainFormChatti.miCopyClick(Sender: TObject);
+begin
+  ShowMessage('Hallo');
 end;
 
 procedure TAppMainFormChatti.RDChatGpt1Answer(Sender: TObject; AMessage: string);
 begin
-  if chBxClear.IsChecked then
-  begin
-    edAnswer.Lines.Clear;
-  end;
-  if ChBxShowQuestion.IsChecked then
-  begin
-    edAnswer.Lines.Add('me: ' + FInput);
-    edAnswer.Lines.Add('-----');
-  end;
-  if ChBxClearQuestion.IsChecked then
-  begin
-    edQuestion.Text := '';
-    edQuestion.SetFocus;
-  end;
-  edAnswer.Lines.Add(AMessage);
-  edAnswer.Lines.Add('');
-
-  if chBxAnalyse.IsChecked then
-  begin
-    RDChatGpt1.LoadModerations(FInput);
-  end;
+  AddLabel(AMessage, False, (not FWasMe) and False);
+  FWasMe := False;
 end;
 
 procedure TAppMainFormChatti.RDChatGpt1ModerationsLoaded(Sender: TObject; AType: TModerations);
 begin
   // still in thread-mode!
   AnalyzeInput(FInput, AType);
+end;
+
+procedure TAppMainFormChatti.RestorePosition;
+begin
+  VertScrollBox1.ViewportPosition := PointF(VertScrollBox1.ViewportPosition.X, 0);
+  MainLayout.Align := TAlignLayout.Client;
+  VertScrollBox1.RealignContent;
 end;
 
 procedure TAppMainFormChatti.SetThemeMode(ATheme: TThemeMode);
@@ -372,16 +425,20 @@ end;
 
 procedure TAppMainFormChatti.ShowShareSheetAction1BeforeExecute(Sender: TObject);
 begin
+  var
+    S: String;
   case TabControl1.TabIndex of
     0:
       begin
-        ShowShareSheetAction1.TextMessage := edAnswer.Text;
+        S := GetLabelsText;
+        // ShowShareSheetAction1.TextMessage := edAnswer.Text;
       end;
     1:
       begin
-        ShowShareSheetAction1.TextMessage := MemoModerations.Text;
+        S := MemoModerations.Text;
       end;
   end;
+  ShowShareSheetAction1.TextMessage := S;
 end;
 
 procedure TAppMainFormChatti.ShowShareSheetAction1Update(Sender: TObject);
@@ -389,7 +446,7 @@ begin
   case TabControl1.TabIndex of
     0:
       begin
-        ShowShareSheetAction1.Enabled := edAnswer.Text.Trim <> '';
+        ShowShareSheetAction1.Enabled := True;
       end;
     1:
       begin
@@ -437,6 +494,37 @@ begin
   begin
     Result := Result.Replace(':', '', [rfReplaceAll]);
   end;
+end;
+
+procedure TAppMainFormChatti.TextToClipBoard(ABubbleLabel: TBubbleLabel);
+begin
+  EditClipboard.Text := ABubbleLabel.Text;
+  EditClipboard.SelectAll;
+  EditClipboard.CopyToClipboard;
+end;
+
+procedure TAppMainFormChatti.UpdateKBBounds;
+var
+  LFocused: TControl;
+  LFocusRect: TRectF;
+begin
+  FNeedOffset := False;
+  if Assigned(Focused) then
+  begin
+    LFocused := TControl(Focused.GetObject);
+    LFocusRect := LFocused.AbsoluteRect;
+    LFocusRect.Offset(VertScrollBox1.ViewportPosition);
+    if (LFocusRect.IntersectsWith(TRectF.Create(FKBBounds))) and (LFocusRect.Bottom > FKBBounds.Top) then
+    begin
+      FNeedOffset := True;
+      MainLayout.Align := TAlignLayout.Horizontal;
+      VertScrollBox1.RealignContent;
+      Application.ProcessMessages;
+      VertScrollBox1.ViewportPosition := PointF(VertScrollBox1.ViewportPosition.X, LFocusRect.Bottom - FKBBounds.Top);
+    end;
+  end;
+  if not FNeedOffset then
+    RestorePosition;
 end;
 
 end.
