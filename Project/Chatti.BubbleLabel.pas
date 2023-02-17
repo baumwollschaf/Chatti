@@ -82,7 +82,7 @@ begin
   FLabel.Margins.Right := cDEF_MARGIN_RIGHT_LEFT;
   FLabel.Margins.Bottom := cDEF_MARGIN;
   FLabel.TextSettings.FontColor := TAlphaColors.White;
-  Fill.Color := TAlphaColors.Deepskyblue;
+  Fill.Color := TAlphaColors.Dodgerblue;
   FLabel.BringToFront;
 end;
 
@@ -135,7 +135,7 @@ begin
       True:
         begin
           // me
-          Fill.Color := TAlphaColors.Deepskyblue;
+          Fill.Color := TAlphaColors.Dodgerblue;
           CalloutPosition := TCalloutPosition.Right;
           FLabel.TextSettings.FontColor := TAlphaColors.White;
           FLabel.Margins.Right := cDEF_MARGIN_RIGHT_LEFT;

@@ -11,9 +11,6 @@ object AppMainFormChatti: TAppMainFormChatti
   OnCreate = FormCreate
   OnClose = FormClose
   OnDestroy = FormDestroy
-  OnFocusChanged = FormFocusChanged
-  OnVirtualKeyboardShown = FormVirtualKeyboardShown
-  OnVirtualKeyboardHidden = FormVirtualKeyboardHidden
   DesignerMasterStyle = 0
   object Header: TToolBar
     Size.Width = 384.000000000000000000
@@ -95,8 +92,7 @@ object AppMainFormChatti: TAppMainFormChatti
       Size.PlatformDefault = False
       TabOrder = 1
       object Layout4: TLayout
-        Align = Bottom
-        Position.Y = 473.000000000000000000
+        Align = Top
         Size.Width = 384.000000000000000000
         Size.Height = 46.000000000000000000
         Size.PlatformDefault = False
@@ -107,43 +103,38 @@ object AppMainFormChatti: TAppMainFormChatti
           TabOrder = 1
           Margins.Left = 8.000000000000000000
           Margins.Top = 8.000000000000000000
-          Margins.Right = 1.000000000000000000
+          Margins.Right = 8.000000000000000000
           Margins.Bottom = 8.000000000000000000
-          Size.Width = 328.000000000000000000
+          Size.Width = 368.000000000000000000
           Size.Height = 30.000000000000000000
           Size.PlatformDefault = False
           OnKeyUp = edQuestionKeyUp
-        end
-        object btnAsk: TButton
-          Align = Right
-          Margins.Left = 1.000000000000000000
-          Margins.Top = 6.000000000000000000
-          Margins.Right = 8.000000000000000000
-          Margins.Bottom = 4.000000000000000000
-          Position.X = 338.000000000000000000
-          Position.Y = 6.000000000000000000
-          Size.Width = 38.000000000000000000
-          Size.Height = 36.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 2
-          OnClick = btnAskClick
-          object PathSend: TPath
-            Align = Client
-            Data.Path = {
-              0900000000000000000000400000A04101000000000000413333B34101000000
-              0000C0410000204101000000000040410000C04101000000000040410000F041
-              01000000666682419A99CD41010000000000B0410000E041010000000000F041
-              0000004003000000000000400000A041}
-            Fill.Color = claGray
-            HitTest = False
-            Margins.Left = 3.000000000000000000
-            Margins.Top = 3.000000000000000000
-            Margins.Right = 3.000000000000000000
-            Margins.Bottom = 3.000000000000000000
-            Size.Width = 32.000000000000000000
-            Size.Height = 30.000000000000000000
+          object EditButton1: TEditButton
+            CanFocus = False
+            Cursor = crArrow
+            Size.Width = 28.000000000000000000
+            Size.Height = 26.000000000000000000
             Size.PlatformDefault = False
-            Stroke.Kind = None
+            TabOrder = 0
+            OnClick = btnAskClick
+            object PathSend: TPath
+              Align = Client
+              Data.Path = {
+                0900000000000000000000400000A04101000000000000413333B34101000000
+                0000C0410000204101000000000040410000C04101000000000040410000F041
+                01000000666682419A99CD41010000000000B0410000E041010000000000F041
+                0000004003000000000000400000A041}
+              Fill.Color = claGray
+              HitTest = False
+              Margins.Left = 1.000000000000000000
+              Margins.Top = 1.000000000000000000
+              Margins.Right = 1.000000000000000000
+              Margins.Bottom = 1.000000000000000000
+              Size.Width = 26.000000000000000000
+              Size.Height = 24.000000000000000000
+              Size.PlatformDefault = False
+              Stroke.Kind = None
+            end
           end
         end
       end
@@ -158,7 +149,7 @@ object AppMainFormChatti: TAppMainFormChatti
         Size.PlatformDefault = False
         TabIndex = 1
         TabOrder = 2
-        TabPosition = PlatformDefault
+        TabPosition = Bottom
         Sizes = (
           368s
           431s
@@ -245,11 +236,5 @@ object AppMainFormChatti: TAppMainFormChatti
     AutoSize = False
     Left = 48
     Top = 264
-  end
-  object Timer1: TTimer
-    Interval = 500
-    OnTimer = Timer1Timer
-    Left = 128
-    Top = 320
   end
 end
