@@ -156,7 +156,7 @@ object AppMainFormChatti: TAppMainFormChatti
         Size.Width = 368.000000000000000000
         Size.Height = 457.000000000000000000
         Size.PlatformDefault = False
-        TabIndex = 0
+        TabIndex = 1
         TabOrder = 2
         TabPosition = PlatformDefault
         Sizes = (
@@ -168,7 +168,7 @@ object AppMainFormChatti: TAppMainFormChatti
           CustomIcon = <
             item
             end>
-          IsSelected = True
+          IsSelected = False
           Size.Width = 58.000000000000000000
           Size.Height = 26.000000000000000000
           Size.PlatformDefault = False
@@ -198,7 +198,7 @@ object AppMainFormChatti: TAppMainFormChatti
           CustomIcon = <
             item
             end>
-          IsSelected = False
+          IsSelected = True
           Size.Width = 63.000000000000000000
           Size.Height = 26.000000000000000000
           Size.PlatformDefault = False
@@ -210,6 +210,7 @@ object AppMainFormChatti: TAppMainFormChatti
           object MemoModerations: TMemo
             Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
             DataDetectorTypes = []
+            ReadOnly = True
             Align = Client
             Size.Width = 368.000000000000000000
             Size.Height = 431.000000000000000000
@@ -244,5 +245,11 @@ object AppMainFormChatti: TAppMainFormChatti
     AutoSize = False
     Left = 48
     Top = 264
+  end
+  object Timer1: TTimer
+    Interval = 500
+    OnTimer = Timer1Timer
+    Left = 128
+    Top = 320
   end
 end

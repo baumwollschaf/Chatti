@@ -63,6 +63,7 @@ type
     MainLayout: TLayout;
     btnAsk: TButton;
     PathSend: TPath;
+    Timer1: TTimer;
     procedure btnSettingsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -79,6 +80,7 @@ type
     procedure FormFocusChanged(Sender: TObject);
     procedure FormVirtualKeyboardShown(Sender: TObject; KeyboardVisible: Boolean; const Bounds: TRect);
     procedure FormVirtualKeyboardHidden(Sender: TObject; KeyboardVisible: Boolean; const Bounds: TRect);
+    procedure Timer1Timer(Sender: TObject);
   private
     FInput: String;
     FWasMe: Boolean;
@@ -92,6 +94,7 @@ type
     procedure ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
   private
     // Keyboard stuff
+    FKeyBoardSrv: IFMXVirtualKeyboardService;
     FService1: IFMXVirtualKeyboardToolbarService;
     FKBBounds: TRectF;
     FNeedOffset: Boolean;
@@ -243,12 +246,7 @@ begin
       end;
   end;
 
-  var
-    Intf: ITextActions := nil;
-
-  Intf := MemoModerations;
-  Intf.SelectAll;
-  Intf.DeleteSelection;
+  MemoModerations.Text := '';
 
 end;
 
@@ -308,6 +306,11 @@ end;
 
 procedure TAppMainFormChatti.FormCreate(Sender: TObject);
 begin
+  FKeyBoardSrv := nil;
+  if TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardService, IInterface(FKeyBoardSrv)) then
+  begin
+
+  end;
   if TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardToolbarService, IInterface(FService1)) then
   begin
     FService1.SetToolbarEnabled(True);
@@ -511,6 +514,41 @@ begin
   EditClipboard.Text := ABubbleLabel.Text;
   EditClipboard.SelectAll;
   EditClipboard.CopyToClipboard;
+end;
+
+procedure TAppMainFormChatti.Timer1Timer(Sender: TObject);
+begin
+{  HeaderLabel.Text := '';
+  if (TVirtualKeyboardState.Visible in FKeyBoardSrv.VirtualKeyboardState) then
+  begin
+    HeaderLabel.Text := 'Visible';
+  end;
+  if (TVirtualKeyboardState.AutoShow in FKeyBoardSrv.VirtualKeyboardState) then
+  begin
+    HeaderLabel.Text := HeaderLabel.Text + ' AutoShow';
+  end;
+
+  if (TVirtualKeyboardState.Error in FKeyBoardSrv.VirtualKeyboardState) then
+  begin
+    HeaderLabel.Text := HeaderLabel.Text + ' Error';
+  end;
+
+  if (TVirtualKeyboardState.Transient in FKeyBoardSrv.VirtualKeyboardState) then
+  begin
+    HeaderLabel.Text := HeaderLabel.Text + ' Transient';
+  end;
+  }
+
+  if FKeyBoardSrv <> nil then
+  begin
+//    if FNeedOffset then
+    begin
+      if FKeyBoardSrv.VirtualKeyboardState = [TVirtualKeyboardState.AutoShow] then
+      begin
+        RestorePosition;
+      end;
+    end;
+  end;
 end;
 
 procedure TAppMainFormChatti.UpdateKBBounds;
