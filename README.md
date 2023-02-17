@@ -1,7 +1,10 @@
 # Chatti
 Chatti App. Delphi implementation of ChatGPT using RDOpenAI component.
 
-Requires: https://github.com/baumwollschaf/RDOpenAI
+Requires: 
+ - https://github.com/baumwollschaf/RDOpenAI
+ - https://github.com/baumwollschaf/FmxAutoSizer
+ 
 
 Chatti in the Play Store at:
 https://play.google.com/store/apps/details?id=com.ralphdietrich.Chatti
