@@ -109,29 +109,42 @@ object AppMainFormChatti: TAppMainFormChatti
           Margins.Top = 8.000000000000000000
           Margins.Right = 1.000000000000000000
           Margins.Bottom = 8.000000000000000000
-          Size.Width = 336.000000000000000000
+          Size.Width = 328.000000000000000000
           Size.Height = 30.000000000000000000
           Size.PlatformDefault = False
           OnKeyUp = edQuestionKeyUp
         end
-        object PathSend: TPath
+        object btnAsk: TButton
           Align = Right
-          Data.Path = {
-            0900000000000000000000400000A04101000000000000413333B34101000000
-            0000C0410000204101000000000040410000C04101000000000040410000F041
-            01000000666682419A99CD41010000000000B0410000E041010000000000F041
-            0000004003000000000000400000A041}
           Margins.Left = 1.000000000000000000
-          Margins.Top = 10.000000000000000000
+          Margins.Top = 6.000000000000000000
           Margins.Right = 8.000000000000000000
-          Margins.Bottom = 10.000000000000000000
-          Position.X = 346.000000000000000000
-          Position.Y = 10.000000000000000000
-          Size.Width = 30.000000000000000000
-          Size.Height = 26.000000000000000000
+          Margins.Bottom = 4.000000000000000000
+          Position.X = 338.000000000000000000
+          Position.Y = 6.000000000000000000
+          Size.Width = 38.000000000000000000
+          Size.Height = 36.000000000000000000
           Size.PlatformDefault = False
-          Stroke.Kind = None
+          TabOrder = 2
           OnClick = btnAskClick
+          object PathSend: TPath
+            Align = Client
+            Data.Path = {
+              0900000000000000000000400000A04101000000000000413333B34101000000
+              0000C0410000204101000000000040410000C04101000000000040410000F041
+              01000000666682419A99CD41010000000000B0410000E041010000000000F041
+              0000004003000000000000400000A041}
+            Fill.Color = claGray
+            HitTest = False
+            Margins.Left = 3.000000000000000000
+            Margins.Top = 3.000000000000000000
+            Margins.Right = 3.000000000000000000
+            Margins.Bottom = 3.000000000000000000
+            Size.Width = 32.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            Stroke.Kind = None
+          end
         end
       end
       object TabControl1: TTabControl

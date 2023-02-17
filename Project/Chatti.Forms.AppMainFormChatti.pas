@@ -35,6 +35,8 @@ uses
   Chatti.BubbleLabel,
   FMX.TabControl,
   FMX.AutoSizer,
+  FMX.VirtualKeyboard,
+  FMX.Platform,
   FMX.Menus;
 
 type
@@ -49,7 +51,6 @@ type
     edQuestion: TEdit;
     ActionList1: TActionList;
     ShowShareSheetAction1: TShowShareSheetAction;
-    PathSend: TPath;
     TabControl1: TTabControl;
     TabItem1: TTabItem;
     TabItem2: TTabItem;
@@ -60,6 +61,8 @@ type
     btnClear: TSpeedButton;
     EditClipboard: TEdit;
     MainLayout: TLayout;
+    btnAsk: TButton;
+    PathSend: TPath;
     procedure btnSettingsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -89,7 +92,7 @@ type
     procedure ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
   private
     // Keyboard stuff
-    { Private declarations }
+    FService1: IFMXVirtualKeyboardToolbarService;
     FKBBounds: TRectF;
     FNeedOffset: Boolean;
     procedure CalcContentBoundsProc(Sender: TObject; var ContentBounds: TRectF);
@@ -150,10 +153,10 @@ begin
   AutoSizer.AutoSize := True;
   var
     Offset: Integer := 10;
-  if Labl.Margins.Top = 0 then
-    Offset := 20;
+  if Labl.Margins.Top = 1 then
+    Offset := Trunc((TBubbleLabel.cDEF_MARGIN - Labl.Margins.Top) * 2);
   Labl.Height := Labl.Height + Labl.Margins.Top + Labl.Margins.Bottom + Offset;
-  sbMessages.ScrollBy(0, -95);
+  sbMessages.ScrollBy(0, -100);
 end;
 
 procedure TAppMainFormChatti.AnalyzeInput(AText: String; AType: TModerations);
@@ -305,7 +308,12 @@ end;
 
 procedure TAppMainFormChatti.FormCreate(Sender: TObject);
 begin
-  VKAutoShowMode := TVKAutoShowMode.Always;
+  if TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardToolbarService, IInterface(FService1)) then
+  begin
+    FService1.SetToolbarEnabled(True);
+    FService1.SetHideKeyboardButtonVisibility(True);
+  end;
+
   VertScrollBox1.OnCalcContentBounds := CalcContentBoundsProc;
 
   TabControl1.ActiveTab := TabItem1;
@@ -406,9 +414,11 @@ begin
   var
     StyleRes: TResourceStream;
   if DarkMode then
-    StyleRes := TResourceStream.Create(HInstance, 'Dark', RT_RCDATA)
-  else
+  begin
+    StyleRes := TResourceStream.Create(HInstance, 'Dark', RT_RCDATA);
+  end else begin
     StyleRes := TResourceStream.Create(HInstance, 'Light', RT_RCDATA);
+  end;
   SynchronizedRun(
     procedure
     begin

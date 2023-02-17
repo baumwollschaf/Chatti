@@ -23,6 +23,9 @@ uses
 
 type
   TBubbleLabel = class(TCalloutRectangle)
+  public const
+    cDEF_MARGIN = 10;
+    cDEF_MARGIN_RIGHT_LEFT = 15;
   strict private
     class var FList: TObjectList<TBubbleLabel>;
   private
@@ -65,19 +68,19 @@ begin
   CalloutWidth := 10;
   XRadius := 15;
   YRadius := 15;
-  Margins.Top := 10;
-  Margins.Left := 10;
-  Margins.Right := 10;
+  Margins.Top := cDEF_MARGIN;
+  Margins.Left := cDEF_MARGIN;
+  Margins.Right := cDEF_MARGIN;
   Margins.Bottom := 0;
 
   FLabel := TLabel.Create(Self);
   FLabel.StyledSettings := FLabel.StyledSettings - [TStyledSetting.FontColor];
   FLabel.Parent := Self;
   FLabel.Align := TAlignLayout.Top;
-  FLabel.Margins.Top := 10;
-  FLabel.Margins.Left := 10;
-  FLabel.Margins.Right := 15;
-  FLabel.Margins.Bottom := 10;
+  FLabel.Margins.Top := cDEF_MARGIN;
+  FLabel.Margins.Left := cDEF_MARGIN;
+  FLabel.Margins.Right := cDEF_MARGIN_RIGHT_LEFT;
+  FLabel.Margins.Bottom := cDEF_MARGIN;
   FLabel.TextSettings.FontColor := TAlphaColors.White;
   Fill.Color := TAlphaColors.Deepskyblue;
   FLabel.BringToFront;
@@ -114,11 +117,11 @@ begin
     FFollowing := Value;
     if Following then
     begin
-      Margins.Top := 0;
-      Margins.Bottom := 0;
+      Margins.Top := 1;
+      Margins.Bottom := 1;
     end else begin
-      Margins.Top := 10;
-      Margins.Bottom := 10;
+      Margins.Top := cDEF_MARGIN;
+      Margins.Bottom := cDEF_MARGIN;
     end;
   end;
 end;
@@ -135,8 +138,8 @@ begin
           Fill.Color := TAlphaColors.Deepskyblue;
           CalloutPosition := TCalloutPosition.Right;
           FLabel.TextSettings.FontColor := TAlphaColors.White;
-          FLabel.Margins.Right := 15;
-          FLabel.Margins.Left := 10;
+          FLabel.Margins.Right := cDEF_MARGIN_RIGHT_LEFT;
+          FLabel.Margins.Left := cDEF_MARGIN;
         end;
       False:
         begin
@@ -144,8 +147,8 @@ begin
           Fill.Color := TAlphaColors.Lightgreen;
           CalloutPosition := TCalloutPosition.Left;
           FLabel.TextSettings.FontColor := TAlphaColors.Black;
-          FLabel.Margins.Right := 10;
-          FLabel.Margins.Left := 15;
+          FLabel.Margins.Right := cDEF_MARGIN;
+          FLabel.Margins.Left := cDEF_MARGIN_RIGHT_LEFT;
         end;
     end;
   end;
