@@ -98,6 +98,9 @@ uses
   System.Math,
   System.IOUtils;
 
+type
+  TVertScrollBoxHack = class(TVertScrollBox);
+
 {$R *.fmx}
 {$IFDEF MSWINDOWS}
 {$R \Res\Styles\Styles_Win.res}
@@ -108,7 +111,7 @@ uses
 {$IFDEF IOS}
 {$R \Res\Styles\Styles_iOS.res}
 {$ENDIF}
-{ TViewForm }
+  { TViewForm }
 {$IFDEF ANDROID}
 {$ENDIF}
 
@@ -142,7 +145,7 @@ begin
   if Labl.Margins.Top = 1 then
     Offset := Trunc((TBubbleLabel.cDEF_MARGIN - Labl.Margins.Top) * 2);
   Labl.Height := Labl.Height + Labl.Margins.Top + Labl.Margins.Bottom + Offset;
-  sbMessages.ScrollBy(0, -Labl.Height + 50);
+  sbMessages.ScrollBy(0, -(TVertScrollBoxHack(sbMessages).VScrollBar.Value + 999999));
 end;
 
 procedure TAppMainFormChatti.AnalyzeInput(AText: string; AType: TModerations);
@@ -304,7 +307,7 @@ begin
   begin
     if Result <> '' then
     begin
-      Result := Result + #13#10+ #13#10;
+      Result := Result + #13#10 + #13#10;
     end;
     if Bub.Me then
     begin

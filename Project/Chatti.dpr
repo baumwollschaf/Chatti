@@ -2,20 +2,25 @@ program Chatti;
 
 uses
   System.StartUpCopy,
+  System.SysUtils,
   FMX.Forms,
-  Chatti.Forms.AppMainFormChatti in 'Chatti.Forms.AppMainFormChatti.pas' {AppMainFormChatti},
-  Chatti.Forms.TemplateForm in 'Chatti.Forms.TemplateForm.pas' {TemplateForm},
-  Chatti.Forms.SettingsForm in 'Chatti.Forms.SettingsForm.pas' {SettingsForm},
-  {$IFDEF baumwollschaf}
+  Chatti.Forms.AppMainFormChatti in 'Chatti.Forms.AppMainFormChatti.pas' {AppMainFormChatti} ,
+  Chatti.Forms.TemplateForm in 'Chatti.Forms.TemplateForm.pas' {TemplateForm} ,
+  Chatti.Forms.SettingsForm in 'Chatti.Forms.SettingsForm.pas' {SettingsForm} ,
+{$IFDEF baumwollschaf}
   Extern.ApiKey in 'Extern.ApiKey.pas',
-  {$ENDIF }
+{$ENDIF }
   Chatti.Types in 'Chatti.Types.pas',
-  Chatti.BubbleLabel in 'Chatti.BubbleLabel.pas';
+  Chatti.BubbleLabel in 'Chatti.BubbleLabel.pas',
+  Chatti.Types.Persistent.Json in 'Chatti.Types.Persistent.Json.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
+  FormatSettings.LongDateFormat := 'dd.mm.yyyy hh:nn';
+  FormatSettings.ShortDateFormat := 'dd.mm.yyyy';
+  FormatSettings.LongTimeFormat := 'hh:nn';
   Application.CreateForm(TAppMainFormChatti, AppMainFormChatti);
   Application.Run;
 
