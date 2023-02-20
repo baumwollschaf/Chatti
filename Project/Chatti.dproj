@@ -273,8 +273,8 @@
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Android)'!=''">
-        <VerInfo_Build>10</VerInfo_Build>
-        <VerInfo_Keys>package=com.ralphdietrich.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=10;versionName=1.0.10;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=</VerInfo_Keys>
+        <VerInfo_Build>11</VerInfo_Build>
+        <VerInfo_Keys>package=com.ralphdietrich.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=11;versionName=1.0.11;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=</VerInfo_Keys>
         <Android_LauncherIcon36>Artwork\Android\FM_LauncherIcon_36x36.png</Android_LauncherIcon36>
         <Android_NotificationAccentColor>#000000</Android_NotificationAccentColor>
         <Android_LauncherIcon48>Artwork\Android\FM_LauncherIcon_48x48.png</Android_LauncherIcon48>
@@ -289,8 +289,8 @@
         <BT_BuildType>AppStore</BT_BuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Android64)'!=''">
-        <VerInfo_Build>10</VerInfo_Build>
-        <VerInfo_Keys>package=com.ralphdietrich.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=10;versionName=1.0.10;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=</VerInfo_Keys>
+        <VerInfo_Build>11</VerInfo_Build>
+        <VerInfo_Keys>package=com.ralphdietrich.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=11;versionName=1.0.11;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=</VerInfo_Keys>
         <Android_LauncherIcon36>Artwork\Android\FM_LauncherIcon_36x36.png</Android_LauncherIcon36>
         <Android_LauncherIcon48>Artwork\Android\FM_LauncherIcon_48x48.png</Android_LauncherIcon48>
         <Android_LauncherIcon72>Artwork\Android\FM_LauncherIcon_72x72.png</Android_LauncherIcon72>

@@ -82,7 +82,7 @@ type
     FChattiMessages: TChattiMessages;
     FFileNameChattiMessages: String;
     function GetLabelsText: string;
-    procedure AddLabel(AText: string; AMe: Boolean; AFollowing: Boolean);
+    procedure AddLabel(AText: string; AMe: Boolean; AFollowing: Boolean; ADate: TDateTime = 0);
     procedure AnalyzeInput(AText: string; AType: TModerations);
     function StringRework(AText: string): string;
     procedure TextToClipBoard(ABubbleLabel: TChatBubbleLabel);
@@ -130,7 +130,7 @@ begin
     Result := '👍';
 end;
 
-procedure TAppMainFormChatti.AddLabel(AText: string; AMe: Boolean; AFollowing: Boolean);
+procedure TAppMainFormChatti.AddLabel(AText: string; AMe: Boolean; AFollowing: Boolean; ADate: TDateTime);
 begin
   var
     Labl: TChatBubbleLabel;
@@ -142,6 +142,10 @@ begin
   Labl.Me := AMe;
   Labl.Following := AFollowing;
   Labl.Position.Y := 999999999;
+  if ADate <> 0 then
+  begin
+    Labl.DateTime := ADate;
+  end;
   Labl.repaint;
   if not FLoading then
   begin
@@ -416,7 +420,7 @@ begin
               follow := not wasMe;
             end;
 
-            AddLabel(FChattiMessages[i].Message, FChattiMessages[i].Me, follow);
+            AddLabel(FChattiMessages[i].Message, FChattiMessages[i].Me, follow, FChattiMessages[i].Date);
             wasMe := FChattiMessages[i].Me;
           end;
         end)
