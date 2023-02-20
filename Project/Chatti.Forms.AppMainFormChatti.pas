@@ -35,6 +35,8 @@ uses
   FMX.Objects,
   Chatti.BubbleLabel,
   FMX.TabControl,
+  System.Threading,
+  Chatti.Types.Persistent.Json,
   FMX.AutoSizer;
 
 type
@@ -71,19 +73,27 @@ type
     procedure ShowShareSheetAction1BeforeExecute(Sender: TObject);
     procedure ShowShareSheetAction1Update(Sender: TObject);
     procedure RDChatGpt1ModerationsLoaded(Sender: TObject; AType: TModerations);
+    procedure FormShow(Sender: TObject);
   private
+    FLoading: Boolean;
     FInput: string;
     FWasMe: Boolean;
     FSettings: TSettings;
+    FChattiMessages: TChattiMessages;
+    FFileNameChattiMessages: String;
     function GetLabelsText: string;
     procedure AddLabel(AText: string; AMe: Boolean; AFollowing: Boolean);
     procedure AnalyzeInput(AText: string; AType: TModerations);
     function StringRework(AText: string): string;
     procedure TextToClipBoard(ABubbleLabel: TChatBubbleLabel);
+    procedure LoadChattiMessages;
+    procedure SaveChattiMessages;
   private
     procedure ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
   public
     procedure SetThemeMode(ATheme: TThemeMode);
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
   end;
 
 var
@@ -133,10 +143,17 @@ begin
   Labl.Following := AFollowing;
   Labl.Position.Y := 999999999;
   Labl.repaint;
-  sbMessages.ScrollBy(0, -(TVertScrollBoxHack(sbMessages).VScrollBar.Value + Labl.Height + 999999));
+  if not FLoading then
+  begin
+    try
+      sbMessages.ScrollBy(0, -(TVertScrollBoxHack(sbMessages).VScrollBar.Value + Labl.Height + 999999));
+    except
+      ;
+    end;
+  end;
   sbMessages.repaint;
-  // sbMessages.RecalcSize;
   sbMessages.RealignContent;
+  sbMessages.RecalcSize;
 end;
 
 procedure TAppMainFormChatti.AnalyzeInput(AText: string; AType: TModerations);
@@ -189,6 +206,7 @@ begin
   if edQuestion.Text.Trim = '' then
     Exit;
 
+  FLoading := False;
   SynchronizedRun(
     procedure
     begin
@@ -199,6 +217,8 @@ begin
             edQuestion.Text := '';
             RDChatGpt1.Ask(FInput);
             AddLabel(FInput, True, FWasMe and True);
+            FChattiMessages.Add(FInput, True, Now);
+            SaveChattiMessages;
             FWasMe := True;
           end;
         1:
@@ -229,6 +249,8 @@ begin
                 begin
                   FWasMe := False;
                   TChatBubbleLabel.Clear;
+                  FChattiMessages.Clear;
+                  SaveChattiMessages;
                 end;
             end;
           end);
@@ -272,6 +294,20 @@ begin
   end;
 end;
 
+constructor TAppMainFormChatti.Create(AOwner: TComponent);
+begin
+  inherited;
+  FLoading := True;
+  FFileNameChattiMessages := IncludeTrailingPathDelimiter(TPath.GetHomePath) + 'ChattiMessages.Dat';
+  FChattiMessages := TChattiMessages.Create;
+end;
+
+destructor TAppMainFormChatti.Destroy;
+begin
+  FreeAndNil(FChattiMessages);
+  inherited;
+end;
+
 procedure TAppMainFormChatti.edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
 begin
   if Key = vkReturn then
@@ -298,7 +334,13 @@ end;
 
 procedure TAppMainFormChatti.FormDestroy(Sender: TObject);
 begin
+  TChatBubbleLabel.Clear;
   FreeAndNil(FSettings);
+end;
+
+procedure TAppMainFormChatti.FormShow(Sender: TObject);
+begin
+  LoadChattiMessages;
 end;
 
 function TAppMainFormChatti.GetLabelsText: string;
@@ -332,6 +374,8 @@ end;
 procedure TAppMainFormChatti.RDChatGpt1Answer(Sender: TObject; AMessage: string);
 begin
   AddLabel(AMessage, False, (not FWasMe) and False);
+  FChattiMessages.Add(AMessage, False, Now);
+  SaveChattiMessages;
   FWasMe := False;
 end;
 
@@ -339,6 +383,60 @@ procedure TAppMainFormChatti.RDChatGpt1ModerationsLoaded(Sender: TObject; AType:
 begin
   // still in thread-mode!
   AnalyzeInput(FInput, AType);
+end;
+
+procedure TAppMainFormChatti.LoadChattiMessages;
+begin
+  TTask.Run(
+    procedure
+    begin
+      var
+        S: String := '';
+      if TFile.Exists(FFileNameChattiMessages) then
+      begin
+        S := TFile.ReadAllText(FFileNameChattiMessages)
+      end;
+      if S = '' then
+        Exit;
+      FChattiMessages.LoadFromJson(S);
+
+      TThread.Synchronize(nil,
+        procedure
+        begin
+          var
+            wasMe: Boolean := False;
+          var
+            follow: Boolean;
+          for var i: Integer := 0 to FChattiMessages.Count - 1 do
+          begin
+            if FChattiMessages[i].Me then
+            begin
+              follow := wasMe;
+            end else begin
+              follow := not wasMe;
+            end;
+
+            AddLabel(FChattiMessages[i].Message, FChattiMessages[i].Me, follow);
+            wasMe := FChattiMessages[i].Me;
+          end;
+        end)
+    end);
+end;
+
+procedure TAppMainFormChatti.SaveChattiMessages;
+begin
+  TTask.Run(
+    procedure
+    begin
+      var
+        S: String := '';
+      if TFile.Exists(FFileNameChattiMessages) then
+      begin
+        TFile.Delete(FFileNameChattiMessages);
+      end;
+      S := FChattiMessages.ToJson;
+      TFile.AppendAllText(FFileNameChattiMessages, S);
+    end);
 end;
 
 procedure TAppMainFormChatti.SetThemeMode(ATheme: TThemeMode);
