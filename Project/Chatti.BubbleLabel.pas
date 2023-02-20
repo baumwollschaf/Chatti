@@ -8,202 +8,208 @@ uses
   System.UITypes,
   System.Classes,
   System.Variants,
+  System.Generics.Collections,
   FMX.Types,
   FMX.Controls,
   FMX.Forms,
   FMX.Graphics,
   FMX.Dialogs,
-  // Skia,
+  FMX.Objects,
   FMX.Controls.Presentation,
-  FMX.StdCtrls,
-  // Skia.FMX,
-  FMX.Layouts,
-  System.Generics.Collections,
-  FMX.Objects;
+  FMX.StdCtrls;
 
 type
-  TBubbleLabel = class(TCalloutRectangle)
-  public const
-    cDEF_MARGIN = 10;
-    cDEF_MARGIN_RIGHT_LEFT = 15;
-  strict private
-    class var FList: TObjectList<TBubbleLabel>;
+  TChatBubbleLabel = class(TLabel)
+  private const
+    cPERCENT_SPACES = 15;
+    cMARGIN_MIN = 4;
+    cMARGIN_LABEL = cMARGIN_MIN;
+    cMARGIN_LABEL_HALF = cMARGIN_LABEL div 2;
+    cRADIUS = 5;
+    cMARGIN = 30;
+    cMARGIN_TOP_NOT_FOLLOWING = cMARGIN_MIN;
+    cMARGIN_TOP_FOLLOWING = 1;
   private
+    class var FList: TObjectList<TChatBubbleLabel>;
+  private
+
+    FRect: TRectangle;
     FLabel: TLabel;
     FDateLabel: TLabel;
-    FMe: Boolean;
+
     FFollowing: Boolean;
-    FDate: TDateTime;
-    procedure SetMe(const Value: Boolean);
-    function GetText: string;
-    procedure SetText(const Value: string);
+    FBGColorYou: TAlphaColor;
+    FBGColorMe: TAlphaColor;
+    FMe: Boolean;
+    FBubbleText: String;
+    procedure SetBGColorMe(const Value: TAlphaColor);
+    procedure SetBGColorYou(const Value: TAlphaColor);
     procedure SetFollowing(const Value: Boolean);
-    procedure SetDate(const Value: TDateTime);
+    procedure SetMe(const Value: Boolean);
+    procedure SetBubbleText(const Value: String);
+  private
+    FDateTime: TDateTime;
+    function AddSpaces(AIn: string; APercentMore: Integer): string;
+    procedure SetDateTime(const Value: TDateTime);
+  protected
+    property Text;
   public
-    procedure Resize; override;
-    property Me: Boolean read FMe write SetMe;
-    property Following: Boolean read FFollowing write SetFollowing;
-    property Text: string read GetText write SetText;
-    property Date: TDateTime read FDate write SetDate;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    property Me: Boolean read FMe write SetMe;
+    property Following: Boolean read FFollowing write SetFollowing;
+    property BGColorMe: TAlphaColor read FBGColorMe write SetBGColorMe;
+    property BGColorYou: TAlphaColor read FBGColorYou write SetBGColorYou;
+    property BubbleText: String read FBubbleText write SetBubbleText;
+    property DateTime: TDateTime read FDateTime write SetDateTime;
   public
-    class property List: TObjectList<TBubbleLabel> read FList;
-    class procedure ClearLabels;
+    class procedure Clear;
     class constructor Create;
     class destructor Destroy;
   end;
 
 implementation
 
+uses
+  System.StrUtils;
+
 { TBubbleLabel }
 
-constructor TBubbleLabel.Create(AOwner: TComponent);
+constructor TChatBubbleLabel.Create(AOwner: TComponent);
 begin
   inherited;
-
   FList.Add(Self);
+  HitTest := True;
+  AutoSize := True;
+  Align := TAlignLayout.Top;
+  StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
+  Font.Size := 18;
 
-  // Height := 20;
-
-  FDate := Now;
-
-  FDateLabel := TLabel.Create(Self);
-  FDateLabel.Parent := Self;
-  FDateLabel.StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
-  FDateLabel.Anchors := [TAnchorKind.akRight, TAnchorKind.akTop];
-  FDateLabel.Width := 70;
-  FDateLabel.TextSettings.Font.Size := 9.0;
-  FDateLabel.TextSettings.HorzAlign := TTextAlign.Trailing;
-  FDateLabel.TextSettings.FontColor := TAlphaColors.White;
-  FDateLabel.Align := TAlignLayout.Top;
-  FDateLabel.Margins.Right := cDEF_MARGIN_RIGHT_LEFT;
-  FDateLabel.Margins.Top := 1;
-  FDateLabel.Text := DateTimeToStr(FDate);
-  FDateLabel.AutoSize := False;
-  FDateLabel.Height := 9;
-
-  // CalloutOffset := -50;
-  Stroke.Kind := TBrushKind.None;
-  FMe := True; // so me
-  CalloutPosition := TCalloutPosition.Right; // so me
-  CalloutLength := 5;
-  CalloutWidth := 10;
-  XRadius := 15;
-  YRadius := 15;
-  Margins.Top := cDEF_MARGIN;
-  Margins.Left := cDEF_MARGIN;
-  Margins.Right := cDEF_MARGIN;
-  Margins.Bottom := 0;
+  FRect := TRectangle.Create(Self);
+  FRect.Parent := Self;
+  FRect.Align := TAlignLayout.Client;
+  FRect.Stroke.Kind := TBrushKind.None;
+  FRect.XRadius := cRADIUS;
+  FRect.YRadius := cRADIUS;
 
   FLabel := TLabel.Create(Self);
-  FLabel.StyledSettings := FLabel.StyledSettings - [TStyledSetting.FontColor];
-  FLabel.Parent := Self;
-  FLabel.Align := TAlignLayout.Top;
-  FLabel.Margins.Top := Abs(cDEF_MARGIN - FDateLabel.Height - FDateLabel.Margins.Top);
-  FLabel.Margins.Left := cDEF_MARGIN;
-  FLabel.Margins.Right := cDEF_MARGIN_RIGHT_LEFT;
-  FLabel.Margins.Bottom := cDEF_MARGIN;
-  FLabel.TextSettings.FontColor := TAlphaColors.White;
-  FLabel.Position.Y := 9999;
-  Fill.Color := TAlphaColors.Dodgerblue;
-  FLabel.BringToFront;
+  FLabel.StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
+  FLabel.Font.Size := 18;
+  FLabel.Parent := FRect;
+  FLabel.Align := TAlignLayout.Client;
+  FLabel.Margins.Left := cMARGIN_LABEL;
+  FLabel.Margins.Top := cMARGIN_LABEL;
+  FLabel.Margins.Right := cMARGIN_LABEL;
+  FLabel.Margins.Bottom := cMARGIN_LABEL_HALF;
+
+  FDateLabel := TLabel.Create(Self);
+  FDateLabel.StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
+  FDateLabel.Align := TAlignLayout.Bottom;
+  FDateLabel.Font.Size := 10;
+  FDateLabel.Margins.Right := cMARGIN_LABEL;
+  FDateLabel.Margins.Bottom := cMARGIN_LABEL_HALF;
+  FDateLabel.Parent := FRect;
+  FDateLabel.TextAlign := TTextAlign.Trailing;
+
+  DateTime := Now;
+
+  FMe := True;
+  FFollowing := False;
+  FBGColorMe := TAlphaColors.Dodgerblue;
+  FBGColorYou := TAlphaColors.Lightgreen;
 end;
 
-destructor TBubbleLabel.Destroy;
+function TChatBubbleLabel.AddSpaces(AIn: string; APercentMore: Integer): string;
+begin
+  Result := AIn;
+  var
+    Len: Integer := Result.Length;
+  var
+    LenFactor: Double := 1 + (APercentMore / 100);
+  var
+    LenNew: Integer := Round(Len * LenFactor);
+  var
+    Offset: Integer := (LenNew - Len);
+  var
+    s: string := DupeString(' ', Offset);
+  Result := Result + #13#10 + s;
+end;
+
+destructor TChatBubbleLabel.Destroy;
 begin
   FList.Remove(Self);
-  FreeAndNil(FDateLabel);
-  FreeAndNil(FLabel);
   inherited;
 end;
 
-class destructor TBubbleLabel.Destroy;
+procedure TChatBubbleLabel.SetBGColorMe(const Value: TAlphaColor);
 begin
-  FreeAndNil(FList);
+  FBGColorMe := Value;
 end;
 
-function TBubbleLabel.GetText: string;
+procedure TChatBubbleLabel.SetBGColorYou(const Value: TAlphaColor);
 begin
-  Result := FLabel.Text;
+  FBGColorYou := Value;
 end;
 
-procedure TBubbleLabel.Resize;
+procedure TChatBubbleLabel.SetBubbleText(const Value: String);
 begin
-  inherited Resize;
-  if FLabel <> nil then
+  FBubbleText := Value;
+  Text := AddSpaces(FBubbleText, cPERCENT_SPACES);
+  FLabel.Text := FBubbleText;
+end;
+
+procedure TChatBubbleLabel.SetDateTime(const Value: TDateTime);
+begin
+  FDateTime := Value;
+  FDateLabel.Text := DateTimeToStr(FDateTime);
+end;
+
+procedure TChatBubbleLabel.SetFollowing(const Value: Boolean);
+begin
+  FFollowing := Value;
+  if FFollowing then
   begin
-    FLabel.AutoSize := False;
-    FLabel.AutoSize := True;
+    Margins.Top := cMARGIN_TOP_FOLLOWING;
+    FRect.Corners := [TCorner.BottomLeft, TCorner.BottomRight]
+  end else begin
+    Margins.Top := cMARGIN_TOP_NOT_FOLLOWING;
+    FRect.Corners := [TCorner.TopLeft, TCorner.TopRight, TCorner.BottomLeft, TCorner.BottomRight]
   end;
 end;
 
-procedure TBubbleLabel.SetDate(const Value: TDateTime);
+procedure TChatBubbleLabel.SetMe(const Value: Boolean);
 begin
-  FDate := Value;
-end;
-
-procedure TBubbleLabel.SetFollowing(const Value: Boolean);
-begin
-  if FFollowing <> Value then
+  FMe := Value;
+  if FMe then
   begin
-    FFollowing := Value;
-    if Following then
-    begin
-      Margins.Top := 1;
-      Margins.Bottom := 1;
-    end
-    else
-    begin
-      Margins.Top := cDEF_MARGIN;
-      Margins.Bottom := cDEF_MARGIN;
-    end;
+    Margins.Left := cMARGIN;
+    Margins.Right := cMARGIN_MIN;
+    FRect.Fill.Color := FBGColorMe;
+    FLabel.FontColor := TAlphaColors.White;
+    FDateLabel.FontColor := TAlphaColors.White;
+  end else begin
+    Margins.Left := cMARGIN_MIN;
+    Margins.Right := cMARGIN;
+    FRect.Fill.Color := FBGColorYou;
+    FLabel.FontColor := TAlphaColors.Black;
+    FDateLabel.FontColor := TAlphaColors.Black;
   end;
+
 end;
 
-procedure TBubbleLabel.SetMe(const Value: Boolean);
-begin
-  if FMe <> Value then
-  begin
-    FMe := Value;
-    case FMe of
-      True:
-        begin
-          // me
-          Fill.Color := TAlphaColors.Dodgerblue;
-          CalloutPosition := TCalloutPosition.Right;
-          FLabel.TextSettings.FontColor := TAlphaColors.White;
-          FLabel.Margins.Right := cDEF_MARGIN_RIGHT_LEFT;
-          FLabel.Margins.Left := cDEF_MARGIN;
-        end;
-      False:
-        begin
-          // ChatGPT
-          Fill.Color := TAlphaColors.Lightgreen;
-          CalloutPosition := TCalloutPosition.Left;
-          FLabel.TextSettings.FontColor := TAlphaColors.Black;
-          FLabel.Margins.Right := cDEF_MARGIN;
-          FLabel.Margins.Left := cDEF_MARGIN_RIGHT_LEFT;
-        end;
-    end;
-    FDateLabel.TextSettings.FontColor := FLabel.TextSettings.FontColor;
-  end;
-end;
-
-procedure TBubbleLabel.SetText(const Value: string);
-begin
-  FLabel.Text := Value;
-  Resize;
-end;
-
-class procedure TBubbleLabel.ClearLabels;
+class procedure TChatBubbleLabel.Clear;
 begin
   FList.Clear;
 end;
 
-class constructor TBubbleLabel.Create;
+class constructor TChatBubbleLabel.Create;
 begin
-  FList := TObjectList<TBubbleLabel>.Create;
+  FList := TObjectList<TChatBubbleLabel>.Create;
+end;
+
+class destructor TChatBubbleLabel.Destroy;
+begin
+  FreeAndNil(FList);
 end;
 
 end.

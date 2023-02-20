@@ -24,6 +24,7 @@ uses
   rd.OpenAI.ChatGpt.ViewModel,
   FMX.Layouts,
   FMX.Edit,
+  FMX.DialogService,
   FMX.Memo.Types,
   FMX.ScrollBox,
   FMX.Memo,
@@ -58,8 +59,7 @@ type
     btnClear: TSpeedButton;
     EditClipboard: TEdit;
     MainLayout: TLayout;
-    EditButton1: TEditButton;
-    PathSend: TPath;
+    btnAsk: TSearchEditButton;
     procedure btnSettingsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -70,9 +70,7 @@ type
     procedure edQuestionKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
     procedure ShowShareSheetAction1BeforeExecute(Sender: TObject);
     procedure ShowShareSheetAction1Update(Sender: TObject);
-    procedure Label1ApplyStyleLookup(Sender: TObject);
     procedure RDChatGpt1ModerationsLoaded(Sender: TObject; AType: TModerations);
-    procedure miCopyClick(Sender: TObject);
   private
     FInput: string;
     FWasMe: Boolean;
@@ -81,7 +79,7 @@ type
     procedure AddLabel(AText: string; AMe: Boolean; AFollowing: Boolean);
     procedure AnalyzeInput(AText: string; AType: TModerations);
     function StringRework(AText: string): string;
-    procedure TextToClipBoard(ABubbleLabel: TBubbleLabel);
+    procedure TextToClipBoard(ABubbleLabel: TChatBubbleLabel);
   private
     procedure ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
   public
@@ -125,27 +123,20 @@ end;
 procedure TAppMainFormChatti.AddLabel(AText: string; AMe: Boolean; AFollowing: Boolean);
 begin
   var
-    Labl: TBubbleLabel;
-  Labl := TBubbleLabel.Create(sbMessages);
+    Labl: TChatBubbleLabel;
+  Labl := TChatBubbleLabel.Create(sbMessages);
+  Labl.Parent := sbMessages;
+  Labl.BubbleText := AText;
   Labl.Touch.InteractiveGestures := Labl.Touch.InteractiveGestures + [TInteractiveGesture.LongTap];
   Labl.OnGesture := ControlGesture;
-  // Labl.OnClick := OnLabelClick;
-  Labl.Parent := sbMessages;
   Labl.Me := AMe;
-  Labl.Text := AText;
-  Labl.Align := TAlignLayout.Top;
-  Labl.Position.Y := 999999999;
   Labl.Following := AFollowing;
-  Labl.Resize;
-  AutoSizer.Control := Labl;
-  AutoSizer.AutoSize := False;
-  AutoSizer.AutoSize := True;
-  var
-    Offset: Integer := 10;
-  if Labl.Margins.Top = 1 then
-    Offset := Trunc((TBubbleLabel.cDEF_MARGIN - Labl.Margins.Top) * 2);
-  Labl.Height := Labl.Height + Labl.Margins.Top + Labl.Margins.Bottom + Offset;
-  sbMessages.ScrollBy(0, -(TVertScrollBoxHack(sbMessages).VScrollBar.Value + 999999));
+  Labl.Position.Y := 999999999;
+  Labl.repaint;
+  sbMessages.ScrollBy(0, -(TVertScrollBoxHack(sbMessages).VScrollBar.Value + Labl.Height + 999999));
+  sbMessages.repaint;
+  // sbMessages.RecalcSize;
+  sbMessages.RealignContent;
 end;
 
 procedure TAppMainFormChatti.AnalyzeInput(AText: string; AType: TModerations);
@@ -178,8 +169,8 @@ begin
 
     MemoModerations.Lines.Add('Hate: ' + YesOrNo(AType.Results[0].Categories.Hate) + '  Score: ' + AType.Results[0]
       .CategoryScores.Hate.ToString);
-    MemoModerations.Lines.Add('Hate Threatening: ' + YesOrNo(AType.Results[0].Categories.HateThreatening) + '  Score: '
-      + AType.Results[0].CategoryScores.HateThreatening.ToString);
+    MemoModerations.Lines.Add('Hate Threatening: ' + YesOrNo(AType.Results[0].Categories.HateThreatening) + '  Score: ' +
+      AType.Results[0].CategoryScores.HateThreatening.ToString);
     MemoModerations.Lines.Add('Self Harm: ' + YesOrNo(AType.Results[0].Categories.SelfHarm) + '  Score: ' +
       AType.Results[0].CategoryScores.SelfHarm.ToString);
     MemoModerations.Lines.Add('Sexual: ' + YesOrNo(AType.Results[0].Categories.Sexual) + '  Score: ' + AType.Results[0]
@@ -188,8 +179,8 @@ begin
       AType.Results[0].CategoryScores.SexualMinors.ToString);
     MemoModerations.Lines.Add('Violence: ' + YesOrNo(AType.Results[0].Categories.Violence) + '  Score: ' +
       AType.Results[0].CategoryScores.Violence.ToString);
-    MemoModerations.Lines.Add('Violence Graphic: ' + YesOrNo(AType.Results[0].Categories.ViolenceGraphic) + '  Score: '
-      + AType.Results[0].CategoryScores.ViolenceGraphic.ToString);
+    MemoModerations.Lines.Add('Violence Graphic: ' + YesOrNo(AType.Results[0].Categories.ViolenceGraphic) + '  Score: ' +
+      AType.Results[0].CategoryScores.ViolenceGraphic.ToString);
   end;
 end;
 
@@ -198,22 +189,26 @@ begin
   if edQuestion.Text.Trim = '' then
     Exit;
 
-  case TabControl1.TabIndex of
-    0:
-      begin
-        FInput := edQuestion.Text;
-        edQuestion.Text := '';
-        RDChatGpt1.Ask(FInput);
-        AddLabel(FInput, True, FWasMe and True);
-        FWasMe := True;
+  SynchronizedRun(
+    procedure
+    begin
+      case TabControl1.TabIndex of
+        0:
+          begin
+            FInput := edQuestion.Text;
+            edQuestion.Text := '';
+            RDChatGpt1.Ask(FInput);
+            AddLabel(FInput, True, FWasMe and True);
+            FWasMe := True;
+          end;
+        1:
+          begin
+            FInput := edQuestion.Text;
+            edQuestion.Text := '';
+            RDChatGpt1.LoadModerations(FInput);
+          end;
       end;
-    1:
-      begin
-        FInput := edQuestion.Text;
-        edQuestion.Text := '';
-        RDChatGpt1.LoadModerations(FInput);
-      end;
-  end;
+    end);
 end;
 
 procedure TAppMainFormChatti.btnCutClick(Sender: TObject);
@@ -226,8 +221,17 @@ begin
   case TabControl1.TabIndex of
     0:
       begin
-        FWasMe := False;
-        TBubbleLabel.ClearLabels;
+        TDialogService.MessageDialog('Clear chat?', TMsgDlgType.mtConfirmation, mbYesNo, TMsgDlgBtn.mbNo, 0,
+          procedure(const AResult: TModalResult)
+          begin
+            case AResult of
+              mrYes:
+                begin
+                  FWasMe := False;
+                  TChatBubbleLabel.Clear;
+                end;
+            end;
+          end);
         Exit;
       end;
   end;
@@ -241,9 +245,9 @@ begin
   var
     CurTheme: TThemeMode := FSettings.ThemeMode;
   SettingsForm := TSettingsForm.Create(Application,
-    // cancel-click
-    nil,
-    // ok-click
+  // cancel-click
+  nil,
+  // ok-click
     procedure(Setting: TObject)
     begin
       FSettings.ThemeMode := TSetting(Setting).Theme;
@@ -263,7 +267,7 @@ procedure TAppMainFormChatti.ControlGesture(Sender: TObject; const EventInfo: TG
 begin
   if EventInfo.GestureID = System.UITypes.igiLongTap then
   begin
-    TextToClipBoard(TBubbleLabel(Sender));
+    TextToClipBoard(TChatBubbleLabel(Sender));
     Handled := True;
   end;
 end;
@@ -294,7 +298,6 @@ end;
 
 procedure TAppMainFormChatti.FormDestroy(Sender: TObject);
 begin
-  TBubbleLabel.ClearLabels;
   FreeAndNil(FSettings);
 end;
 
@@ -303,34 +306,27 @@ begin
   Result := '';
   var
     Who: string;
-  for var Bub: TBubbleLabel in TBubbleLabel.List do
+
+  var
+    Bub: TChatBubbleLabel;
+  for var i: Integer := 0 to sbMessages.ComponentCount - 1 do
   begin
-    if Result <> '' then
+    if sbMessages.Components[i] is TChatBubbleLabel then
     begin
-      Result := Result + #13#10 + #13#10;
+      Bub := TChatBubbleLabel(sbMessages.Components[i]);
+      if Result <> '' then
+      begin
+        Result := Result + #13#10 + #13#10;
+      end;
+      if Bub.Me then
+      begin
+        Who := 'me: ';
+      end else begin
+        Who := 'Chatti: ';
+      end;
+      Result := Result + Who + Bub.BubbleText;
     end;
-    if Bub.Me then
-    begin
-      Who := 'me: ';
-    end
-    else
-    begin
-      Who := 'Chatti: ';
-    end;
-
-    Result := Result + Who + Bub.Text;
   end;
-end;
-
-procedure TAppMainFormChatti.Label1ApplyStyleLookup(Sender: TObject);
-begin
-  PathSend.Fill.Color := HeaderLabel.GetStyledColor;
-  PathSend.Stroke.Color := HeaderLabel.GetStyledColor;
-end;
-
-procedure TAppMainFormChatti.miCopyClick(Sender: TObject);
-begin
-  ShowMessage('Hallo');
 end;
 
 procedure TAppMainFormChatti.RDChatGpt1Answer(Sender: TObject; AMessage: string);
@@ -359,9 +355,7 @@ begin
   if DarkMode then
   begin
     StyleRes := TResourceStream.Create(HInstance, 'Dark', RT_RCDATA);
-  end
-  else
-  begin
+  end else begin
     StyleRes := TResourceStream.Create(HInstance, 'Light', RT_RCDATA);
   end;
   SynchronizedRun(
@@ -451,7 +445,7 @@ begin
   end;
 end;
 
-procedure TAppMainFormChatti.TextToClipBoard(ABubbleLabel: TBubbleLabel);
+procedure TAppMainFormChatti.TextToClipBoard(ABubbleLabel: TChatBubbleLabel);
 begin
   EditClipboard.Text := ABubbleLabel.Text;
   EditClipboard.SelectAll;

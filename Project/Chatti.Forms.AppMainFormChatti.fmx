@@ -109,7 +109,7 @@ object AppMainFormChatti: TAppMainFormChatti
           Size.Height = 30.000000000000000000
           Size.PlatformDefault = False
           OnKeyUp = edQuestionKeyUp
-          object EditButton1: TEditButton
+          object btnAsk: TSearchEditButton
             CanFocus = False
             Cursor = crArrow
             Size.Width = 28.000000000000000000
@@ -117,24 +117,6 @@ object AppMainFormChatti: TAppMainFormChatti
             Size.PlatformDefault = False
             TabOrder = 0
             OnClick = btnAskClick
-            object PathSend: TPath
-              Align = Client
-              Data.Path = {
-                0900000000000000000000400000A04101000000000000413333B34101000000
-                0000C0410000204101000000000040410000C04101000000000040410000F041
-                01000000666682419A99CD41010000000000B0410000E041010000000000F041
-                0000004003000000000000400000A041}
-              Fill.Color = claGray
-              HitTest = False
-              Margins.Left = 1.000000000000000000
-              Margins.Top = 1.000000000000000000
-              Margins.Right = 1.000000000000000000
-              Margins.Bottom = 1.000000000000000000
-              Size.Width = 26.000000000000000000
-              Size.Height = 24.000000000000000000
-              Size.PlatformDefault = False
-              Stroke.Kind = None
-            end
           end
         end
       end
