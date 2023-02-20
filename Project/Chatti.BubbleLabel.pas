@@ -19,7 +19,13 @@ uses
   FMX.StdCtrls;
 
 type
-  TChatBubbleLabel = class(TLabel)
+  TLabel = class(FMX.StdCtrls.TLabel)
+  private
+    FRect: TRectangle;
+    FDateLabel: TLabel;
+  end;
+
+  TChatBubbleLabel = class
   private const
     cPERCENT_SPACES = 15;
     cMARGIN_MIN = 4;
@@ -48,13 +54,22 @@ type
     procedure SetMe(const Value: Boolean);
     procedure SetBubbleText(const Value: String);
   private
+    procedure ResizeLabel(Sender: TObject);
+  private
     FDateTime: TDateTime;
+    FOnGesture: TGestureEvent;
+    FOnTapClick: TNotifyEvent;
     function AddSpaces(AIn: string; APercentMore: Integer): string;
     procedure SetDateTime(const Value: TDateTime);
-  protected
-    property Text;
+    function GetOnGesture: TGestureEvent;
+    function GetTouchManager: TTouchManager;
+    procedure SetTouchManager(const Value: TTouchManager);
+    procedure SetOnGesture(const Value: TGestureEvent);
+    procedure ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
+    procedure SetOnTapClick(const Value: TNotifyEvent);
+
   public
-    constructor Create(AOwner: TComponent); override;
+    constructor Create(AOwner: TFmxObject);
     destructor Destroy; override;
     property Me: Boolean read FMe write SetMe;
     property Following: Boolean read FFollowing write SetFollowing;
@@ -62,8 +77,11 @@ type
     property BGColorYou: TAlphaColor read FBGColorYou write SetBGColorYou;
     property BubbleText: String read FBubbleText write SetBubbleText;
     property DateTime: TDateTime read FDateTime write SetDateTime;
+    property OnTapClick: TNotifyEvent read FOnTapClick write SetOnTapClick;
+    procedure Resize;
   public
     class procedure Clear;
+    class property List: TObjectList<TChatBubbleLabel> read FList;
     class constructor Create;
     class destructor Destroy;
   end;
@@ -75,41 +93,47 @@ uses
 
 { TBubbleLabel }
 
-constructor TChatBubbleLabel.Create(AOwner: TComponent);
+constructor TChatBubbleLabel.Create(AOwner: TFmxObject);
 begin
-  inherited;
+  inherited Create;
   FList.Add(Self);
-  HitTest := True;
-  AutoSize := True;
-  Align := TAlignLayout.Top;
-  StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
-  Font.Size := 18;
 
-  FRect := TRectangle.Create(Self);
-  FRect.Parent := Self;
-  FRect.Align := TAlignLayout.Client;
+  FRect := TRectangle.Create(AOwner);
+  FRect.Parent := AOwner;
+  FRect.Align := TAlignLayout.Top;
   FRect.Stroke.Kind := TBrushKind.None;
   FRect.XRadius := cRADIUS;
   FRect.YRadius := cRADIUS;
+  FRect.Position.Y := 9999999999999;
 
-  FLabel := TLabel.Create(Self);
-  FLabel.StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
-  FLabel.Font.Size := 18;
+  FLabel := TLabel.Create(FRect);
+  FLabel.Touch.InteractiveGestures := FLabel.Touch.InteractiveGestures + [TInteractiveGesture.LongTap];
+  FLabel.OnGesture := ControlGesture;
+
+  FLabel.AutoSize := True;
+  FLabel.OnResize := ResizeLabel;
+  FLabel.FRect := FRect;
+  FLabel.HitTest := True;
+  FLabel.StyledSettings := [TStyledSetting.Size, TStyledSetting.Family, TStyledSetting.Style];
   FLabel.Parent := FRect;
-  FLabel.Align := TAlignLayout.Client;
+  FLabel.Align := TAlignLayout.Top;
   FLabel.Margins.Left := cMARGIN_LABEL;
   FLabel.Margins.Top := cMARGIN_LABEL;
   FLabel.Margins.Right := cMARGIN_LABEL;
   FLabel.Margins.Bottom := cMARGIN_LABEL_HALF;
 
-  FDateLabel := TLabel.Create(Self);
+  FDateLabel := TLabel.Create(FRect);
+  FDateLabel.AutoSize := True;
+  FLabel.FDateLabel := FDateLabel;
   FDateLabel.StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
-  FDateLabel.Align := TAlignLayout.Bottom;
-  FDateLabel.Font.Size := 10;
+  FDateLabel.Align := TAlignLayout.Top;
+  FDateLabel.Font.Size := 11;
   FDateLabel.Margins.Right := cMARGIN_LABEL;
   FDateLabel.Margins.Bottom := cMARGIN_LABEL_HALF;
   FDateLabel.Parent := FRect;
   FDateLabel.TextAlign := TTextAlign.Trailing;
+
+  FLabel.Position.Y := 0;
 
   DateTime := Now;
 
@@ -137,6 +161,9 @@ end;
 
 destructor TChatBubbleLabel.Destroy;
 begin
+  FreeAndNil(FLabel);
+  FreeAndNil(FDateLabel);
+  FreeAndNil(FRect);
   FList.Remove(Self);
   inherited;
 end;
@@ -154,7 +181,6 @@ end;
 procedure TChatBubbleLabel.SetBubbleText(const Value: String);
 begin
   FBubbleText := Value;
-  Text := AddSpaces(FBubbleText, cPERCENT_SPACES);
   FLabel.Text := FBubbleText;
 end;
 
@@ -169,10 +195,10 @@ begin
   FFollowing := Value;
   if FFollowing then
   begin
-    Margins.Top := cMARGIN_TOP_FOLLOWING;
+    FRect.Margins.Top := cMARGIN_TOP_FOLLOWING;
     FRect.Corners := [TCorner.BottomLeft, TCorner.BottomRight]
   end else begin
-    Margins.Top := cMARGIN_TOP_NOT_FOLLOWING;
+    FRect.Margins.Top := cMARGIN_TOP_NOT_FOLLOWING;
     FRect.Corners := [TCorner.TopLeft, TCorner.TopRight, TCorner.BottomLeft, TCorner.BottomRight]
   end;
 end;
@@ -182,14 +208,14 @@ begin
   FMe := Value;
   if FMe then
   begin
-    Margins.Left := cMARGIN;
-    Margins.Right := cMARGIN_MIN;
+    FRect.Margins.Left := cMARGIN;
+    FRect.Margins.Right := cMARGIN_MIN;
     FRect.Fill.Color := FBGColorMe;
     FLabel.FontColor := TAlphaColors.White;
     FDateLabel.FontColor := TAlphaColors.White;
   end else begin
-    Margins.Left := cMARGIN_MIN;
-    Margins.Right := cMARGIN;
+    FRect.Margins.Left := cMARGIN_MIN;
+    FRect.Margins.Right := cMARGIN;
     FRect.Fill.Color := FBGColorYou;
     FLabel.FontColor := TAlphaColors.Black;
     FDateLabel.FontColor := TAlphaColors.Black;
@@ -197,9 +223,38 @@ begin
 
 end;
 
+procedure TChatBubbleLabel.SetOnGesture(const Value: TGestureEvent);
+begin
+  FOnGesture := Value;
+  FLabel.OnGesture := FOnGesture;
+end;
+
+procedure TChatBubbleLabel.SetOnTapClick(const Value: TNotifyEvent);
+begin
+  FOnTapClick := Value;
+end;
+
+procedure TChatBubbleLabel.SetTouchManager(const Value: TTouchManager);
+begin
+  FLabel.Touch := Value;
+end;
+
 class procedure TChatBubbleLabel.Clear;
 begin
   FList.Clear;
+end;
+
+procedure TChatBubbleLabel.ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
+begin
+  if EventInfo.GestureID = System.UITypes.igiLongTap then
+  begin
+    if Assigned(FOnTapClick) then
+    begin
+      FOnTapClick(Self);
+      // TextToClipBoard(TChatBubbleLabel(Sender));
+      Handled := True;
+    end;
+  end;
 end;
 
 class constructor TChatBubbleLabel.Create;
@@ -210,6 +265,33 @@ end;
 class destructor TChatBubbleLabel.Destroy;
 begin
   FreeAndNil(FList);
+end;
+
+function TChatBubbleLabel.GetOnGesture: TGestureEvent;
+begin
+  Result := FOnGesture;
+end;
+
+function TChatBubbleLabel.GetTouchManager: TTouchManager;
+begin
+  Result := FLabel.Touch;
+end;
+
+procedure TChatBubbleLabel.Resize;
+begin
+  FLabel.Resize;
+end;
+
+procedure TChatBubbleLabel.ResizeLabel(Sender: TObject);
+begin
+  var
+    L: TLabel := TLabel(Sender);
+  if L.FRect = nil then
+    Exit;
+  L.FRect.Height := L.Height + L.Margins.Top + L.Margins.Bottom;
+  if L.FDateLabel = nil then
+    Exit;
+  L.FRect.Height := L.FRect.Height + L.FDateLabel.Height + L.FDateLabel.Margins.Top + L.FDateLabel.Margins.Bottom;
 end;
 
 end.

@@ -89,6 +89,7 @@ type
     procedure LoadChattiMessages;
     procedure SaveChattiMessages;
   private
+    procedure TapClick(Sender: TObject);
     procedure ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
   public
     procedure SetThemeMode(ATheme: TThemeMode);
@@ -135,29 +136,26 @@ begin
   var
     Labl: TChatBubbleLabel;
   Labl := TChatBubbleLabel.Create(sbMessages);
-  Labl.Parent := sbMessages;
   Labl.BubbleText := AText;
-  Labl.Touch.InteractiveGestures := Labl.Touch.InteractiveGestures + [TInteractiveGesture.LongTap];
-  Labl.OnGesture := ControlGesture;
+  Labl.OnTapClick := TapClick;
   Labl.Me := AMe;
   Labl.Following := AFollowing;
-  Labl.Position.Y := 999999999;
   if ADate <> 0 then
   begin
     Labl.DateTime := ADate;
   end;
-  Labl.repaint;
   if not FLoading then
   begin
     try
-      sbMessages.ScrollBy(0, -(TVertScrollBoxHack(sbMessages).VScrollBar.Value + Labl.Height + 999999));
+      sbMessages.ScrollBy(0, -(TVertScrollBoxHack(sbMessages).VScrollBar.Value + 999999));
     except
       ;
     end;
   end;
-  sbMessages.repaint;
-  sbMessages.RealignContent;
-  sbMessages.RecalcSize;
+  Labl.Resize;
+  // sbMessages.repaint;
+  // sbMessages.RealignContent;
+  // sbMessages.RecalcSize;
 end;
 
 procedure TAppMainFormChatti.AnalyzeInput(AText: string; AType: TModerations);
@@ -355,23 +353,20 @@ begin
 
   var
     Bub: TChatBubbleLabel;
-  for var i: Integer := 0 to sbMessages.ComponentCount - 1 do
+  for var i: Integer := 0 to TChatBubbleLabel.List.Count - 1 do
   begin
-    if sbMessages.Components[i] is TChatBubbleLabel then
+    Bub := TChatBubbleLabel.List[i];
+    if Result <> '' then
     begin
-      Bub := TChatBubbleLabel(sbMessages.Components[i]);
-      if Result <> '' then
-      begin
-        Result := Result + #13#10 + #13#10;
-      end;
-      if Bub.Me then
-      begin
-        Who := 'me: ';
-      end else begin
-        Who := 'Chatti: ';
-      end;
-      Result := Result + Who + Bub.BubbleText;
+      Result := Result + #13#10 + #13#10;
     end;
+    if Bub.Me then
+    begin
+      Who := 'me: ';
+    end else begin
+      Who := 'Chatti: ';
+    end;
+    Result := Result + Who + Bub.BubbleText;
   end;
 end;
 
@@ -423,6 +418,7 @@ begin
             AddLabel(FChattiMessages[i].Message, FChattiMessages[i].Me, follow, FChattiMessages[i].Date);
             wasMe := FChattiMessages[i].Me;
           end;
+
         end)
     end);
 end;
@@ -547,9 +543,14 @@ begin
   end;
 end;
 
+procedure TAppMainFormChatti.TapClick(Sender: TObject);
+begin
+  TextToClipBoard(TChatBubbleLabel(Sender));
+end;
+
 procedure TAppMainFormChatti.TextToClipBoard(ABubbleLabel: TChatBubbleLabel);
 begin
-  EditClipboard.Text := ABubbleLabel.Text;
+  EditClipboard.Text := ABubbleLabel.BubbleText;
   EditClipboard.SelectAll;
   EditClipboard.CopyToClipboard;
 end;
