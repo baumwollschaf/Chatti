@@ -61,10 +61,6 @@ type
     FOnTapClick: TNotifyEvent;
     function AddSpaces(AIn: string; APercentMore: Integer): string;
     procedure SetDateTime(const Value: TDateTime);
-    function GetOnGesture: TGestureEvent;
-    function GetTouchManager: TTouchManager;
-    procedure SetTouchManager(const Value: TTouchManager);
-    procedure SetOnGesture(const Value: TGestureEvent);
     procedure ControlGesture(Sender: TObject; const EventInfo: TGestureEventInfo; var Handled: Boolean);
     procedure SetOnTapClick(const Value: TNotifyEvent);
 
@@ -223,20 +219,9 @@ begin
 
 end;
 
-procedure TChatBubbleLabel.SetOnGesture(const Value: TGestureEvent);
-begin
-  FOnGesture := Value;
-  FLabel.OnGesture := FOnGesture;
-end;
-
 procedure TChatBubbleLabel.SetOnTapClick(const Value: TNotifyEvent);
 begin
   FOnTapClick := Value;
-end;
-
-procedure TChatBubbleLabel.SetTouchManager(const Value: TTouchManager);
-begin
-  FLabel.Touch := Value;
 end;
 
 class procedure TChatBubbleLabel.Clear;
@@ -265,16 +250,6 @@ end;
 class destructor TChatBubbleLabel.Destroy;
 begin
   FreeAndNil(FList);
-end;
-
-function TChatBubbleLabel.GetOnGesture: TGestureEvent;
-begin
-  Result := FOnGesture;
-end;
-
-function TChatBubbleLabel.GetTouchManager: TTouchManager;
-begin
-  Result := FLabel.Touch;
 end;
 
 procedure TChatBubbleLabel.Resize;

@@ -69,6 +69,36 @@ object AppMainFormChatti: TAppMainFormChatti
       Text = 'btnSettings'
       OnClick = btnSettingsClick
     end
+    object PanelInfo: TRectangle
+      Align = Contents
+      Fill.Color = claThistle
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 2.000000000000000000
+      Margins.Bottom = 2.000000000000000000
+      Size.Width = 380.000000000000000000
+      Size.Height = 42.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      XRadius = 10.000000000000000000
+      YRadius = 10.000000000000000000
+      object LabelInfo: TLabel
+        Align = Client
+        AutoSize = True
+        StyledSettings = [Family, Size, Style]
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 364.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 22.000000000000000000
+        TextSettings.HorzAlign = Center
+        Text = 'LabelInfo'
+        TabOrder = 0
+      end
+    end
   end
   object ViewStyleBook: TStyleBook
     UseStyleManager = True
@@ -130,7 +160,7 @@ object AppMainFormChatti: TAppMainFormChatti
         Size.Width = 368.000000000000000000
         Size.Height = 457.000000000000000000
         Size.PlatformDefault = False
-        TabIndex = 1
+        TabIndex = 0
         TabOrder = 2
         TabPosition = Bottom
         Sizes = (
@@ -142,7 +172,7 @@ object AppMainFormChatti: TAppMainFormChatti
           CustomIcon = <
             item
             end>
-          IsSelected = False
+          IsSelected = True
           Size.Width = 58.000000000000000000
           Size.Height = 26.000000000000000000
           Size.PlatformDefault = False
@@ -172,7 +202,7 @@ object AppMainFormChatti: TAppMainFormChatti
           CustomIcon = <
             item
             end>
-          IsSelected = True
+          IsSelected = False
           Size.Width = 63.000000000000000000
           Size.Height = 26.000000000000000000
           Size.PlatformDefault = False
@@ -197,10 +227,17 @@ object AppMainFormChatti: TAppMainFormChatti
       end
     end
   end
+  object TimerInfo: TTimer
+    Enabled = False
+    OnTimer = TimerInfoTimer
+    Left = 144
+    Top = 184
+  end
   object RDChatGpt1: TRDChatGpt
     Temperature = 0.100000000000000000
     URL = 'https://api.openai.com/v1'
     OnAnswer = RDChatGpt1Answer
+    OnError = RDChatGpt1Error
     OnModerationsLoaded = RDChatGpt1ModerationsLoaded
     Asynchronous = True
     Left = 184
@@ -214,10 +251,5 @@ object AppMainFormChatti: TAppMainFormChatti
       OnUpdate = ShowShareSheetAction1Update
       OnBeforeExecute = ShowShareSheetAction1BeforeExecute
     end
-  end
-  object AutoSizer: TFmxAutoSizer
-    AutoSize = False
-    Left = 48
-    Top = 264
   end
 end

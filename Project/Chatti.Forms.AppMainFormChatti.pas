@@ -36,8 +36,7 @@ uses
   Chatti.BubbleLabel,
   FMX.TabControl,
   System.Threading,
-  Chatti.Types.Persistent.Json,
-  FMX.AutoSizer;
+  Chatti.Types.Persistent.Json;
 
 type
   TAppMainFormChatti = class(TForm)
@@ -55,13 +54,15 @@ type
     TabItem1: TTabItem;
     TabItem2: TTabItem;
     MemoModerations: TMemo;
-    AutoSizer: TFmxAutoSizer;
     sbMessages: TVertScrollBox;
     btnShare: TSpeedButton;
     btnClear: TSpeedButton;
     EditClipboard: TEdit;
     MainLayout: TLayout;
     btnAsk: TSearchEditButton;
+    TimerInfo: TTimer;
+    PanelInfo: TRectangle;
+    LabelInfo: TLabel;
     procedure btnSettingsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -74,6 +75,8 @@ type
     procedure ShowShareSheetAction1Update(Sender: TObject);
     procedure RDChatGpt1ModerationsLoaded(Sender: TObject; AType: TModerations);
     procedure FormShow(Sender: TObject);
+    procedure TimerInfoTimer(Sender: TObject);
+    procedure RDChatGpt1Error(Sender: TObject; AMessage: string);
   private
     FLoading: Boolean;
     FInput: string;
@@ -81,6 +84,8 @@ type
     FSettings: TSettings;
     FChattiMessages: TChattiMessages;
     FFileNameChattiMessages: String;
+    procedure ShowInfo(AText: String);
+    procedure HideInfo;
     function GetLabelsText: string;
     procedure AddLabel(AText: string; AMe: Boolean; AFollowing: Boolean; ADate: TDateTime = 0);
     procedure AnalyzeInput(AText: string; AType: TModerations);
@@ -299,6 +304,7 @@ end;
 constructor TAppMainFormChatti.Create(AOwner: TComponent);
 begin
   inherited;
+  HideInfo;
   FLoading := True;
   FFileNameChattiMessages := IncludeTrailingPathDelimiter(TPath.GetHomePath) + 'ChattiMessages.Dat';
   FChattiMessages := TChattiMessages.Create;
@@ -330,7 +336,9 @@ begin
   FSettings := TSettings.Create(RDChatGpt1);
   FSettings.Load;
   RDChatGpt1.ApiKey := S(TExternalStuff.ApiKey);
+{$IFDEF DEBUG}
   RDChatGpt1.LoadModels;
+{$ENDIF}
   SetThemeMode(FSettings.ThemeMode);
 end;
 
@@ -370,12 +378,23 @@ begin
   end;
 end;
 
+procedure TAppMainFormChatti.HideInfo;
+begin
+  TimerInfo.Enabled := False;
+  PanelInfo.Visible := False;
+end;
+
 procedure TAppMainFormChatti.RDChatGpt1Answer(Sender: TObject; AMessage: string);
 begin
   AddLabel(AMessage, False, (not FWasMe) and False);
   FChattiMessages.Add(AMessage, False, Now);
   SaveChattiMessages;
   FWasMe := False;
+end;
+
+procedure TAppMainFormChatti.RDChatGpt1Error(Sender: TObject; AMessage: string);
+begin
+  ShowInfo(AMessage);
 end;
 
 procedure TAppMainFormChatti.RDChatGpt1ModerationsLoaded(Sender: TObject; AType: TModerations);
@@ -470,6 +489,15 @@ begin
     end);
 end;
 
+procedure TAppMainFormChatti.ShowInfo(AText: String);
+begin
+  if AText.Trim = '' then
+    Exit;
+  LabelInfo.Text := AText;
+  PanelInfo.Visible := True;
+  TimerInfo.Enabled := True;
+end;
+
 procedure TAppMainFormChatti.ShowShareSheetAction1BeforeExecute(Sender: TObject);
 begin
   var
@@ -546,6 +574,7 @@ end;
 procedure TAppMainFormChatti.TapClick(Sender: TObject);
 begin
   TextToClipBoard(TChatBubbleLabel(Sender));
+  ShowInfo('Copied');
 end;
 
 procedure TAppMainFormChatti.TextToClipBoard(ABubbleLabel: TChatBubbleLabel);
@@ -553,6 +582,11 @@ begin
   EditClipboard.Text := ABubbleLabel.BubbleText;
   EditClipboard.SelectAll;
   EditClipboard.CopyToClipboard;
+end;
+
+procedure TAppMainFormChatti.TimerInfoTimer(Sender: TObject);
+begin
+  HideInfo;
 end;
 
 end.
