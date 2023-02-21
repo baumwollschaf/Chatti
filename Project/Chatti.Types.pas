@@ -106,7 +106,7 @@ begin
         FRDChat.Model := ReadString('RDChat', 'Model', 'text-davinci-003');
         FRDChat.Temperature := ReadFloat('RDChat', 'Temperature', 0.1);
         FRDChat.MaxTokens := ReadInteger('RDChat', 'MaxTokens', 2048);
-        FRDChat.TimeOutSeconds := ReadInteger('RDChat', 'TimeOutSec', 30);
+        FRDChat.TimeOutSeconds := ReadInteger('RDChat', 'TimeOutSec', 90);
 
         FThemeMode := TThemeMode(ReadInteger('General', 'ThemeMode', Ord(tmDark)));
         FClearAnswer := ReadBool('General', 'ClearAnswer', False);

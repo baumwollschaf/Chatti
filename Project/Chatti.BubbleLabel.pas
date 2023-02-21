@@ -7,6 +7,7 @@ uses
   System.Types,
   System.UITypes,
   System.Classes,
+  System.Threading,
   System.Variants,
   System.Generics.Collections,
   FMX.Types,
@@ -235,7 +236,31 @@ begin
   begin
     if Assigned(FOnTapClick) then
     begin
+      var
+        Color, ColorBack: TAlphaColor;
+      if FMe then
+      begin
+        Color := FBGColorYou;
+        ColorBack := FBGColorMe;
+      end else begin
+        Color := FBGColorMe;
+        ColorBack := FBGColorYou;
+      end;
+      FRect.Fill.Color := Color;
+      TTask.Run(
+        procedure
+        begin
+          // short blinking
+          sleep(200);
+          TThread.Synchronize(nil,
+            procedure
+            begin
+              FRect.Fill.Color := ColorBack;
+            end);
+        end);
+
       FOnTapClick(Self);
+
       // TextToClipBoard(TChatBubbleLabel(Sender));
       Handled := True;
     end;

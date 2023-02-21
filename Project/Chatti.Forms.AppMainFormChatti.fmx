@@ -85,7 +85,7 @@ object AppMainFormChatti: TAppMainFormChatti
       object LabelInfo: TLabel
         Align = Client
         AutoSize = True
-        StyledSettings = [Family, Size, Style]
+        StyledSettings = [Family, Style]
         Margins.Left = 8.000000000000000000
         Margins.Top = 8.000000000000000000
         Margins.Right = 8.000000000000000000
@@ -93,7 +93,7 @@ object AppMainFormChatti: TAppMainFormChatti
         Size.Width = 364.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
-        TextSettings.Font.Size = 22.000000000000000000
+        TextSettings.Font.Size = 11.000000000000000000
         TextSettings.HorzAlign = Center
         Text = 'LabelInfo'
         TabOrder = 0
