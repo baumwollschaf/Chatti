@@ -4,6 +4,8 @@ uses
   System.StartUpCopy,
   System.SysUtils,
   FMX.Forms,
+  FMX.Types,
+  Skia.FMX,
   Chatti.Forms.AppMainFormChatti in 'Chatti.Forms.AppMainFormChatti.pas' {AppMainFormChatti} ,
   Chatti.Forms.TemplateForm in 'Chatti.Forms.TemplateForm.pas' {TemplateForm} ,
   Chatti.Forms.SettingsForm in 'Chatti.Forms.SettingsForm.pas' {SettingsForm} ,
@@ -17,6 +19,9 @@ uses
 {$R *.res}
 
 begin
+  GlobalUseMetal := True;
+  GlobalUseSkia := True;
+  GlobalUseSkiaRasterWhenAvailable := False;
   Application.Initialize;
   FormatSettings.LongDateFormat := 'dd.mm.yyyy hh:nn';
   FormatSettings.ShortDateFormat := 'dd.mm.yyyy';

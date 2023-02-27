@@ -14,7 +14,11 @@ uses
   FMX.Graphics,
   FMX.Dialogs,
   FMX.StdCtrls,
-  FMX.Controls.Presentation, FMX.Layouts;
+  FMX.Controls.Presentation,
+  FMX.Layouts,
+
+  Skia,
+  Skia.FMX;
 
 type
   TTemplateForm = class abstract(TForm)

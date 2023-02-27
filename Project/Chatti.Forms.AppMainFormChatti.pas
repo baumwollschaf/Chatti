@@ -36,7 +36,12 @@ uses
   Chatti.BubbleLabel,
   FMX.TabControl,
   System.Threading,
-  Chatti.Types.Persistent.Json;
+  Chatti.Types.Persistent.Json,
+  FMX.Ani,
+
+
+  Skia,
+  Skia.FMX;
 
 type
   TAppMainFormChatti = class(TForm)
@@ -63,6 +68,9 @@ type
     TimerInfo: TTimer;
     PanelInfo: TRectangle;
     LabelInfo: TLabel;
+    saiAnimatedLogo: TSkAnimatedImage;
+    fanFadeOutTransition: TFloatAnimation;
+    lytContent: TLayout;
     procedure btnSettingsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -77,6 +85,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure TimerInfoTimer(Sender: TObject);
     procedure RDChatGpt1Error(Sender: TObject; AMessage: string);
+    procedure saiAnimatedLogoAnimationFinish(Sender: TObject);
   private
     FLoading: Boolean;
     FInput: string;
@@ -332,6 +341,11 @@ end;
 
 procedure TAppMainFormChatti.FormCreate(Sender: TObject);
 begin
+  Fill.Color := $FF372C7C; // Purple
+  saiAnimatedLogo.Visible := True;
+  saiAnimatedLogo.BringToFront;
+  lytContent.Visible := False;
+
   TabControl1.ActiveTab := TabItem1;
   FSettings := TSettings.Create(RDChatGpt1);
   FSettings.Load;
@@ -401,6 +415,13 @@ procedure TAppMainFormChatti.RDChatGpt1ModerationsLoaded(Sender: TObject; AType:
 begin
   // still in thread-mode!
   AnalyzeInput(FInput, AType);
+end;
+
+procedure TAppMainFormChatti.saiAnimatedLogoAnimationFinish(Sender: TObject);
+begin
+  lytContent.Visible := True;
+  Fill.Color := $FFEBEEF1; // Light gray
+  fanFadeOutTransition.Enabled := True;
 end;
 
 procedure TAppMainFormChatti.LoadChattiMessages;

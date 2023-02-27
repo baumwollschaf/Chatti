@@ -21,7 +21,10 @@ uses
   FMX.ListBox,
   FMX.Edit,
   FMX.EditBox,
-  FMX.NumberBox;
+  FMX.NumberBox,
+
+  Skia,
+  Skia.FMX;
 
 type
   TSettingsForm = class;
